@@ -2579,7 +2579,6 @@ body {
         const diffX = touchEndX - touchStartX;
         const diffY = touchEndY - touchStartY;
 
-        // 手指往右滑動超過 70px，且不是上下垂直滾動時，自動退回總覽
         if (diffX > 70 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
           if (typeof switchAppTab === 'function') {
             switchAppTab('overview');
@@ -2587,6 +2586,48 @@ body {
         }
       }, { passive: true });
     })();
+
+    // 全站 Google Maps 連結自動直達 App (防止主畫面 App 模式跳轉 App Store 迷航)
+    document.addEventListener('click', function(e) {
+      const link = e.target.closest('a');
+      if (!link || !link.href) return;
+
+      const href = link.href;
+
+      // 檢查是否為 Google Maps 連結
+      if (href.includes('maps.google') || href.includes('goo.gl/maps') || href.includes('maps.app.goo.gl')) {
+        e.preventDefault(); // 攔截瀏覽器原本會跳往 App Store 的預設行為
+
+        // 提取目的地關鍵字或經緯度參數
+        let query = '';
+        try {
+          const urlObj = new URL(href);
+          query = urlObj.searchParams.get('query') || urlObj.searchParams.get('q') || '';
+        } catch (err) {
+          query = '';
+        }
+
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+        if (isIOS) {
+          // iPhone/iPad: 優先嘗試使用原生 App Scheme 喚醒 Google Maps
+          if (query) {
+            window.location.href = `comgooglemaps://?q=${encodeURIComponent(query)}`;
+          } else {
+            // 短網址或無明確 query 時直接以原始網址嘗試喚醒 App
+            window.location.href = href.replace(/^https?:\/\//i, 'comgooglemaps://');
+          }
+
+          // 備援方案：若 1.5 秒內未成功喚醒 App，則以系統 Safari 打開網頁版
+          setTimeout(function() {
+            window.location.href = href;
+          }, 1500);
+        } else {
+          // Android 或一般瀏覽器直接跳轉
+          window.location.href = href;
+        }
+      }
+    }, true);
   </script>
 </body>
 </html>
