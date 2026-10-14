@@ -1,0 +1,2561 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <!-- 宣告為獨立原生 App（隱藏網址列與 Safari 工具列） -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mexico Tour">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png?v=2">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#fbf9f6">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- 亡靈節彩繪骷髏桌面 App 圖示 (SVG 向量內嵌，保證超清晰) -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23237883'/%3E%3Cpath d='M25 45 C25 22 75 22 75 45 C75 58 66 68 62 78 L38 78 C34 68 25 58 25 45 Z' fill='%23ffffff' stroke='%23df5a2c' stroke-width='3'/%3E%3Ccircle cx='38' cy='46' r='9' fill='%232c3e50'/%3E%3Ccircle cx='62' cy='46' r='9' fill='%232c3e50'/%3E%3Ccircle cx='38' cy='46' r='4' fill='%23f1c40f'/%3E%3Ccircle cx='62' cy='46' r='4' fill='%23f1c40f'/%3E%3Cpolygon points='50,56 46,63 54,63' fill='%23e74c3c'/%3E%3Cline x1='42' y1='72' x2='58' y2='72' stroke='%23333333' stroke-width='2.5'/%3E%3Cline x1='46' y1='68' x2='46' y2='76' stroke='%23333333' stroke-width='2'/%3E%3Cline x1='50' y1='68' x2='50' y2='76' stroke='%23333333' stroke-width='2'/%3E%3Cline x1='54' y1='68' x2='54' y2='76' stroke='%23333333' stroke-width='2'/%3E%3Ccircle cx='50' cy='32' r='4' fill='%23df5a2c'/%3E%3C/svg%3E">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>墨西哥 25 天深度手冊 2026</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <style>
+    :root{--earth-bg:#fbf9f6;--earth-card:#ffffff;--earth-soft:#f3eee8;--earth-text:#423934;--earth-text-muted:#7a6f68;--earth-green:#3a7d8c;--earth-green-hover:#2b616d;--earth-clay:#8c6b58;--earth-border:#e8e1d7;--radius:12px}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Noto Sans TC",sans-serif;-webkit-tap-highlight-color:transparent}
+    body{background-color:var(--earth-bg);color:var(--earth-text);display:flex;flex-direction:column;min-height:100vh;line-height:1.6;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+    header{background:#fff;border-bottom:2px solid var(--earth-border);position:sticky;top:0;z-index:1000;box-shadow:0 1px 4px rgba(0,0,0,0.03)}
+    .header-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;max-width:960px;margin:0 auto;width:100%;flex-wrap:wrap;gap:8px}
+    .header-bar h1{font-size:1.1rem;font-weight:700;color:var(--earth-text)}
+    .nav-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+    .nav-tabs::-webkit-scrollbar{display:none}
+    .tab-btn{background:#fff;border:1px solid var(--earth-border);padding:7px 12px;font-size:0.84rem;color:var(--earth-text-muted);cursor:pointer;border-radius:var(--radius);font-weight:700;transition:all 0.2s;white-space:nowrap}
+    .tab-btn.active{background:var(--earth-green);color:#fff;border-color:var(--earth-green)}
+    .city-selector-bar{display:none;overflow-x:auto;padding:10px 16px;gap:8px;background:var(--earth-soft);border-top:1px solid var(--earth-border);scrollbar-width:none}
+    .city-selector-bar::-webkit-scrollbar{display:none}
+    .city-selector-bar.show{display:flex}
+    .city-pill{flex:0 0 auto;padding:7px 16px;border-radius:20px;font-size:0.86rem;border:1px solid var(--earth-border);background:#fff;color:var(--earth-text);cursor:pointer;font-weight:700;transition:all 0.2s;white-space:nowrap}
+    .city-pill.active{background:var(--earth-green);color:#fff;border-color:var(--earth-green)}
+    main{flex:1;padding:16px;max-width:960px;margin:0 auto;width:100%}
+    .page-view{display:none}
+    .page-view.active{display:block}
+    .summary-section{margin-bottom:24px}
+    .section-title{font-size:1.05rem;font-weight:700;color:var(--earth-text);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .section-title::before{content:"";display:inline-block;width:4px;height:16px;background:var(--earth-clay);border-radius:2px}
+    .map-container{background:linear-gradient(180deg,#f7f3ec 0%,#efe7dc 100%);border:2px solid var(--earth-border);border-radius:var(--radius);padding:16px 12px 12px 12px;box-shadow:0 3px 12px rgba(0,0,0,0.03);position:relative}
+    .mexico-svg{width:100%;height:auto;display:block;max-height:440px}
+    .map-land-green{fill:url(#greenLandGradient);stroke:#4f6452;stroke-width:1.5;stroke-linejoin:round;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.06))}
+    .map-mountain{fill:none;stroke:#2d3b2f;stroke-width:1.2;stroke-linecap:round;opacity:0.45}
+    .map-peninsula-green{fill:#627b66;stroke:#4f6452;stroke-width:1.2}
+    .map-route-line{fill:none;stroke:#ffba59;stroke-width:3.5;stroke-dasharray:6,6;stroke-linecap:round;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.3))}
+    .map-city-node{cursor:pointer}
+    .map-city-node circle.glow{fill:#ff7e47;opacity:0.35;transition:0.2s}
+    .map-city-node circle.core{fill:#ff5722;stroke:#ffffff;stroke-width:2.5;transition:0.2s}
+    .map-city-node:hover circle.core{fill:#ffeb3b;stroke-width:3.5}
+    .map-city-node:hover circle.glow{r:20;opacity:0.6}
+    .map-city-label{font-size:12px;font-weight:800;fill:#202721;text-shadow:0 1px 3px rgba(255,255,255,0.9)}
+    .map-date-label{font-size:10px;font-weight:700;fill:#a35638;text-shadow:0 1px 2px rgba(255,255,255,0.9)}
+    .schedule-table-card{background:#fff;border:1px solid var(--earth-border);border-radius:var(--radius);overflow-x:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.03);padding:4px 0}
+    .schedule-table{width:100%;border-collapse:collapse;text-align:left;font-size:0.84rem;table-layout:fixed}
+    .schedule-table th{background:var(--earth-soft);color:var(--earth-text);font-weight:700;padding:10px 4px;border-bottom:2px solid var(--earth-border);text-align:center}
+    .schedule-table td{padding:10px 4px;border-bottom:1px solid var(--earth-soft);color:var(--earth-text);vertical-align:middle;text-align:center}
+    .schedule-table th:nth-child(1), .schedule-table td:nth-child(1){width:27%;font-size:0.75rem}
+    .schedule-table th:nth-child(2), .schedule-table td:nth-child(2){width:38%;text-align:left;padding-left:8px}
+    .schedule-table th:nth-child(3), .schedule-table td:nth-child(3){width:15%}
+    .schedule-table th:nth-child(4), .schedule-table td:nth-child(4){width:20%}
+    .schedule-table tr:hover td{background:#fbf9f5}
+    .table-city-link{color:var(--earth-green);font-weight:700;text-decoration:none;cursor:pointer}
+    .table-hotel-btn{display:inline-flex;align-items:center;justify-content:center;background:var(--earth-green);color:#fff;padding:4px 8px;border-radius:6px;text-decoration:none;font-size:0.75rem;font-weight:700;transition:all 0.2s;white-space:nowrap}
+    .traffic-card{background:#fff;border:1px solid var(--earth-border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+    .traffic-route{font-size:0.95rem;font-weight:700;color:var(--earth-text)}
+    .flight-card{background:#fff;border:1px solid var(--earth-border);border-radius:var(--radius);padding:16px;margin-bottom:12px;border-left:5px solid var(--earth-clay)}
+    .flight-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px}
+    .flight-title{font-size:1.05rem;font-weight:700;color:var(--earth-text)}
+    .flight-tag{font-size:0.76rem;background:var(--earth-soft);color:var(--earth-clay);padding:3px 8px;border-radius:4px;font-weight:700}
+    .flight-segment{margin-top:8px;padding-top:8px;border-top:1px dashed var(--earth-border);font-size:0.88rem;color:var(--earth-text)}
+    .flight-segment strong{color:var(--earth-green)}
+    .day-block{background:#fff;border:1px solid var(--earth-border);border-radius:var(--radius);padding:20px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
+    .day-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;border-bottom:2px solid var(--earth-soft);padding-bottom:8px}
+    .day-header-title{font-size:1.25rem;font-weight:700;color:var(--earth-text)}
+    .day-header-date{font-size:0.9rem;color:var(--earth-clay);font-weight:700}
+    .remark-box{background:#fdf6f0;border-left:4px solid var(--earth-clay);padding:12px 14px;border-radius:4px;margin-bottom:16px;font-size:0.88rem;color:#73361e}
+    .timeline{position:relative;padding-left:18px;border-left:2px solid var(--earth-border);margin-left:6px}
+    .timeline-item{position:relative;margin-bottom:16px}
+    .timeline-dot{position:absolute;left:-25px;top:8px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid var(--earth-green)}
+    .timeline-card{background:#faf7f2;padding:16px;border-radius:var(--radius);border:1px solid var(--earth-border)}
+    .timeline-time{font-size:0.8rem;font-weight:700;color:var(--earth-green)}
+    .timeline-title{font-size:1rem;font-weight:700;color:var(--earth-text);margin-bottom:4px}
+    .timeline-detail{font-size:0.88rem;color:var(--earth-text-muted);line-height:1.5;margin-bottom:8px}
+    .option-grid-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:10px}
+    .candidate-card{background:#fff;border:1px solid var(--earth-border);border-radius:8px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;border-top:3.5px solid var(--earth-green)}
+    .candidate-tag{font-size:0.72rem;font-weight:700;color:var(--earth-clay)}
+    .candidate-title{font-size:0.95rem;font-weight:700;color:var(--earth-text);margin:2px 0 4px 0}
+    .candidate-summary{font-size:0.82rem;color:var(--earth-text-muted);line-height:1.45;margin-bottom:10px}
+    .action-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;align-items:center}
+    .btn-restaurant-modal{display:inline-flex;align-items:center;gap:4px;background:#fcf2eb;color:#a85632;border:1px solid #f2d4c2;padding:6px 12px;border-radius:6px;font-size:0.82rem;font-weight:700;cursor:pointer;transition:all 0.2s ease}
+.btn-restaurant-modal:hover{background:#a85632;color:#ffffff;border-color:#a85632}
+    .btn-spot-modal{display:inline-flex;align-items:center;gap:4px;background:#edf5f7;color:var(--earth-green);border:1px solid #cde1e6;padding:6px 12px;border-radius:6px;font-size:0.82rem;font-weight:700;cursor:pointer}
+    .map-btn{display:inline-flex;align-items:center;gap:4px;background:#fff;color:var(--earth-text);border:1px solid var(--earth-border);padding:6px 12px;border-radius:6px;text-decoration:none;font-size:0.82rem;font-weight:600}
+    .ticket-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:6px;font-size:0.78rem;font-weight:700;text-decoration:none;background:#e2ebed;color:#2d5761;border:1px solid #c2d5d9;transition:all 0.2s ease}
+.ticket-btn:hover{background:#3a7d8c;color:#ffffff;border-color:#3a7d8c}
+    .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(40,32,28,0.65);backdrop-filter:blur(4px);z-index:2000;align-items:center;justify-content:center;padding:16px}
+    .modal-overlay.active{display:flex}
+    .modal-box{background:#fff;border-radius:var(--radius);width:100%;max-width:640px;max-height:85vh;overflow-y:auto;border:1px solid var(--earth-border);position:relative;padding:24px;display:flex;flex-direction:column}
+    .modal-close-btn{position:absolute;top:14px;right:14px;background:var(--earth-soft);border:none;width:32px;height:32px;border-radius:50%;font-size:1.1rem;cursor:pointer;font-weight:700}
+    .modal-header-tag{font-size:0.8rem;font-weight:700;color:var(--earth-clay);margin-bottom:2px}
+    .modal-title{font-size:1.35rem;font-weight:700;color:var(--earth-text);margin-bottom:8px;padding-right:30px}
+    .modal-desc{font-size:0.92rem;color:var(--earth-text-muted);line-height:1.6;margin-bottom:14px;background:var(--earth-bg);padding:12px 14px;border-radius:8px}
+    .modal-image-box{width:100%;margin-bottom:14px;border-radius:8px;overflow:hidden;border:1px solid var(--earth-border)}
+    .modal-image-box img{width:100%;height:auto;display:block}
+    .modal-section-title{font-size:0.98rem;font-weight:700;color:var(--earth-green);margin:16px 0 8px 0;border-left:3px solid var(--earth-green);padding-left:8px}
+    .modal-btn-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;padding-top:12px;border-top:1px solid var(--earth-soft)}
+    .dish-list{list-style:none;padding:0;margin-bottom:12px}
+    .dish-item{padding:7px 0;border-bottom:1px dashed var(--earth-soft);font-size:0.9rem;line-height:1.6}
+    .dish-item strong{color:var(--earth-green)}
+    .spot-text-para{font-size:0.9rem;line-height:1.7;margin-bottom:12px;text-align:justify}
+    .checklist{list-style:none}
+    .checklist-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--earth-soft);font-size:0.92rem;cursor:pointer;user-select:none}
+    .checklist-item input{width:18px;height:18px;accent-color:var(--earth-green);cursor:pointer}
+    .checklist-item.checked{color:#a8a29e;text-decoration:line-through}
+    .modal-item-card{background:#faf7f2;border:1px solid var(--earth-border);border-radius:8px;padding:12px;margin-bottom:10px}
+    .modal-item-name{font-weight:700;color:var(--earth-text);margin-bottom:4px;font-size:0.95rem}
+    .modal-item-detail{font-size:0.85rem;color:var(--earth-text-muted);margin-bottom:10px}
+/* 讓內容最底部留出空間，避免被常駐導覽列與 iPhone 白條遮擋 */
+body {
+  padding-bottom: calc(75px + env(safe-area-inset-bottom)) !important;
+}
+
+/* App 分頁切換隱藏規則 */
+.app-view-tab {
+  display: none;
+}
+.app-view-tab.active-tab {
+  display: block;
+  animation: fadeInApp 0.25s ease-out;
+}
+@keyframes fadeInApp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 底部常駐 App 導覽列 */
+.app-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(253, 252, 249, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-top: 1px solid #e5dcce;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 9999;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.nav-tab-btn {
+  background: none;
+  border: none;
+  outline: none;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: #8c7e73;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.nav-tab-btn .nav-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.nav-tab-btn .nav-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* 當前被選中的按鈕（暖風綠松青色） */
+.nav-tab-btn.active {
+  color: #237883;
+}
+.nav-tab-btn.active .nav-icon {
+  transform: scale(1.12);
+}
+
+/* 1. 備忘提醒清單：強力內縮，徹底讓圓點遠離最左側邊框線 */
+.memo-card, .alert-box, .notice-box, .tips-card, .day-card, .itinerary-day-card, .itinerary-content {
+  overflow: visible !important;
+}
+.memo-card ul, .alert-box ul, .notice-box ul, .tips-card ul, .day-card ul, .checklist, .note-list {
+  padding-left: 28px !important; /* 強制留出 28px 安全距離，圓點絕不壓線 */
+  margin-left: 0 !important;
+  list-style-position: outside !important;
+}
+.memo-card li, .alert-box li, .notice-box li, .tips-card li, .day-card li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+  padding-left: 4px !important;
+}
+
+/* 2. 行程總表：100% 自適應，城市開頭字母嚴格垂直對齊 */
+.schedule-table-card {
+  overflow-x: hidden !important;
+  padding: 8px 4px;
+}
+.schedule-table {
+  width: 100% !important;
+  table-layout: fixed !important;
+  border-collapse: collapse;
+}
+.schedule-table th, .schedule-table td {
+  padding: 10px 4px !important;
+  vertical-align: middle;
+}
+/* 欄位寬度與對齊規則 */
+.schedule-table th:nth-child(1), .schedule-table td:nth-child(1) { 
+  width: 32%; 
+  text-align: center; 
+  font-size: 0.8rem; 
+}
+/* 城市欄：文字靠左對齊，保持開頭字母一刀切齊 */
+.schedule-table th:nth-child(2) { 
+  width: 35%; 
+  text-align: left; 
+  padding-left: 12px !important; 
+  font-size: 0.85rem; 
+}
+.schedule-table td:nth-child(2) { 
+  width: 35%; 
+  text-align: left; 
+  padding-left: 12px !important; 
+  font-weight: 700; 
+  font-size: 0.86rem; 
+  white-space: nowrap; 
+}
+.schedule-table th:nth-child(3), .schedule-table td:nth-child(3) { 
+  width: 18%; 
+  text-align: center; 
+  font-size: 0.85rem; 
+}
+.schedule-table th:nth-child(4), .schedule-table td:nth-child(4) { 
+  width: 15%; 
+  text-align: center; 
+}
+
+/* 拿掉城市名稱底線，點擊整行跳轉 */
+.table-city-link {
+  text-decoration: none !important;
+  color: var(--primary, #df5a2c);
+  cursor: pointer;
+  border-bottom: none !important;
+  display: inline-block;
+}
+/* 住宿飯店按鈕：小巧精緻的 ↗️ 圖示按鈕 */
+.table-hotel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #fdf5ea;
+  border: 1px solid #e2cfb7;
+  border-radius: 8px;
+  text-decoration: none !important;
+  font-size: 1.05rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* 3. 車票卡片與一體化票根 */
+.traffic-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #ebd9c8;
+}
+.traffic-link-inline {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.ticket-badge {
+  background: #fff3e6;
+  border: 1px dashed #df5a2c;
+  color: #df5a2c;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+/* 4. 地圖方案 A：全螢幕縮放大圖燈箱（支援手機自由平移與縮放） */
+.map-lightbox-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(18, 14, 11, 0.95);
+  z-index: 99999;
+  overflow: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-x pan-y pinch-zoom !important;
+}
+.map-lightbox-content {
+  position: relative;
+  width: 1200px;
+  min-width: 1200px;
+  padding: 60px 30px;
+  box-sizing: border-box;
+  touch-action: manipulation;
+  margin: auto;
+}
+.lightbox-close-btn {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,0.9);
+  color: #222;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 900;
+  z-index: 100000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-hint {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  pointer-events: none;
+  z-index: 100000;
+}
+  </style>
+</head>
+<body>
+
+<header>
+    <div class="header-bar">
+      <h1>2026 🇲🇽 墨西哥旅行之友誼考驗</h1>
+    </div>
+  </header>
+
+  <main>
+    <!-- 【第 ① 張頁籤：旅程總覽】 (地圖 + 總表 + 車票 + 機票) -->
+    <div id="tab-overview" class="app-view-tab active-tab">
+      
+      <!-- 1. 吉卜力手繪地圖（點擊整張地圖直接彈出全螢幕大圖） -->
+      <div class="summary-section">
+        <div class="section-title">全旅程跨城軌跡</div>
+       <div class="map-container" onclick="openMapLightbox()" style="position:relative; width:100%; border-radius:14px; overflow:hidden; border:2px solid #e2e8f0; box-shadow:0 4px 16px rgba(0,0,0,0.08); margin-bottom:20px; line-height:0; cursor:zoom-in;">
+          <img src="mexico-map.png?v=1" alt="Mexico Travel Map" style="width:100%; height:auto; display:block;" />
+        </div>
+      </div>
+
+      <!-- 2. 行程總表（無底線 + ↗️ 導航按鈕 + 正確停留晚數 + 完美自適應） -->
+      <div class="summary-section">
+        <div class="section-title">行程總表</div>
+        <div class="schedule-table-card">
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>城市</th>
+                <th>停留晚數</th>
+                <th>住宿</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>10/21 - 10/24</td>
+                <td><span class="table-city-link" onclick="switchAppTab('daily'); jumpToCityGroup(0);">Guadalajara</span></td>
+                <td>3 晚</td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query=Hotel+Emperador+Guadalajara" target="_blank" class="table-hotel-btn" title="開啟導航">↗️</a></td>
+              </tr>
+              <tr>
+                <td>10/24 - 10/27</td>
+                <td><span class="table-city-link" onclick="switchAppTab('daily'); jumpToCityGroup(1);">Guanajuato</span></td>
+                <td>3 晚</td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query=Cda.+de+Mexiamora+15+Zona+Centro+Guanajuato" target="_blank" class="table-hotel-btn" title="開啟導航">↗️</a></td>
+              </tr>
+              <tr>
+                <td>10/27 - 10/30</td>
+                <td><span class="table-city-link" onclick="switchAppTab('daily'); jumpToCityGroup(2);">Puebla</span></td>
+                <td>3 晚</td>
+                <td><a href="https://maps.app.goo.gl/RoEyDhQGT4pj9a6E9" target="_blank" class="table-hotel-btn" title="開啟導航">↗️</a></td>
+              </tr>
+              <tr>
+                <td>10/30 - 11/02</td>
+                <td><span class="table-city-link" onclick="switchAppTab('daily'); jumpToCityGroup(3);">Oaxaca</span></td>
+                <td>3 晚</td>
+                <td><a href="https://maps.app.goo.gl/cgfb3xE75ADrVjMt9" target="_blank" class="table-hotel-btn" title="開啟導航">↗️</a></td>
+              </tr>
+              <tr>
+                <td>11/03 - 11/07</td>
+                <td><span class="table-city-link" onclick="switchAppTab('daily'); jumpToCityGroup(4);">Mexico City</span></td>
+                <td>4 晚</td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query=Oklahoma+93+Napoles+Benito+Juarez+Mexico+City" target="_blank" class="table-hotel-btn" title="開啟導航">↗️</a></td>
+              </tr>
+              <tr>
+                <td>11/07 - 11/10</td>
+                <td><span class="table-city-link" onclick="switchAppTab('daily'); jumpToCityGroup(5);">Querétaro</span></td>
+                <td>3 晚</td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query=Morelos+By+HomiRent+Queretaro" target="_blank" class="table-hotel-btn" title="開啟導航">↗️</a></td>
+              </tr>
+              <tr>
+                <td>11/10 - 11/11</td>
+                <td><span class="table-city-link" onclick="switchAppTab('daily'); jumpToCityGroup(6);">Mexico City</span></td>
+                <td>1 晚</td>
+                <td><a href="https://www.google.com/maps/search/?api=1&query=Hotel+Segovia+Regency+Mexico+City" target="_blank" class="table-hotel-btn" title="開啟導航">↗️</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3. 交通車票（極簡一體化，無多餘按鈕） -->
+      <div class="summary-section">
+        <div class="section-title">交通車票</div>
+        
+        <div class="traffic-card">
+          <a href="GDL到Guanajuato車票.pdf" target="_blank" style="text-decoration:none; color:inherit; display:flex; justify-content:space-between; align-items:center; width:100%; font-size:0.92rem; font-weight:600;">
+            <span>10/24 09:00 Guadalajara ➔ Guanajuato</span>
+            <span style="font-size:1.15rem; margin-left:8px;">↗️</span>
+          </a>
+        </div>
+
+        <div class="traffic-card">
+          <a href="Guanajuato到Puebla車票.pdf" target="_blank" style="text-decoration:none; color:inherit; display:flex; justify-content:space-between; align-items:center; width:100%; font-size:0.92rem; font-weight:600;">
+            <span>10/27 08:00 Guanajuato ➔ Puebla</span>
+            <span style="font-size:1.15rem; margin-left:8px;">↗️</span>
+          </a>
+        </div>
+
+        <div class="traffic-card">
+          <a href="Puebla到Oax車票.pdf" target="_blank" style="text-decoration:none; color:inherit; display:flex; justify-content:space-between; align-items:center; width:100%; font-size:0.92rem; font-weight:600;">
+            <span>10/30 08:25 Puebla ➔ Oaxaca</span>
+            <span style="font-size:1.15rem; margin-left:8px;">↗️</span>
+          </a>
+        </div>
+
+        <div class="traffic-card">
+          <a href="Oax到Mex車票.pdf" target="_blank" style="text-decoration:none; color:inherit; display:flex; justify-content:space-between; align-items:center; width:100%; font-size:0.92rem; font-weight:600;">
+            <span>11/02 23:15 Oaxaca ➔ Mexico City </span>
+            <span style="font-size:1.15rem; margin-left:8px;">↗️</span>
+          </a>
+        </div>
+
+        <div class="traffic-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:0.92rem; font-weight:600;">
+            <span>11/07 10:20 Mexico City ➔ Querétaro</span>
+            <span style="font-size:0.8rem; color:var(--earth-clay,#c35c34); font-weight:700;"> 尚未購票</span>
+          </div>
+        </div>
+
+        <div class="traffic-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; width:100%; font-size:0.92rem; font-weight:600;">
+            <span>11/10 11:00 Querétaro ➔ Mexico City</span>
+            <span style="font-size:0.8rem; color:var(--earth-clay,#c35c34); font-weight:700;"> 尚未購票</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. 機票資訊 -->
+      <div class="summary-section">
+        <div class="section-title">機票資訊</div>
+        <div class="flight-card">
+          <div class="flight-header"><span class="flight-title">去程：台北 ➔ 洛杉磯 ➔ 瓜達拉哈拉</span></div>
+          <div class="flight-segment"><strong>航段 1：</strong> 10/20 TPE T2 CI8 23:50 → LAX TB 10/20 20:45，飛行 11:55小時</div>
+          <div class="flight-segment"><strong>航段 2：</strong> 10/21 LAX T3 AM785 9:55 →  GDL T1 14:15，飛行 3:20小時、換匯、搭 T02/T03到 Dr. Roberto Michel</div>
+        </div>
+        <div class="flight-card">
+          <div class="flight-header"><span class="flight-title">回程：墨西哥城 ➔ 洛杉磯 ➔ 台北</span></div>
+          <div class="flight-segment"><strong>航段 1：</strong> 11/11 MEX T2 AM664 16:55 → LAX T1 19:59</div>
+          <div class="flight-segment"><strong>航段 2：</strong> 11/11 LAX  T1 CI3 23:40 → TPE T2 11/13 05:45，飛行 14:05小時</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- 【/第 ① 張頁籤結束】 -->
+
+   <!-- 【第 ② 張頁籤：每日行程】 -->
+    <div id="tab-daily" class="app-view-tab" style="position: relative;">
+      
+      <!-- 懸浮返回按鈕：無論怎麼滑都浮在螢幕左上方，不擋版面 -->
+      <button type="button" onclick="switchAppTab('overview')" style="position: fixed; top: 18px; left: 18px; z-index: 9999; display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #1e293b; border: 1px solid #cbd5e1; border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.15); transition: transform 0.15s ease;">
+        ‹ 返回
+      </button>
+
+      <!-- 頂部保留一點間距，避免第一天的標題被按鈕壓到 -->
+      <div style="height: 48px;"></div>
+
+      <div id="itinerary-city-container"></div>
+    </div>
+    <!-- 【/第 ② 張頁籤結束】 -->
+
+   <!-- 🚨 緊急聯絡專屬畫面區塊 (tab-safety) -->
+    <section id="tab-safety" class="app-view-tab">
+      <div class="safety-wrapper" style="padding: 16px 16px 80px 16px; max-width: 600px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        
+        <!-- 頁面標題 -->
+        <div style="text-align: center; margin-bottom: 20px;">
+          <h2 style="font-size: 1.3rem; margin: 0 0 6px 0; color: #1e293b;">🚨 緊急聯絡與求助電話</h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0;">點擊按鈕可直接以手機撥打專線</p>
+        </div>
+
+        <!-- 墨西哥當地緊急報案 -->
+        <div style="background: #ffffff; border-radius: 12px; margin-bottom: 16px; border: 1px solid #fee2e2; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
+          <div style="padding: 12px 16px; background: #fef2f2; font-weight: bold; font-size: 0.95rem; color: #991b1b;">
+            🚨 墨西哥當地報案專線
+          </div>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: bold; color: #0f172a;">全境緊急報案 (911)</div>
+                <div style="font-size: 0.75rem; color: #64748b;">警察、救護車、消防火警</div>
+              </div>
+              <a href="tel:911" style="background: #dc2626; color: #ffffff; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.85rem;">撥打 911</a>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: bold; color: #0f172a;">觀光警察／公路救援 (078)</div>
+                <div style="font-size: 0.75rem; color: #64748b;">綠色天使、重大觀光糾紛 (可英語)</div>
+              </div>
+              <a href="tel:078" style="background: #0284c7; color: #ffffff; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.85rem;">撥打 078</a>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: bold; color: #0f172a;">反勒索／重大威脅 (089)</div>
+                <div style="font-size: 0.75rem; color: #64748b;">遭遇恐嚇勒索、緊急匿名檢舉</div>
+              </div>
+              <a href="tel:089" style="background: #475569; color: #ffffff; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 0.85rem;">撥打 089</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 台灣代表處與外交部急難救助 -->
+        <div style="background: #ffffff; border-radius: 12px; margin-bottom: 16px; border: 1px solid #bfdbfe; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.03);">
+          <div style="padding: 12px 16px; background: #eff6ff; font-weight: bold; font-size: 0.95rem; color: #1e40af;">
+            🇹🇼 駐墨西哥代表處（護照遺失／急難救助）
+          </div>
+          <div style="padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="background: #eff6ff; border: 1px solid #bfdbfe; padding: 10px 12px; border-radius: 8px;">
+              <div style="font-weight: bold; color: #1e40af; margin-bottom: 2px;">代表處 24H 緊急急難救助專線</div>
+              <div style="font-size: 0.75rem; color: #3b82f6; margin-bottom: 8px;">護照遺失補發、突發重大事故、遭扣留專用</div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <a href="tel:5554536523" style="background: #2563eb; color: #ffffff; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 500;">當地直接撥：55-5453-6523</a>
+                <a href="tel:+5215554536523" style="background: #1d4ed8; color: #ffffff; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 500;">漫遊撥打：+52-1-55-5453-6523</a>
+              </div>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: bold; color: #0f172a;">代表處代表號（上班時間）</div>
+                <div style="font-size: 0.75rem; color: #64748b;">平日上班時間諮詢服務</div>
+              </div>
+              <a href="tel:+525552426800" style="background: #64748b; color: #ffffff; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: bold;">撥打總機</a>
+            </div>
+
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 10px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: bold; color: #0f172a;">外交部急難救助全球專線</div>
+                <div style="font-size: 0.75rem; color: #64748b;">台灣外交部領事事務局</div>
+              </div>
+              <a href="tel:+886800085095" style="background: #64748b; color: #ffffff; padding: 6px 14px; border-radius: 20px; text-decoration: none; font-size: 0.8rem; font-weight: bold;">撥打電話</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- 統一彈跳視窗 (Feature Modal) -->
+  <div class="modal-overlay" id="feature-modal" onclick="closeModalOnBg(event, 'feature-modal')">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeModal('feature-modal')">✕</button>
+      <div class="modal-header-tag" id="fm-tag">深度導覽指南</div>
+      <h2 class="modal-title" id="fm-title">名稱</h2>
+      <div class="modal-desc" id="fm-summary">精華一句話</div>
+
+      <div class="modal-section-title" id="fm-sec1-title">⭐ 核心看點 / 推薦菜色</div>
+      <div id="fm-sec1-content"></div>
+
+      <div class="modal-section-title" id="fm-sec2-title">💡 現場看點與實用提示</div>
+      <div id="fm-sec2-content" style="font-size:0.9rem; line-height:1.7; margin-bottom:12px; white-space:pre-wrap; text-align:justify;"></div>
+
+      <div id="fm-sec3-box" style="display:none;">
+        <div class="modal-section-title" id="fm-sec3-title">📷 拍照機位與行前注意事項</div>
+        <div id="fm-sec3-content" style="font-size:0.9rem; line-height:1.7; margin-bottom:12px; white-space:pre-wrap; text-align:justify;"></div>
+      </div>
+
+      <div class="modal-btn-row" style="display: none;">
+        <a id="fm-map-btn" href="#" target="_blank" class="map-btn">📍 開啟 Google Maps 導航</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 城市總覽彈跳視窗 (City Modal) -->
+  <div class="modal-overlay" id="city-modal" onclick="closeModalOnBg(event, 'city-modal')">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeModal('city-modal')">✕</button>
+      <div class="modal-header-tag" id="cm-tag"></div>
+      <h2 class="modal-title" id="cm-title"></h2>
+      <div class="modal-desc" id="cm-intro"></div>
+      
+      <div class="modal-section-title">📍 城市推薦地標直達</div>
+      <div id="cm-landmarks-wrap"></div>
+    </div>
+  </div>
+
+  <script>
+    var luggageItems = ["護照（包含加拿大護照）", "Esta", "旅遊保險", "機票 Check-in", "Sim卡 or eSim", "帶藥（暈車、感冒藥、胃藥、止痛藥、發燒貼）", "準備美金", "信用卡", "不需要轉接頭", "行動電源 x 2", "濕紙巾、防蚊液、跳蚤藥膏、酒精", "護唇膏、保濕乳液", "小包包", "多帶一台備用手機（?）", "口罩、牙線", "拖鞋、布鞋", "防曬用品（遮陽帽、太陽眼鏡、防曬乳）", "衣服（長袖、短袖、保暖外套）", "頸枕 x 2", "小型手電筒", "Air tag", "耳塞", "鎖 + 鋼圈線", "靠背充氣枕", "牙刷 牙膏", "旅行吹風機", "自拍棒"];
+
+    var featuresDb = {
+      // 10/21
+      "karne-garibaldi": { type: "restaurant", tag: "🏆 金氏世界紀錄認證・必吃傳奇名店", title: "Karne Garibaldi Sucursal Catedral", summary: "創立於 1931 年，曾創下入座 13.5 秒極速上菜金氏世界紀錄！專注於哈利斯科州獨步全墨的『肉汁浸牛肉』。", sec1Title: "⭐ 招牌必點與吃法指南", dishes: ["<strong>Carne en su Jugo（肉汁浸牛肉）</strong>：極薄切牛肉浸泡在慢燉高湯中，拌入炸培根碎、小洋蔥丁與香菜。", "<strong>Frijoles con Elote（特製甜玉米黑豆泥）</strong>：點餐免費隨附的靈魂配菜！豆泥滑順並拌入甜玉米粒。"], sec2Title: "💡 現場點餐與避坑小提示", tips: "1. 份量選擇：男生建議點『Mediana（中碗）』，女生點『Chica（小碗）』即可。\n2. 地道吃法：肉湯上桌後，先喝一口原味，接著擠入大量新鮮青檸汁，撒上現切白洋蔥與香菜碎！", query: "Karne Garibaldi Sucursal Catedral Guadalajara" },
+      "tomate-taqueria": { 
+        type: "restaurant", 
+        tag: "🌮 瓜城排隊名店・炭烤牧羊人與極致起司脆皮", 
+        title: "TOMATE Taquería", 
+        summary: "瓜達拉哈拉極具代表性的人氣塔可名店！以特製旋轉炭烤牧羊人豬肉（Pastor）與將起司煎至金黃酥脆的『Costra』聞名全城。", 
+        sec1Title: "⭐ 招牌必點與推薦搭配", 
+        dishes: [
+          "<strong>Costra de Pastor（牧羊人起司脆皮捲）</strong>：鎮店靈魂！鐵板將大量起司煎成一層香脆金黃的起司脆皮，緊緊包裹現削多汁的牧羊人烤肉，起司控絕對不能錯過。", 
+          "<strong>Tacos al Pastor（招牌牧羊人塔可）</strong>：傳統炭火直烤豬肉薄片，佐以現削烤鳳梨片、新鮮香菜與碎洋蔥，鹹甜焦香完美平衡。", 
+          "<strong>Gringa de Pastor（起司肉餅）</strong>：用軟韌的麵粉薄餅（Tortilla de harina）夾入炭烤豬肉與融化起司，口感溫潤濃郁。", 
+          "<strong>Agua de Horchata（墨西哥肉桂米漿）</strong>：店家自製的冰涼米漿飲品，肉桂香氣濃郁，搭配重口味塔可最解膩清爽。"
+        ], 
+        sec2Title: "💡 現場點餐與避坑小提示", 
+        tips: "1. 醬料搭配：桌上會附多款特製莎莎醬，綠醬（Salsa Verde）微酸開胃解膩，紅醬（Salsa Roja）辣度較高請先沾少許試味。\n2. 人潮應對：晚餐尖峰時段經常需要小排隊，但翻桌速度相當快，若不想久等可提早至 18:30 左右抵達。", 
+        query: "TOMATE Taqueria Av Mexico Guadalajara" 
+      },
+      "plaza-liberacion": { type: "spot", tag: " 瓜達拉哈拉歷史心臟・世界遺產核心", title: "Plaza de la Liberación (解放廣場)", summary: "瓜達拉哈拉殖民老城的核心十字樞紐，被市民親切稱為『兩座大教堂之廣場』。兩側坐落著這座城市最璀璨的建築珍寶。", sec1Title: "📜 歷史典故與神話源流", sec1Text: "瓜達拉哈拉解放廣場是整座哈利斯科州的心臟。這座廣場在墨西哥獨立史上有著不可磨滅的崇高地位：1810 年 12 月，『墨西哥獨立之父』伊達爾戈神父（Miguel Hidalgo）率領起義軍進駐，在此處正式簽署了美洲大陸歷史上第一道正式廢除奴隸制的法令。廣場中央如今矗立著高聳的神父青銅雕像，雕像中的神父身著長袍，右手高舉，奮力扯斷象徵奴役與禁錮的沈重鐵鍊，腳下踩著象徵自由的基石，莊嚴無比。漫步於這片平整的粉色採石場地磚上，能深刻體會到墨西哥人民為爭取自由獨立所付出的浩瀚血淚。", sec2Title: "👁️ 現場視覺亮點與建築結構", tips: "廣場周圍環繞著多座橫跨 16 至 19 世紀的國寶級建築瑰寶：\n西側主教座堂（Catedral de Guadalajara）：始建於 1561 年。最著名的便是高達 65 公尺的黃黑相間菱形瓷磚雙尖塔，原塔在 1818 年大地震中倒塌，現存雙塔由建築師於 1854 年重建，造型猶如倒扣的細長百合花。\n東側德戈亞多劇院（Teatro Degollado）：墨西哥保存最完好的新古典主義歌劇院之一。劇院正面由 16 根巨大的科林斯式大理石圓柱排列出宏偉門廊，三角楣樑上方是義大利雕刻名家操刀的大理石浮雕《阿波羅與九位謬思女神》。走入劇院內部，抬頭即可仰望描繪但丁《神曲》的宏偉穹頂壁畫。", sec3Title: "📷 拍照機位建議與注意事項", sec3Text: "【最佳攝影機位】：\n1. 神父雕像東側低角度：站在雕像後方約 15 公尺處仰拍，能同時將神父扯斷鎖鍊的雕像輪廓與西側大教堂的雙尖塔框入同一個畫面，構圖張力極強。\n2. 劇院階梯俯拍：站在劇院最高層階梯向西望去，整座廣場的深邃透視感一覽無遺。\n【實用行前提醒】：每晚約 19:30 老城區暖黃色投光燈會全數亮起，雙塔在夜色中如夢似幻；夜間漫步非常安全，但請留意隨身財物，避開廣場周邊陰暗小巷即可。", query: "Plaza de la Liberación Guadalajara" },
+      
+      // 10/22
+      "cantaritos-el-guero": { type: "restaurant", tag: "🍹 墨西哥狂歡代名詞", title: "Cantaritos el Güero #1 (Amatitán)", summary: "位於龍舌蘭公路旁的傳奇露天狂歡場！每天消耗數千顆現剖新鮮柑橘與整卡車的 Tequila，氣氛極度熱烈。", sec1Title: "⭐ 招牌調酒規格與配方", dishes: ["<strong>Cantarito Tradicional（正宗陶罐調酒）</strong>：傳統紅陶罐盛裝，底部鋪滿碎冰，現擠葡萄柚汁、鮮橙汁與青檸汁，加入 100% 藍色龍舌蘭酒，最後注滿氣泡水並抹上海鹽與辣椒粉。"], sec2Title: "💡 現場體驗攻略與避坑提示", tips: "1. 陶罐可以帶走：喝完後的紅陶土罐是可以直接清洗後帶回家當紀念品的！\n2. 防翻倒提示：現場多為露天長木桌，陶罐重心較高且外壁會凝結水珠，移動時請務必雙手捧穩底座。", query: "Cantaritos el Güero #1 Amatitan" },
+      "patio-mayahua": { type: "restaurant", tag: "🌿 特基拉小鎮隱秘庭園", title: "Patio Mayahua", summary: "隱匿於特基拉老鎮中心的迷人殖民庭園餐廳。綠意盎然的露天中庭環繞著熱帶植栽。", sec1Title: "⭐ 招牌必點與主廚推薦", dishes: ["<strong>Arrachera al Tequila（酒香醃烤側腹牛排）</strong>：特選頂級牛肉以白龍舌蘭酒與柑橘香料醃漬後高溫炙烤。", "<strong>Camarones al Agave（龍舌蘭蜜汁鮮蝦）</strong>：大蝦佐以有機龍舌蘭糖漿、蒜蓉與乾辣椒醬快炒。"], sec2Title: "💡 用餐氛圍與訂位叮嚀", tips: "1. 餐廳中庭微風徐徐，非常適合參觀完炎熱的龍舌蘭田後，在此舒適地享用午餐消暑。\n2. 點餐建議：牛排份量充足，兩位用餐建議點一份牛排主餐搭配一份鮮蝦分食剛剛好。", query: "Patio Mayahua Tequila" },
+      "plaza-principal-tequila": { type: "spot", tag: "🌳 龍舌蘭魔法小鎮歷史中心", title: "Plaza Principal Tequila", summary: "特基拉魔法小鎮的靈魂核心。環繞著 18 世紀古老教堂、月桂樹蔭鑄鐵涼亭與青銅雕像群。", sec1Title: "📜 歷史典故與小鎮身世", sec1Text: "特基拉主廣場坐落於這座世界聞名小鎮的正中心。特基拉鎮建於 1530 年，名稱源自納瓦特爾語，意為『生長特有草本之地』。在西班牙人抵達之前，當地的原住民就懂得利用野生龍舌蘭發酵釀造微醺飲品『Pulque』；直到 16 世紀末西班牙人引進蒸餾技術，才誕生了現代意義上的龍舌蘭烈酒。整座廣場四周鋪設著整齊的石磚，中央矗立著 19 世紀法式鍛鐵雙層音樂涼亭。廣場北側傲然聳立著始建於 18 世紀的聖地牙哥使徒聖殿，教堂保留了樸實莊嚴的巴洛克防禦型建築風格。漫步於這座綠蔭濃密的中央公園，空氣中時常飄散著從周邊百年酒廠蒸煮龍舌蘭心時逸散出的絲絲焦糖甜香。", sec2Title: "👁️ 現場看點與建築細節", tips: "【Jimador 採收工青銅紀念碑】：\n廣場一隅矗立著『吉馬多爾採收工』青銅雕像。生動捕捉了世代採收工人雙手緊握圓形鋼鏟，奮力採收重達數十公斤草心的堅毅身姿。\n【聖地牙哥使徒教堂立面與彩色字母】：\n教堂前方的廣場開闊處設有繽紛彩繪的『TEQUILA』巨型小鎮字母地標，每個英文字母上都彩繪著藍色龍舌蘭、傳統蒸餾銅鍋、流浪樂手與墨西哥雄鷹圖騰。", sec3Title: "📷 漫步動線與拍照機位", sec3Text: "【最佳取景機位】：\n1. 彩色 TEQUILA 字母前：站在字母地標正面往教堂方向拍攝，可將七彩字母、中央噴水池與鐘樓完美納入畫面。\n2. 鍛鐵涼亭二樓仰角：午後陽光穿透月桂樹葉縫隙灑在精美的雕花上。\n【實用叮嚀】：午後廣場周邊常有販售傳統龍舌蘭冰淇淋的攤車，買一杯坐在長椅上品嚐是體會小鎮生活節奏的最佳方式。", query: "Plaza Principal Tequila" },
+      "hacienda-la-cofradia": { type: "spot", tag: "🥭 百年老芒果樹林間的傳奇酒莊", title: "Tequilera Hacienda La Cofradía", summary: "特基拉產區少數完整保留古典莊園體系的大型傳奇酒莊。擁有陶藝工坊與地下酒窖餐廳。", sec1Title: "📜 莊園身世與『兄弟會』釀酒傳奇", sec1Text: "拉·科弗拉迪亞莊園是特基拉產區最具文化底蘊與莊園規模的百年酒廠之一。『Cofradía』在西班牙語中意為『兄弟會』，代表著釀酒世代工匠之間情同手足的深厚凝聚力。這座莊園被上千棵樹齡超過百年的老芒果樹深情環抱。自 1990 年代起，莊園主致力於將傳統釀酒工藝與墨西哥民間藝術深度結合，堅持使用 100% 藍色龍舌蘭草，並開創了在莊園內自設陶瓷藝術工坊、由當地民間工匠純手工拉胚燒製並彩繪每一只收藏級藝術酒瓶的先河。整座園區宛如一座沉浸式的生態與文化露天博物館。", sec2Title: "👁️ 現場參觀亮點與地下酒窖", tips: "【五大傳統釀酒工序現場直擊】：\n第一步看採收工現場俐落劈開龍舌蘭心；第二步參觀高溫磚石蒸烤爐，剛出爐的草心散發著如蜜地瓜般的濃郁香氣；第三步見證巨型碾碎機壓榨；第四步觀察發酵不鏽鋼大桶；第五步參觀傳統銅製雙重蒸餾器，流出清澈如水的新酒。\n【地下拱形酒窖餐廳】：\n莊園最震撼的空間是深入地下 4.5 公尺開鑿而成的拱形橡木桶地窖。迎面而來的是濕潤冷涼的空氣與濃烈撲鼻的橡木焦糖香氣。數千隻陳釀的美國白橡木桶整齊堆疊，宛如中世紀隱修院的神殿。", sec3Title: "🍷 品酩環節與參訪行前叮嚀", sec3Text: "【專業品酩體驗】：\n導覽尾聲會在品酒室進行專業三杯品鑑：由淺至深依序品嚐未經橡木桶陳釀的純淨 Blanco、陳釀數月的 Reposado，以及陳年超過一年的 Añejo（深邃的黑巧克力與橡木焦糖餘韻）。\n【實用行前叮嚀】：該莊園導覽極受歡迎，出發前請務必確認已完成預約（需訂位）；莊園內部腹地遼闊多為碎石路，建議穿著舒適好走的平底鞋。", query: "Hacienda La Cofradia Tequila" },
+      "mi-esperanza": { type: "restaurant", tag: "特基拉傳統料理・淹水三明治", title: "Restaurante Mi Esperanza", summary: "特基拉在地人極力推薦的傳統 Jalisco 料理老字號，環境具有濃厚的家庭溫馨感與花磚庭園風格。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Torta Ahogada（招牌淹水三明治）</strong>：酥脆鹹法棍塞滿特製嫩豬肉，整顆浸泡在微辣的特調番茄紅醬中。", "<strong>Tejuino con Nieve de Limón</strong>：發酵玉米冰飲搭配青檸雪酪。"], sec2Title: "💡 現場避坑提示", tips: "吃淹水三明治時店家會附手套，辣醬極辣，不擅吃辣者建議點『Media Ahogada（微辣）』即可！", query: "Restaurante Mi Esperanza Tequila Jalisco" },
+      "dona-jose": { type: "restaurant", tag: "在地炭火慢燉・傳統瓦鍋燉肉", title: "Birriería y Menudo doña Jóse", summary: "專注於哈利斯科州傳統菜餚的在地老店，以瓦鍋大火與炭火慢燉熬製出的紅亮濃郁肉湯聞名。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Birria de Res（慢燉牛肉湯）</strong>：以多種乾辣椒與香料煨燉至骨肉分離，肉質軟嫩至極。", "<strong>Quesabirria</strong>：玉米餅包入燉牛肉與大量拉絲起司，在鐵板煎得香脆後沾著濃肉湯食用。"], sec2Title: "💡 現場避坑提示", tips: "肉湯上桌後擠入滿滿現剖檸檬汁並撒上白洋蔥碎，搭配現烤玉米餅包肉吃才是最地道的吃法！", query: "Birriería y Menudo doña Jóse Tequila" },
+      
+      // 10/23
+      "las-9-esquinas": { type: "restaurant", tag: "瓜達拉哈拉羊肉湯名店", title: "Birriería las 9 Esquinas", summary: "座落於傳統 9 號街角廣場旁的傳奇羊肉湯館，滿牆都是色彩斑斕的手工彩繪瓷磚。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Birria Tlaquepaque（招牌燉羊肉）</strong>：選用嫩羊肉以秘製香料醃製並在瓦罐中低溫慢焙，湯濃肉嫩毫無羶味。", "<strong>Frijoles con Queso</strong>：特製濃郁黑豆泥佐新鮮墨西哥白乳酪。"], sec2Title: "💡 現場避坑提示", tips: "這家店非常受歡迎，建議提早於 10 點前抵達避開排隊人潮；店家自製的脆皮玉米餅非常美味！", query: "Birriería las 9 Esquinas Guadalajara" },
+      "taco-fish": { type: "restaurant", tag: "下加利福尼亞酥炸海鮮塔可", title: "Taco Fish La Paz", summary: "將北墨風格帶入瓜城的排隊海鮮塔可店，以現點現炸、外酥內嫩的魚肉與鮮蝦塔可稱霸全城。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Taco de Pescado（酥炸鮮魚塔可）</strong>：啤酒麵糊裹新鮮白肉魚油炸，外皮酥脆化渣，魚肉多汁鮮美。", "<strong>Taco de Camarón（黃金炸蝦塔可）</strong>：肥美彈牙的鮮蝦包裹酥脆外衣。"], sec2Title: "💡 現場避坑提示", tips: "店內中央有一座自助手作醬料吧，提供 8 種以上沙拉、酪梨醬與醃洋蔥，拿到塔可後可以自由堆疊滿滿配料！", query: "Taco Fish La Paz Guadalajara" },
+      "mercado-34": { type: "restaurant", tag: "在地清晨海鮮朝市・現開生蠔", title: "Mercado del Mar 34", summary: "瓜城規模最大的專業海鮮集散市場，周邊聚集了數十家當天清晨現拆現賣的生猛海產小攤。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Ostiones Frescos（現開生蠔）</strong>：現剖帶殼新鮮生蠔，淋上海鮮辣醬與青檸汁直吞。", "<strong>Aguachile Verde（青醬生醃鮮蝦）</strong>：鮮蝦用檸檬汁熟化，拌入綠椒與紅洋蔥，酸辣開胃。"], sec2Title: "💡 現場避坑提示", tips: "市場環境充滿地道市井煙火氣，建議挑選人潮最多、冰塊最充足的攤位就坐享用。", query: "Mercado del Mar de la 34 Guadalajara" },
+     // 10/23 特拉克帕克 - 避難所文化中心
+      "el-refugio": {
+        type: "spot",
+        tag: " 百年純白拱廊迷宮・野戰停屍間傳說與國寶陶瓷殿堂",
+        title: "避難所文化中心 (Centro Cultural El Refugio)",
+        summary: "特拉克帕克最震撼的純白幾何建築群！佔地萬坪，曾為傳染病避難醫院、革命野戰軍營與停屍間，流傳著白衣修女幽靈傳說。如今浴火重生為國家級陶瓷大賽最高殿堂，純白長拱廊與橘樹中庭交織出絕美光影迷宮。",
+        sec1Title: "📜 慈悲救濟院、軍營停屍間黑歷史與超自然夜遊傳奇",
+        sec1Text: "【從慈悲避難所到野戰醫院停屍間】\n這座佔地逾萬平方公尺的宏偉建築群始建於 1885 年，由路易斯・阿根廷神父（Fray Luis Argüello）發起募建，命名為『El Refugio（避難所）』，最初旨在收容孤苦無依者、絕症病患與精神失常者。在 19 世紀末霍亂、傷寒與天花肆虐時期，此地曾是慘烈隔離重症病患的人間煉獄；1910 年墨西哥革命與 1920 年代基督戰爭（Guerra Cristera）動盪期間，更被軍隊強行徵用為野戰軍醫院與臨時停屍間，地下密道曾用於秘密轉運受傷戰士與神職人員，見證了哈利斯科州無數生死血淚。\n\n【全墨知名幽靈傳說與夜間傳奇巡禮（Recorridos Nocturnos）】\n1979 年醫院廢棄後，長廊中無聲飄移的白衣修女身影、早已斷電的荒廢手術室傳來金屬器械碰撞聲等傳奇不脛而走，成為墨西哥著名的都市靈異傳說聖地。1985 年全面修復轉型為文化中心後，館方巧妙將這段暗黑歷史轉化為文化特色——每週特定夜晚會常態舉辦『夜間傳說與超自然巡禮（Recorridos de Mitos y Leyendas）』，由專業說書人帶領遊客手持微光穿梭於幽暗拱廊、神秘地下通道與舊病房，生動重現百年前的歷史懸疑。",
+        sec2Title: "👁️ 純白拱廊幾何光影與全國陶瓷大賽冠軍神作",
+        tips: "1. 無盡的純白長拱廊迷宮（Claustros y Patios）：建築由數十座粗壯圓柱支撐的半圓形連續拱廊交織而成，牆面通體粉刷為純白色，地面鋪設質樸的陶土紅磚（Barro Rojo）。午後燦爛的高原陽光穿透白色拱圈，在紅磚地上切割出強烈對比的幾何陰影，多個露天中庭栽種著結滿果實的柑橘樹，形成極具修道院極簡美學的寧靜綠洲。\n\n2. 潘塔萊翁・潘杜羅陶瓷博物館（Museo Pantaleón Panduro）：特拉克帕克在納瓦特爾語中意為『黏土之地』，這裡是墨西哥國立陶瓷大賽（Premio Nacional de la Cerámica）的永久主辦展場與最高榮譽殿堂。館內永久陳列歷屆獲獎的登峰造極之作——包含高達數公尺、手工繁複雕塑數百個人物神獸的巨型『生命之樹（Árbol de la Vida）』泥塑、傳承千年的古印第安拋光陶（Barro Bruñido）以及融合現代超現實主義的先鋒陶藝，徹底顛覆對傳統土產工藝的想像。",
+        sec3Title: "📷 連續拱廊長焦機位、橘樹天井與參訪指南",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 主中庭連續拱廊縱深（中長焦壓縮感）：站在中央大庭院外圍長廊盡頭，使用手機 2x 或 3x 望遠端鏡頭平視拍攝，層層疊疊向遠方收縮的純白拱圈在自然側光下極富層次，宛如走入基里訶的超現實畫作。\n2. 柑橘樹中庭仰拍：走入種植橘樹的露天小天井，以結實纍纍的綠葉柑橘枝枒與古樸鐵十字架為前景，仰拍純白幾何女兒牆與蔚藍天空，色彩鮮明純淨。\n\n【⚠️ 現場重要參訪指引與周邊動線】：\n• 免門票參觀：文化中心白日展覽館『完全免費開放入場』，開放時間為週二至週日 09:00 - 18:00（週一通常閉館休整）；全館佔地廣闊，建議預留 1 至 1.5 小時細細漫步。\n• 夜間導覽購票：若欲參加週末夜間傳說導覽（Recorrido Nocturno），需於週五或週六傍晚至文化中心現場服務台購票預約場次。\n• 周邊銜接：出大門後步行 2 分鐘即可銜接特拉克帕克核心的『獨立大街步行街（Calle Independencia）』，順遊彩色雨傘天空街與傳統露天流浪樂隊餐廳 El Parián。",
+        query: "Centro Cultural El Refugio Tlaquepaque"
+      },
+     // 10/23 特拉克帕克 - 歷史中心藝術步行街
+      "tlaquepaque-centro": {
+        type: "spot",
+        tag: "☂️ 殖民莊園藝術步行街・漂浮雨傘天空與流浪樂隊陶罐調酒聖殿",
+        title: "特拉克帕克歷史中心 (Tlaquepaque Centro)",
+        summary: "墨西哥民俗藝術與靈魂音樂的最高殿堂！源自千年前印第安黏土之地，19 世紀化身瓜城貴族避暑莊園群。漫步於懸掛漂浮雨傘與剪紙的獨立大街，穿梭超現實大師藝廊，在 El Parián 八角拱廊聆聽正宗 Mariachi 演奏並暢飲陶罐龍舌蘭酒。",
+        sec1Title: "📜 千年黏土之地、大霍亂貴族避暑莊園與文藝復興",
+        sec1Text: "【從印第安『黏土之地』到寡頭避暑莊園群】\n特拉克帕克（Tlaquepaque）源自古納瓦特爾語『Tlacapan』，意為『位於高處的黏土之地』，千百年來原住民利用當地純淨天然陶土發展出全美洲最具盛名的陶藝聚落。19 世紀中葉瓜達拉哈拉城內炎熱且爆發霍亂疫情，城內富可敵國的白銀礦業巨頭、政商顯要與西班牙貴族相中了這裡微風吹拂的涼爽氣候，紛紛購地興建了大量帶有挑高穹頂、雕花木門與噴泉天井的奢華避暑莊園（Casonas）。20 世紀中葉起，隨著墨西哥民俗復興，全墨最頂尖的藝術大師紛紛進駐買下這些百年老宅，將昔日莊園轉型為融合前衛超現實雕塑、手工吹製玻璃與陶瓷工坊的頂級藝廊，成為舉世聞名的第一座民俗藝術『魔法小鎮』。\n\n【歷史名場面：伊達爾戈花園與聖佩德羅聖堂】\n老鎮心臟為伊達爾戈花園（Jardín Hidalgo），1810 年獨立之父伊達爾戈神父曾率起義軍在此短暫駐紮休整，如今中央矗立其青銅雕像，四周環繞著茂密印度榕樹綠蔭。花園東側矗立著建於 17 世紀、融合拜占庭與新古典風格的聖佩德羅聖堂（Santuario de San Pedro），溫潤粉紅火山石雙塔在高原陽光下巍然聳立，是當地居民祈福與婚禮聖地。",
+        sec2Title: "👁️ 獨立大街天空裝置、Sergio Bustamante 藝廊與 El Parián 狂歡",
+        tips: "1. 獨立大街（Andador Independencia）與四季天空畫布：橫貫歷史城區的石板步行街，兩側整齊排列著 18、19 世紀精心修復的貴族老宅，外牆刷著濃烈鮮豔的鵝黃、陶土紅、孔雀藍與仙人掌綠。街道上方懸掛著隨季節與節慶更換的『天空裝置藝術（Cielo de Colores）』——春夏季是數百把半透明的七彩漂浮雨傘、亡靈節換上繁複繽紛的萬壽菊蕾絲彩色剪紙（Papel Picado），視覺張力極具衝擊力！\n\n2. 塞吉歐・布斯塔曼特藝廊（Galeria Sergio Bustamante）：位於主街上的國寶級超現實雕塑大師旗艦藝廊，陳列其標誌性的三角人臉青銅雕、太陽與月亮拟人化雕塑以及奇幻動物珠寶，宛如走入達利與墨西哥神話交織的異想迷宮。\n\n3. El Parián 露天八角拱廊與 Mariachi 正宗發源地：主廣場旁建於 1878 年的宏偉八角形新古典石柱連續拱廊，內部圍繞著十幾家傳統酒館與中庭露天座。哈利斯科州為墨西哥流浪樂隊（Mariachi）發源地，每天午後至深夜，身著華麗銀扣夏羅服裝（Traje de Charro）的樂手們在長廊中穿梭，小號、小提琴與吉他隆歡騰奏響。\n\n4. 靈魂陶罐調酒（Cantaritos）：坐在 El Parián 庭院必點盛裝於未上釉特製陶罐杯中的招牌調酒——倒入大份量特基拉酒（Tequila），擠入現榨萊姆、葡萄柚與甜橙原汁，撒上海鹽冰塊並注滿葡萄柚汽水，杯緣抹上一圈 Tajín 辣椒鹽，入口酸甜果香激盪濃烈酒香，極度過癮！",
+        sec3Title: "📷 長焦街道機位、採買防坑指南與樂隊點歌行情",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 獨立大街長焦壓縮空間感：站在步行街中央，使用手機 3x 望遠長焦鏡頭由低角度向前平視拍攝，將地面兩側高飽和色彩的殖民建築立面與頭頂密集的漂浮雨傘（或彩色剪紙）高度壓縮在同一畫面，色彩密度極為震撼！\n2. El Parián 拱廊樂手剪影：黃昏點燈時分，以古樸石柱與熱鬧的露天庭院為背景，側拍身著銀飾服裝的 Mariachi 樂手吹奏小號的神情，電影故事感十足。\n\n【⚠️ 現場採買防坑與實用遊玩指引】：\n• 精品 vs 平價採買攻略：獨立大街兩側的莊園店鋪屬於高階精品藝廊，作品精美但價格高昂；若想尋找性價比極高的日用陶盤、彩繪馬克杯或手工吹製玻璃，『強烈建議轉入平行的 Juárez 街或走進市立傳統市場（Mercado Municipal el Parián）』，價格往往只要主街的三到五成，並可適度禮貌議價。\n• Mariachi 點歌行情報價：在 El Parián 欣賞中央舞台公播演出完全免費；若邀請樂隊走到桌邊單獨為你獻唱情歌（Serenata），一般行情為『按首計費』（每首約 150 - 250 MXN），點歌前請先微笑確認單首價格避免爭議。\n• 最佳造訪時段：上午 10:00 前適合清幽漫步拍攝無人彩色街景；下午 16:00 起街頭藝人與樂隊全面進駐，氣氛最為熱絡狂歡。",
+        query: "Jardín Hidalgo Tlaquepaque"
+      },
+      "la-yaquesita": { type: "restaurant", tag: "🥩 北部索諾拉風格・炭火直烤", title: "Tacos La Yaquesita", summary: "當地極受歡迎的塔可老店，主打北部索諾拉州風格的炭火烤肉與厚實手作麵粉餅皮。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Tacos de Asada（炭烤牛肉塔可）</strong>：以高品質牛肉在炭火上直烤至焦香，肉汁飽滿。", "<strong>Tacos de Costilla（炭烤肋排肉塔可）</strong>：帶有豐富油脂與炭香的肋排肉，極其軟嫩。"], sec2Title: "💡 現場點餐提示", tips: "1. 餅皮選擇：這家的特色是提供『麵粉餅皮』，比起傳統玉米餅口感更具嚼勁，非常適合包烤肉！\n2. 辣醬注意：店內附的紅色莎莎醬辣度偏高，建議先滴一點在盤子上試味道再淋上塔可。", query: "Tacos La Yaquesita Tlaquepaque" },
+      "tacos-estilo-mexico": { type: "restaurant", tag: "🍍 首都街頭正宗風味・旋轉烤肉", title: "TACOS 'ESTILO MEXICO'", summary: "將正宗『墨西哥城街頭風格』帶入哈利斯科州的塔可名店，主打香氣四溢的旋轉烤肉與鐵板慢燉牛腹肉。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Tacos al Pastor（旋轉烤豬肉塔可）</strong>：紅木香料醃製的豬肉層層疊在旋轉烤柱上，搭配削落的鳳梨塊，酸甜解膩。", "<strong>Tacos de Suadero（慢燉牛腹肉塔可）</strong>：牛腹肉與油脂慢燉至入口即化，再煎出焦脆表面。"], sec2Title: "💡 現場點餐提示", tips: "1. 必加配料：吃 Pastor 塔可時，『Con todo（全加）』意味著加上洋蔥碎與香菜，這是靈魂所在。\n2. 店家營業到深夜，是夜晚感受當地人熱絡吃宵夜氣氛的最佳據點。", query: "TACOS ESTILO MEXICO Tlaquepaque" },
+      
+      // 10/24
+      "mercado-hidalgo": { type: "restaurant", tag: " 百年鐵皮市場・平民美食集散地", title: "Mercado Hidalgo (CARNITASAM 攤位)", summary: "瓜納華托最大的傳統室內市場，建築宛如古典火車站。裡面藏著最道地的平民美食，特別是必吃的炸豬皮鱷梨包！", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Guacamayas（炸豬皮鱷梨包）</strong>：瓜城經典街頭小吃，酥脆麵包夾滿炸豬皮（Chicharrón）、新鮮莎莎醬與酪梨。", "<strong>Carnitas（油封豬肉塔可）</strong>：傳統銅鍋慢燉豬肉，肉質軟嫩化渣。"], sec2Title: "💡 現場點餐提示", tips: "1. 市場內攤位眾多，去找『CARNITASAM』的招牌。環境比較擁擠與喧囂，非常有在地市井氣息。小心保管隨身財物。\n2. 吃 Guacamayas 時因為碎豬皮很脆，碎屑容易掉落，建議準備濕紙巾擦手。", query: "Mercado Hidalgo Guanajuato" },
+      "tacos-el-paisa": { type: "restaurant", tag: "🌮 宵夜首選・高人氣街頭塔可", title: "Tacos 'El Paisa II'", summary: "瓜納華托在地人最愛的塔可名店之一，營業到深夜，完美呈現正宗墨西哥街頭烤肉的煙火氣。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Tacos al Pastor（旋轉烤豬肉塔可）</strong>：必點招牌！紅木香料醃製的豬肉搭配解膩鳳梨。", "<strong>Tacos de Suadero（慢燉牛腹肉塔可）</strong>：鐵板上慢燉至軟嫩的牛腹肉，脂香濃郁。"], sec2Title: "💡 現場點餐提示", tips: "點餐時記得說「Con todo（全加）」，師傅會加上滿滿的洋蔥與香菜。店內通常人潮洶湧，需要稍微排隊等候座位。", query: "Tacos El Paisa II Guanajuato" },
+      "sazon-oaxaqueno": { type: "restaurant", tag: "🌮 在地深夜食堂・正宗瓦哈卡風味", title: "Taquería el Sazón Oaxaqueño", summary: "瓜納華托極受歡迎的道地瓦哈卡塔可小店！以豪邁的鐵板燒肉、香濃瓦哈卡起司與份量十足的特色肉盤聞名，營業至深夜，煙火氣十足。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Especialidad Sazón Oaxaqueño（招牌瓦哈卡大拼盤）</strong>：店內招牌必點！結合鐵板牛排（Bistec）、牧羊人烤豬肉（Pastor）、培根碎、雞肉與滿滿融化起司，附熱玉米餅包著吃超級過癮。", "<strong>Queso Fundido con Chorizo / Pastor（瓦哈卡溶乳酪鐵板燒）</strong>：香濃拉絲的瓦哈卡起司鐵板熱融，搭配自製瓦哈卡辣香腸或烤豬肉，捲入麵餅香氣撲鼻。", "<strong>Tacos de Suadero / Pastor（招牌塔可）</strong>：慢燉軟嫩牛腹肉（Suadero）與招牌紅木香料烤豬肉（Pastor），肉汁飽滿油脂香濃。"], sec2Title: "💡 現場點餐提示", tips: "1. 點塔可時推薦加起司（con Queso），瓦哈卡起司奶香濃郁且拉絲感極佳。\n2. 桌上附有多種店家特製辣醬，辣度普遍偏高，建議先少量淋在盤邊沾取試味。\n3. 店面小巧接地氣，主要以外帶與在地饕客內用為主，顛峰用餐時間人潮絡繹不絕。", query: "Taqueria el sazon oaxaqueno Guanajuato" },
+
+      // 10/24 & 10/26 景點：El Mirador 展望台 (皮皮拉)
+      "monumento-pipila": { 
+        type: "spot", 
+        tag: "🌆 瓜納華托制高點・世界遺產彩色積木全景", 
+        title: "El Mirador 展望台 (Mirador del Pípila)", 
+        summary: "高踞於聖米格爾山丘頂端，是俯瞰整個瓜納華托峽谷盆地、將如彩色積木般層疊錯落的殖民老城盡收眼底的最佳位置[cite: 1]。", 
+        sec1Title: "📜 英雄傳奇：背負巨石的礦工 Pípila", 
+        sec1Text: "來到瓜納華托，如果不登上這座城市的制高點，就等於未曾真正領略過這座銀礦山城的精髓[cite: 1]。通常大家所說的「El Mirador」，指的就是矗立著民族英雄紀念碑的 Mirador del Pípila（皮皮拉展望台）[cite: 1]。\n\n這座展望台的核心是一座巨大雄偉的粉紅砂岩雕像，紀念的是墨西哥獨立戰爭中的平民英雄——本名胡安·荷西·馬丁內斯（Juan José Martínez）的礦工，外號「皮皮拉（El Pípila）」[cite: 1]。1810 年 9 月，起義軍圍攻堡壘「穀倉」時死傷慘重，年輕的礦工皮皮拉挺身而出，將一塊扁平的厚重石板綁在背上以抵禦槍林彈雨與滾燙焦油，匍匐前進將木質大門點燃，促成了起義軍的首次重大勝利[cite: 1]。雕像高舉火炬象徵不屈的自由意志，基座刻著著名銘文：「還有許多穀倉等待焚毀」，提醒後人爭取自由的代價[cite: 1]。", 
+        sec2Title: "👁️ 俯瞰全城的視覺饗宴", 
+        tips: "【地標建築的焦點】：最醒目的是正中央亮黃色牆面配深紅頂棚的聖母大教堂，宛如調色盤中最純粹的一抹明黃；不遠處則是白色古典立面的瓜納華托大學，其標誌性的長階梯如同白色琴鍵嵌入山腰[cite: 1]。\n【色彩的交響】：居民房屋被粉刷成赭紅、鈷藍、粉紫與嫩綠，屋頂平台彼此交錯，如同被打翻的糖果盒堆砌在乾涸的河谷斜坡上[cite: 1]。\n【地下隧道的入口】：仔細觀察，可以看見一輛輛車輛消失在山壁洞口。瓜納華托因銀礦開採與防洪需求鑿出縱橫交錯的地下隧道網，如今成為地下行車幹線，也是世界上少見的「立體地底城市景觀」[cite: 1]。", 
+        sec3Title: "📷 實用參訪指南與交通方式", 
+        sec3Text: "【最佳造訪時間】：\n強烈建議在日落前半小時抵達。你可以完整捕捉金黃暮色灑在彩色屋頂上的暖光，接著欣賞藍調時刻（Blue Hour）路燈與教堂投射燈逐一點亮、宛如星海般的夜景[cite: 1]。\n【交通方式】：\n1. 登山纜車（Funicular）：位於市中心胡亞雷斯劇院（Teatro Juárez）後方，搭乘傾斜纜車約 2 分鐘即可直達山頂，省力又可沿途賞景[cite: 1]。\n2. 步行階梯（Callejones）：由市中心沿著狹窄的巷弄拾級而上，約需 15 至 20 分鐘。沿途塗鴉與民居風情濃厚，但階梯較為陡峭，夜間回程建議搭乘纜車或計程車以策安全[cite: 1]。", 
+        query: "Monumento Al Pipila Guanajuato" 
+      },
+      
+      // 10/26 景點：Calle Aldama (阿爾達馬街)
+      "calle-aldama": {
+        type: "spot",
+        tag: " 獨立運動先驅命名・殖民風情石板巷",
+        title: "Calle Aldama (阿爾達馬街)",
+        summary: "承載著濃厚殖民地風情的石板巷弄，以獨立運動先驅命名，保留了老城未經雕琢的生活痕跡與光影之美。",
+        sec1Title: "📜 歷史淵源與命名由來",
+        sec1Text: "這條街以墨西哥獨立運動先驅胡安·阿爾達馬（Juan Aldama, 1774–1811）命名。阿爾達馬原為西班牙殖民時期的騎兵軍官，秘密加入起義組織。當密謀遭當局破獲時，他星夜兼程將情報傳遞至多洛雷斯，促成了伊達爾戈神父敲響鐘聲、發表歷史性「多洛雷斯呼聲」。阿爾達馬隨後擔任起義軍少將，在多場戰役中展現軍事才能，最終不幸被俘就義。在瓜納華托州各市鎮，Calle Aldama 都是象徵國家誕生、彰顯愛國者無畏精神的重要標記。",
+        sec2Title: "👁️ 視覺與建築特色",
+        tips: "【曲折迷離的巷弄網絡】：順應山谷地勢修建的狹長小巷，遠離了熱門觀光廣場的喧囂，保留了老城未經雕琢的生活痕跡。\n【厚重民居與鐵鑄花窗】：沿街房屋外牆多採用當地綠砂石或磚石加固，二樓陽台鑲嵌細膩的西班牙鍛鐵欄杆，窗台擺滿盆栽。清晨與午後陽光穿透狹窄天空縫隙，在斑駁牆面上流轉，非常適合放慢腳步細細品味。",
+        query: "Calle Aldama San Miguel de Allende"
+      },
+
+     // 10/28 普埃布拉晚餐 3選1 餐廳
+      "puebla-comal": {
+        type: "restaurant",
+        tag: "🍲 大教堂景觀・經典平民傳統小吃",
+        title: "Comal Cocina Local",
+        summary: "座落於普埃布拉大教堂正對面的二樓景觀名店，以親民價格與極致地道的傳統街頭小吃聞名。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Pelonas（招牌炸圓麵包牛肉堡）</strong>：外層金黃酥脆的炸圓麵包，內餡夾滿慢燉手撕牛肉、黑豆泥、生菜與酸奶，酥脆而不油膩。",
+          "<strong>Chalupas Poblanas（經典查路帕脆餅）</strong>：現點現炸的小圓玉米餅，分別淋上紅綠雙色莎莎醬，撒上手撕豬肉與白洋蔥丁，是普埃布拉靈魂小吃。",
+          "<strong>Chanclas（浸汁肉餡三明治）</strong>：長型麵包塞入肉餡，整份浸泡在特調微辣辣椒番茄濃汁中，濃郁過癮。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 靠窗陽台座位視野極佳，直面夜間打燈的普埃布拉大教堂，建議傍晚前往搶佔二樓陽台座位。\n2. 份量精緻，非常適合與旅伴多點幾樣不同小吃一起分食品嚐！",
+        query: "Comal Cocina Local Puebla"
+      },
+      "puebla-mural": {
+        type: "restaurant",
+        tag: "🏆 普埃布拉美食天花板・傳奇壁畫經典國宴",
+        title: "El Mural de los Poblanos",
+        summary: "滿牆都是墨西哥藝術大師的傳奇壁畫，被公認為品嚐正宗普埃布拉莫雷醬（Mole Poblano）的最高殿堂。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Mole Poblano（經典普埃布拉莫雷燉雞/火雞）</strong>：由數十種乾辣椒、堅果、葡萄乾與頂級黑巧克力慢火熬煮數日的國寶醬汁，微甜微辣、層次極深。",
+          "<strong>Degustación de Moles（綜合莫雷品鑑拼盤）</strong>：一次品嚐四種招牌醬汁（經典黑莫雷、綠南瓜子 Pipián Verde、紅芝麻 Pipián Rojo 與白莫雷）。",
+          "<strong>Cemitas Poblanas（普埃布拉芝麻包）</strong>：外酥內軟的芝麻圓麵包，夾入酥炸牛排、大量手撕 Quesillo 白起司與特有香草 Pápalo。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 這家店極受歡迎且屬於高級傳統餐廳，強烈建議提早訂位；若未訂位建議傍晚 18:30 前抵達現場候位。\n2. 莫雷醬汁極度濃郁，搭配店家免費隨附的現烤玉米餅與紅米飯食用最對味。",
+        query: "El Mural de los Poblanos Puebla"
+      },
+      "puebla-mendrugo": {
+        type: "restaurant",
+        tag: " 17世紀古宅博物館・精緻傳統佳餚與爵士樂",
+        title: "La Casa del Mendrugo",
+        summary: "結合了考古博物館與 17 世紀古宅庭園的高雅餐廳，一邊聆聽現場音樂，一邊品嚐融合現代美學的普埃布拉佳餚。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Pipián Verde con Cerdo（綠南瓜子醬慢燉豬肉）</strong>：以烘烤南瓜子、綠番茄與香草研磨製成的翠綠醬汁，香氣清雅不膩。",
+          "<strong>Chalupas Gourmet（精緻雙色查路帕）</strong>：用傳統手法油炸玉米餅，搭配慢燉嫩肉絲與主廚特調紅綠莎莎醬，精緻典雅。",
+          "<strong>Tapas y Mezcal（西班牙風味佐酒小點與梅斯卡爾）</strong>：融合西班牙與墨西哥風味的冷切肉、熟成乳酪與特調雞尾酒。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 餐廳本身地下室與天井就是一座小型博物館（展出史前人類骨骼與原住民文物），用餐前後可免費參觀。\n2. 週末晚間常有現場爵士樂或吉他演奏，氣氛極佳，非常適合浪漫慢活晚餐。",
+        query: "La Casa del Mendrugo Puebla"
+      },
+
+    // 10/28 喬魯拉 4 大推薦口袋景點 - 1. 補救聖母聖殿
+      "cholula-remedios": { 
+        type: "spot", 
+        tag: "⛪ 殖民信仰奇蹟・踩在世界之巔的活火山觀景台", 
+        title: "補救聖母聖殿 (Santuario de Nuestra Señora de los Remedios)", 
+        summary: "傲立於喬魯拉世界最大金字塔頂峰的明黃色聖殿！腳踩千年生坯泥磚神殿，背倚終年噴煙的波波卡特佩特活火山，是文明征服與自然絕景交織的超現實地標。", 
+        sec1Title: "📜 歷史典故與征服血淚", 
+        sec1Text: "【屠城陰影與365座教堂傳說】\n1519 年西班牙征服者科爾特斯進駐托爾特克聖城喬魯拉，因猜忌而發動殘酷的大屠殺，數小時內殘殺數千名本土原住民。征服後科爾特斯誓言要在每座異教神殿廢墟上興建天主教堂，造就了喬魯拉『一年365天每天都能在不同教堂做彌撒』的傳奇。\n\n【踩在神殿上的歷史意外】\n這座名為 Tlachihualtepetl（人工堆砌之山）的大金字塔早在西元 9 世紀便被廢棄，長年泥土淤積與草木生長讓它形同自然山丘。殖民者於 1594 年下令在山頂興建聖殿時，甚至不知腳下踩著一座體積超越埃及吉薩的古文明神殿，意外讓埋在地底的古蹟免遭毀滅性拆除。\n\n【皇家軍隊守護神：補救聖母】\n殿內供奉的補救聖母木雕像原為科爾特斯隨軍將領攜帶的護身符，在著名的『悲傷之夜』逃亡中被視為保佑生還的救星。在 19 世紀墨西哥獨立戰爭期間，起義軍尊崇本土褐膚色的瓜達露佩聖母，西班牙皇家殖民軍則將補救聖母奉為統帥，賦予了這座聖殿濃厚的歷史政治張力。", 
+        sec2Title: "👁️ 現場視覺看點與建築結構", 
+        tips: "1. 登頂朝聖石階：沿著金字塔側面的石砌步道之字形蜿蜒而上，步程約 12-15 分鐘。沿途回頭眺望，可俯瞰喬魯拉老城錯綜複雜的彩色街巷與無數教堂圓頂。\n2. 普埃布拉黃金灰泥（Yesería）：走入殿內，歷經 1864 年大地震重建的新古典與巴洛克穹頂令人屏息。白底牆面上繁複細緻的鍍金灰泥浮雕蔓藤花紋，在天窗斜射光線下散發莊嚴神聖的金光。\n3. 主祭壇小木雕本尊：主祭壇中央玻璃壁龕內供奉著僅約 27 公分高的 16 世紀補救聖母木雕，身披華麗金線刺繡斗篷，手抱聖嬰。\n4. 絕景火山露台：教堂後方西側開闊的石造露台是全城視野最高潮！正前方即是海拔 5,426 公尺、白雪皚皚且不時噴發蒸氣的波波卡特佩特活火山（Popocatépetl）與睡美人火山（Iztaccíhuatl）。", 
+        sec3Title: "📷 絕美拍照機位與參觀提醒", 
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 西側觀景露台（夕陽時分）：下午 16:30 - 17:45 空氣最為通透，順光將黃色外牆染成深金色，背後的波波卡特佩特火山輪廓清晰雄偉，偶爾噴出的白煙是絕佳背景。\n2. 山腳南側祭壇庭院仰拍：在金字塔考古區的露天石階處，以古文明祭壇石基為前景仰角長焦拍攝山頂黃教堂，完美呈現『古印第安地基疊加殖民天主教』的時空錯位感。\n\n【⚠️ 現場參觀提醒】：\n• 開放時間：每日 07:00 - 19:00，免費開放參觀。\n• 體力與鞋況：登山石階有一定坡度，建議穿著抓地力良好的平底鞋；山頂風勢通常較大，傍晚前往建議備薄防風外套。\n• 動線建議：建議清晨先攀登教堂避開午後烈日與人潮，下山後順路銜接山腳的考古遺址與地下隧道。", 
+        query: "Santuario de la Virgen de los Remedios Cholula" 
+      },
+      "cholula-arqueologica": { 
+        type: "spot", 
+        tag: " 金氏世界紀錄體積最大金字塔・千年生坯地下迷宮", 
+        title: "喬魯拉大金字塔遺址 (Zona Arqueológica de Cholula)", 
+        summary: "體積超越埃及吉薩近一倍！基底達 450×450 公尺的人類史上最大人造巨構。歷經千年生坯泥磚如俄羅斯套娃層層包裹，深邃的 8 公里地下探測隧道帶你穿梭文明地心。", 
+        sec1Title: "📜 巨人神話、俄羅斯套娃與金字塔未被拆毀之謎", 
+        sec1Text: "【巨人薩爾瓦造山傳說】\n在納瓦特爾語（Nahuatl）中，這座金字塔被稱為 Tlachihualtepetl，字面意思是『人造之山』。根據阿茲特克創世神話，太古時期一場毀天滅地的大洪水幾乎滅絕人類，倖存下來的七名巨人之一名為『薩爾瓦』（Xelhua），為了感念雨水並防止未來的洪水再次淹沒生靈，他召集眾人以人龍接力的方式從遠方傳遞泥磚，誓言要建造一座高聳入雲、直達天堂的神山。天神震怒於凡人企圖比肩神界，降下天火與雷霆擊潰頂部，工程才被迫停滯。現代考古證實，整座金字塔的核心正是用無數乾燥泥磚（生坯，Adobe）以人力一磚一瓦築造而成。\n\n【千年生坯的俄羅斯套娃】\n這座巨構並非一朝一夕建成，而是自西元前 3 世紀至西元 9 世紀近千年間，由特奧蒂瓦坎（Teotihuacán）與托爾特克（Toltec）等多代文明相繼擴建。每一代新的統治階層來到這裡，基於對前代神祇的敬畏與宣示統治權，從不拆除舊廟，而是在舊廟外塗抹泥土、重新鋪上新的石階台階與外牆。整座金字塔就像俄羅斯套娃一樣，內外總共嵌套了 6 層主要結構，最終形成了底座 450×450 公尺、體積高達 445 萬立方公尺的巨無霸（比埃及胡夫金字塔的 258 萬立方公尺大了將近一倍）。\n\n【為什麼西班牙人沒有把金字塔拆光？】\n西班牙人征服墨西哥時，幾乎把所有看到的印第安金字塔全部拆毀，搬運其石材建造天主教修道院（例如墨西哥城的大神廟廢墟）。但喬魯拉大金字塔卻奇蹟般『逃過一劫』！原因是早在西元 8 至 9 世紀，當地居民因政治與乾旱遷徙，這座龐然大物被廢棄長達數百年。經過狂風、雨水與塵土的掩埋，厚厚的土壤與野生灌木完全覆蓋了整座金字塔，讓它在外觀上完全就像一座渾然天成的翠綠小山丘。1519 年科爾特斯率軍抵達時，根本不知道自己腳下踩著一座龐大無比的人工金字塔，只把它當成一座視野絕佳的天然制高點並在山頂修建了黃色教堂。這場美麗的歷史誤會，意外讓這座美洲最巨大的印第安神廟免遭被全面拆毀運石的浩劫。", 
+        sec2Title: "👁️ 8公里採礦隧道、祭壇庭院與神明飲酒圖", 
+        tips: "1. 穿梭 8 公里地心探勘隧道（Túneles）：1931 年墨西哥考古學家馬爾基納（Ignacio Marquina）面臨兩難——山頂是國家級古蹟黃色聖殿，地底是千年文明，絕不能從上方開挖剝離。於是團隊採用類似『採礦工程』的方式，從山腳水平打入隧道，在黑暗腹中開鑿了長達 8 公里的探測坑道。走入對外開放的數百公尺隧道，室外高溫瞬間驟降，撲面而來的是帶有泥土香的沁涼空氣。兩側昏黃燈光下，你能親手觸摸兩千年前泥磚上的稻草纖維，並在交叉口清晰看見早期斜坡石階（Talud-Tablero 風格）被後期泥磚直接封存包裹的奇妙切面。\n\n2. 祭壇庭院（Patio de los Altares）：穿過隧道來到南側開闊露天遺址，這片宏偉庭院是古代舉行求雨儀式與活人獻祭的核心廣場。四周立著精緻的巨型雕刻石碑，石碑邊緣刻滿代表水與羽蛇神（Quetzalcóatl）的波浪羽毛圖紋，以及供奉雨神特拉洛克（Tlaloc）的祭祀基座。\n\n3. 傳奇《酒徒壁畫》（Mural de los Bebedores）：金字塔深處出土了一幅長達 56 公尺、高 2.5 公尺的震撼古壁畫。畫中栩栩如生描繪了 110 位人物狂飲『普逵酒』（Pulque，發酵龍舌蘭酒）的盛宴，有人倒酒、舀酒、甚至酩酊大醉。在古印第安信仰中，這並非單純世俗享樂，而是祭司與貴族為了進入超自然狂喜狀態、與雨神特拉洛克及祖先神靈通靈溝通的嚴肅神聖儀式（遺址博物館內有等比復原展示）。", 
+        sec3Title: "📷 雙重時空機位、參觀路線與注意事項", 
+        sec3Text: "【📸 雙重時空明信片機位】：\n從南側祭壇庭院（Patio de los Altares）向上仰望：以裸露千年的特奧蒂瓦坎風格石階地基為前景，使用長焦鏡頭仰拍山頂鮮黃色的補救聖母教堂，古代異教祭壇與殖民天主教在畫面中完美重疊，極具視覺衝擊力。\n\n【⚠️ 現場參觀指南】：\n• 開放時間：週二至週日 09:00 - 18:00（週一通常閉館休整，門票含露天遺址、博物館與隧道開放段）。\n• 動線建議：建議早晨先登頂參觀補救聖母教堂，隨後順石階而下自南側售票處進入考古遺址與地下隧道，最後參觀遺址博物館，動線最為順暢。\n• 隧道提醒：地底隧道高約 2 公尺、燈光較為昏暗幽閉，若有嚴重幽閉恐懼症或呼吸道敏感者，可選擇略過隧道，直接參觀露天祭壇遺址與博物館。", 
+        query: "Zona Arqueológica de Cholula" 
+      },
+      "cholula-san-gabriel": { 
+        type: "spot", 
+        tag: "🏰 美洲最古老方濟各要塞・49座伊斯蘭清真寺穹頂奇蹟", 
+        title: "大天使聖加百列修道院 (Convento de San Gabriel Arcángel)", 
+        summary: "始建於 1529 年的軍事要塞修道院，直接拔地建於羽蛇神大金廟舊址！擁有全美洲獨一無二、仿造哥多華大清真寺的 49 座連續採光穹頂，中庭更立著融合印第安『世界之樹』宇宙觀的無基督十字架。", 
+        sec1Title: "📜 殖民要塞血淚、49圓頂清真寺奇蹟與世界之樹密碼", 
+        sec1Text: "【羽蛇神殿上的防禦要塞】\n1529 年方濟各會修士在科爾特斯發動喬魯拉大屠殺後的廢墟上破土動工，直接建在被西班牙人徹底鏟平的『羽蛇神（Quetzalcóatl）大金廟』地基之上。由於當時修士與西班牙軍人僅有數十人，面對城內數萬名剛遭屠殺、敵意極深的原住民，修道院必須兼具防禦碉堡功能：高聳厚實的粗琢石牆、頂部環繞防禦弓箭的鋸齒狀垛口（Almenas）、窗戶狹窄如步槍射擊孔，並設有封閉式內院，一旦爆發原住民暴動，修士能立刻退守堡壘閉門固守數週。\n\n【49 圓頂皇家小堂：為什麼天主教堂長得像清真寺？】\n與修道院北側相連的皇家小堂（Capilla Real，又稱原住民小堂 Capilla de Naturales）是傳教史上大膽的建築妥協！印第安人千百年來習慣在開闊露天的金字塔頂祭拜神明，被強行趕進幽暗封閉的歐洲傳統教堂時產生極度恐慌窒息與暴動。主持修士靈機一動，仿造西班牙南部『哥多華大清真寺（Mezquita de Córdoba）』的多柱通透大廳，由 12 排八角形石柱支撐出 7 條寬敞並排通廊，頂部築起整整 49 座帶採光天窗的八角穹頂。如森林般延展的立柱空間既合乎天主教規範，又讓原住民感覺如同置身熟悉的樹林之下，在美洲天主教建築中絕無僅有。\n\n【十字架背後的中美洲『世界之樹（Ceiba）』密碼】\n漫步於寬闊的中庭草坪，中央矗立著原住民石匠雕鑿的中庭十字架（Cruz Atrial）。仔細端詳會發現極具震撼的宗教融合密碼——十字架上完全沒有釘著耶穌的肉身！在中美洲納瓦特爾神話中，宇宙分為十三層天界、人間與九層冥界，貫穿三界的中軸正是巨大的吉貝木棉樹（Ceiba，生命世界之樹）。原住民石匠不願將死亡腐朽的人體刻在聖樹上，而是刻上富有生機的樹皮植物紋理；十字架交叉中心雕刻著代表宇宙心臟與生命的圓形翡翠符號（Chalchihuitl）；基督受難的長矛與釘子被轉化為雨水與自然圖騰；十字架的四端更暗合印第安宇宙觀的東、西、南、北四方神靈。西班牙修士以為土著皈依了基督救贖，而台下膜拜的原住民眼裡敬拜的依舊是那棵連接天地、孕育萬物的古老世界之樹！\n\n【內院迴廊與 16 世紀黑白修道壁畫】\n走入修道院深處的內院中庭（Claustro），兩層樓石造長廊牆壁上完整保留了 16 世紀方濟各會修士指導原住民畫匠繪製的早期壁畫。純粹以炭黑、石灰與紅赭石繪製，描繪著聖方濟各的生平神蹟與苦修生活，線條剛勁莊嚴，散發著中世紀晚期傳教士面對蠻荒世界的孤寂與虔誠。", 
+        sec2Title: "👁️ 現場三大震撼看點與工藝探索", 
+        tips: "1. 皇家小堂 49 穹頂迷宮（Capilla Real）：踏入小堂內部，數十根八角石柱如石林般拔地而起，抬頭仰望 49 個帶窗穹頂排列出無垠的幾何天幕，自然採光自穹頂天窗傾瀉而下，灑在石板地面上，營造出濃郁的安達魯西亞伊斯蘭空間韻味。\n\n2. 露天中庭（Atrio）與四角角堂（Capillas Posas）：門前遼闊的草坪中庭是新大陸特有的宗教空間發明，為習慣露天祭祀的數萬原住民舉行萬人集體洗禮。中庭四角保留著精緻的石雕小涼亭（角堂 Posas），是當年宗教巡遊隊伍停靈與修士分批傳教的停留站點。\n\n3. 要塞防禦立面與鋸齒雉堞：退到主修道院外牆前仰望，厚重斑駁的火山石外牆幾乎不開窗，頂部完整保留著中世紀城堡標誌性的鋸齒防禦垛口（Almenas），直觀見證 16 世紀軍事鎮壓與傳教合一的劍與十字架時代。", 
+        sec3Title: "📷 超廣角幾何機位、參觀路線與注意事項", 
+        sec3Text: "【📸 兩大震撼級攝影機位】：\n1. 皇家小堂正中心仰拍（0.5x 超廣角必備）：站在 49 圓頂小堂中央通道，將手機鏡頭垂直 90 度向上仰拍，12 排石柱向四周延展，49 個八角採光圓頂形成極具透視感與幾何對稱性的光影矩陣，宛如置身西班牙科爾多瓦清真寺。\n2. 中庭大草坪全景：以中央刻滿世界之樹符號的石雕十字架為前景，向後拍攝修道院要塞城牆與鋸齒垛口，背景映襯高原純藍天空，歷史滄桑感十足。\n\n【⚠️ 現場參觀指南】：\n• 開放時間：每日 07:00 - 19:00，免費開放入場。\n• 參觀動線：推薦動線為『中庭十字架與要塞外觀 → 主修道院大堂 → 內院修道迴廊黑白壁畫 → 皇家小堂 49 圓頂』，全程約需 40-50 分鐘。\n• 禮儀提醒：皇家小堂至今仍有神職人員與信徒進行祈禱，拍照時請關閉快門聲音與閃光燈，穿著請保持莊重體面。", 
+        query: "Convento de San Gabriel Cholula" 
+      },
+      "cholula-parroquia": { 
+        type: "spot", 
+        tag: " 大廣場巴洛克核心・全美洲第三高八角採光穹頂", 
+        title: "聖佩德羅主教教堂 (Parroquia de San Pedro Cholula)", 
+        summary: "傲立於和諧廣場西側的巴洛克信仰中樞！擁有名列全拉丁美洲第三高的八角抗震採光大穹頂，鐘樓鑲嵌融入印第安雨神密碼的塔拉韋拉彩陶磚，門前緊鄰全墨西哥最長 46 拱廊街。", 
+        sec1Title: "📜 天堂鑰匙的權力爭奪、八角穹頂工程賭局與彩陶密碼", 
+        sec1Text: "【守護神聖伯多祿與『天堂鑰匙』的爭權傳奇】\n在 16 世紀殖民初期，隔壁聖加百列修道院的方濟各會修士權力滔天，牢牢掌控了原住民洗禮與稅賦奉獻。到了 17 世紀，喬魯拉本土混血居民（Criollos 與 Mestizos）累積了豐厚商貿財富，不再甘心凡事聽命於嚴苛修士。鎮民們自發集資破土興建這座屬於平民的世俗教區大教堂，並指名奉耶穌首徒『聖伯多祿（San Pedro）』為守護神。在天主教義中，耶穌將天國鑰匙親手賜予聖伯多祿，象徵靈魂救贖的最高正統權柄。主祭壇上聖伯多祿手握金銀雙鑰的巨像，正是世俗鎮民向隔壁修士宣告：『開啟天堂之門的權杖在此，老百姓不再需要透過修道院的清規戒律才能接近上帝！』\n\n【『天國燈塔』：美洲第三高八角巨穹頂的工程賭局】\n這座大教堂的穹頂在 17 世紀落成時高聳入雲，高度名列全拉丁美洲第三（僅次於墨西哥城主教座堂與普埃布拉大教堂）。在地震頻仍且背靠活火山的喬魯拉高地，將沉重無比的石造巨構推上幾十公尺高空，曾被當時工程界視為『瘋狂的自毀工程』。然而天才石匠採用精妙的八角形鼓座（Tambor）拱券受力分流技術，並在八個轉角各開一扇巨型採光拱窗。正午日光自天窗如瀑布般砸落鍍金主祭壇時，整座大殿金光萬道宛如天門洞開。數百年間歷經多次大地震周邊無數民宅坍塌，這座八角穹頂卻奇蹟般完好無損，被信徒深信是聖伯多祿親手托舉的庇佑神蹟。\n\n【陶匠的暗渡陳倉：塔拉韋拉彩陶磚上的異教符號】\n教堂高聳鐘樓頂端鑲嵌著大量普埃布拉名聞遐邇的塔拉韋拉藍白彩陶磚（Azulejos de Talavera）。西班牙殖民當局自詡引進了安達魯西亞與阿拉伯的頂級釉彩工藝來彰顯主榮，然而負責窯燒的工人全是喬魯拉本土原住民陶匠。原住民匠人表面上繪製西班牙人指定的幾何蔓藤花紋，暗地裡卻在藍白陶磚的角落邊緣，悄悄繪入印第安神話中象徵雨神特拉洛克（Tlaloc）的雷電波浪紋與太陽神四方方位圖騰。在高原烈日照耀下，這座看似純淨的天主教鐘樓，暗中披著一層原住民祈求風調雨順的古老神靈外衣。", 
+        sec2Title: "👁️ 現場三大視覺震撼與市井慢活看點", 
+        tips: "1. 八角形巨型採光穹頂（Cúpula）：步入大殿中央仰頭凝視，八扇巨型採光拱窗引入通透自然天光，照亮挑高穹頂上的精細浮雕，與下方拉丁十字主堂的鍍金木雕祭壇（Retablo Dorado）交織出神聖空靈的巴洛克光影。\n\n2. 塔拉韋拉藍白彩陶鐘樓：走到教堂外側抬頭欣賞鐘樓細節，雪白與鈷藍交織的手工燒製陶磚在陽光下泛著溫潤釉光，展現普埃布拉高原獨步全球的殖民混血陶藝極致。\n\n3. 全墨最長 46 拱門市政廊道（Los Portales）：教堂正門前緊鄰長達 170 公尺、由 46 道連續石造拱門串聯而成的市政長廊，是全墨西哥現存最長的古典外廊。在 19 世紀獨立內戰時期曾是革命志士密謀的聚點，如今則是全鎮最迷人的避暑長廊，林立著露天咖啡座、酒吧與手藝工坊。\n\n4. 轉角傳統市場的煙火氣（Mercado Municipal）：教堂旁步行 1 分鐘即達傳統市政市場，剛出爐的芝麻香酥大麵包三明治（Cemitas Poblanas）與傳統陶甕裝的普逵酒香氣四溢，是從神聖殿堂切換至道地墨西哥市井生活的絕佳轉角。", 
+        sec3Title: "📷 古典拱門機位、散步動線與注意事項", 
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 市政 46 拱廊框景：站在長廊內部的石柱陰影下，利用連續拱門的縱深透視線作為天然相框，將大教堂的彩色鐘樓與八角大穹頂框在右側，深具電影古典氛圍。\n2. 和諧廣場噴泉長焦視角：退至廣場中央的大理石噴泉旁，以水花與盤旋的鴿群為前景，平視仰拍整座巴洛克主教堂全景，層次感極佳。\n\n【⚠️ 現場參觀指南】：\n• 開放時間：每日 07:00 - 20:00，免費開放入場。\n• 慢活體驗建議：參觀完教堂內部後，非常推薦在 46 拱廊挑選一家露天咖啡座，點一杯帶肉桂香氣的傳統熱巧克力或冷飲，一邊閱讀歷史一邊遠眺廣場，享受喬魯拉午後最愜意的時光。\n• 參觀禮儀：教堂內常有當地居民進行靜默祈禱，拍照時請勿使用閃光燈與自拍棒。", 
+        query: "Parroquia de San Pedro Cholula" 
+      },
+
+     // 10/26 景點：聖米格爾大天使教堂
+      "san-miguel-church": {
+        type: "spot",
+        tag: "⛪ 玫瑰粉紅新哥德奇蹟・樹枝沙地繪出的傳奇地標",
+        title: "天使長聖米迦勒堂 (Parroquia de San Miguel Arcángel)",
+        summary: "全墨西哥最著名的新哥德地標！由目不識丁的原住民石匠僅憑歐洲明信片與樹枝沙地圖率眾雕鑿，以天然粉紅火山砂岩包覆 17 世紀巴洛克主殿，是融合土著工藝、獨立革命歷史與天主教信仰的曠世奇蹟。",
+        sec1Title: "📜 世紀傳奇：樹枝在沙地上繪出的大教堂",
+        sec1Text: "【起源與震災】\n教堂最早可追溯至 1555 年法蘭西斯會修士建立的小禮拜堂，現存的十字形主建築主體於 1680 年至 1709 年間完工，原本是極為純粹厚重新西班牙巴洛克風格。\n然而在 1880 年，連年地震導致原有雙鐘樓立面嚴重崩裂、傾頹。教區神父決定徹底重修立面，並找來了當地土生土長的原住民石匠大師——塞費里諾・古鐵雷斯（Zeferino Gutiérrez）。\n\n【明信片與沙地草圖】\n塞費里諾出身底層、完全沒有受過西方正規學院建築教育，甚至識字有限。他手邊僅有的「建築藍圖」，是信徒們旅歐帶回來的幾張比利時與德國科隆大教堂（Cologne Cathedral）明信片及蝕刻版畫。\n在沒有工程測量儀器的年代，塞費里諾每天破曉時分召集石匠與泥水匠，在教堂前塵土飛揚的廣場沙地上，隨手拾起一根樹枝憑空畫出幾何弧線與尖拱草圖，比手畫腳地指示匠人依樣開鑿。工匠們在毫無大型起重設備的條件下，徒手搭設簡陋木竹鷹架與滑輪組，將重達數百公斤的石塊運上海拔近百公尺的頂端。\n\n【十年苦功築造奇蹟】\n這座融合了歐洲哥德式飛券、尖拱、細柱，卻又融入墨西哥本土工匠大膽誇張想像的粉紅奇蹟，歷時整整十年，最終於 1890 年正式落成。落成之初曾被當時崇尚歐式古典學院派的墨西哥城菁英批評為『怪誕、四不像的土著仿造品』；然而百年之後，它成為全墨西哥、乃至全美洲最受全球讚譽且最具辨識度的新哥德建築典範。",
+        sec2Title: "👁️ 現場深度探索：建築彩蛋與內部珍寶",
+        tips: "【1. 粉紅砂岩（Cantera Rosa）的日照魔術】：\n整座立面開採自聖米格爾西南約 5 公里的天然火山岩。這種砂岩富含長石與氧化鐵，剛開採時質地溫潤易雕琢，接觸空氣氧化後日益堅硬。清晨 8:00 前晨曦斜射時呈柔嫩淡粉；正午烈日下反差轉為明朗暖米；傍晚夕陽（17:30-18:30）則燃燒成濃郁的紫紅玫瑰金；入夜 19:30 投射暖黃燈光後，整座城堡彷彿浮於夜空之中。\n\n【2. 穿梭時空的『雙層建築』反差】：\n當你穿過華麗高聳的新哥德尖拱大門步入大殿，會驚訝地發現外殼與內部完全是兩個世界！內部完好保存著 17 世紀的低調拉丁十字巴洛克風格，兩側厚重的石砌拱頂與新古典主義純白金色祭壇，與門外的繁複哥德尖塔形成強烈的時空反差。\n\n【3. 神秘的玉米稈征服基督像（Señor de la Conquista）】：\n在主祭壇右側的側禮拜堂，供奉著一尊面容黝黑、神情悲憫的受苦耶穌像。這是 16 世紀原住民米卻肯（Michoacán）塔拉斯坎族（Tarascan）工匠的傳奇技藝：雕像完全不使用木頭，而是將『乾燥玉米稈』磨碎成粉，混合野生蘭花球莖提取的天然植物膠塑形，最後敷上石膏彩繪。此種技法製成的雕像重量極輕（便於傳教士巡迴遊行），且能數百年不受蟲蛀濕氣腐壞。在印第安原住民心中，玉米代表大地生命起源，他們藉此將自身古老神靈悄悄融入了殖民天主教之中。\n\n【4. 外牆滴水獸與鐘樓古鐘】：\n抬頭細看尖塔兩側伸出的排水口，不同於歐洲常見的惡魔或石獅滴水獸（Gargoyle），這裡雕刻著許多帶有本土原住民風格的野獸與神話面孔；雙塔頂端則懸掛著四口於 18、19 世紀鑄造的青銅大鐘，每逢正點鐘聲在山谷迴盪，深沉而莊嚴。\n\n【5. 祭壇地宮（La Cripta）與獨立英魂】：\n主祭壇正下方有一座深邃的地下地宮，每年僅在 11 月亡靈節期間短暫開放公眾入內參觀。地宮內安葬著歷代主教、神職人員，以及墨西哥前總統安納斯塔西奧・布斯塔曼特（Anastasio Bustamante）的遺骸心臟。",
+        sec3Title: "📷 絕美攝影機位、歷史散步與參觀禮儀",
+        sec3Text: "【📸 三大明信片級攝影機位】：\n1. Calle Aldama 經典仰拍：從主廣場往南沿著 Aldama 鵝卵石街往下走約 150 公尺，回頭向上看。前景是兩側色彩濃郁的殖民古宅、懸掛的鐵鑄路燈與九重葛綠蔭，粉紅尖塔高聳矗立於盡頭，此為全球旅遊雜誌最標誌性的封面視角。\n2. El Jardín 主花園綠蔭長椅：坐在廣場正前方的印度月桂樹（Laurel de la India）修剪整齊的圓冠樹蔭下，用長焦鏡頭透過枝枒捕捉尖塔細節與廣場漫步人群。\n3. 市政廳二樓拱廊（Palacio Municipal）：從廣場北側的市政建築石造拱門框景向南拍攝，拱門恰好形成古典相框。\n\n【📜 廣場歷史散步】：\n教堂正前方的 El Jardín 廣場，是 1810 年墨西哥獨立革命的核心策源地。民族英雄伊格納西奧・阿連德（Ignacio Allende）正是誕生於教堂旁的宅邸（現為阿連德歷史博物館）。坐在廣場上，點一份剛出爐的吉拿棒（Churros）配熱巧克力，聆聽街頭流浪樂隊（Mariachi）彈奏，是聖米格爾最極致的時光享受。\n\n【⚠️ 現場參觀提醒】：\n• 開放時間：每日 06:30 - 21:00，免費開放入場。\n• 著裝規範：雖不強制長袍，但請避免短褲、背心或過度暴露的服裝；進入正殿前男性請脫帽以示敬意。\n• 拍照規範：可室內拍照，但進行彌撒期間請勿走動、肅靜並絕對禁止使用閃光燈。",
+        query: "Parroquia de San Miguel Arcángel San Miguel de Allende"
+      },
+
+      // 10/25 上午四大景點
+      "basilica-guanajuato": { type: "spot", tag: "⛪ 瓜納華托守護神・亮黃色信仰中心", title: "Basílica Colegiata de Nuestra Señora", summary: "矗立於和平廣場的百年聖殿，亮黃色的外牆與大紅色圓頂是瓜納華托最鮮明的視覺中心。", sec1Title: "📜 歷史背景與聖母像的傳奇漂流", sec1Text: "這座宏偉的聖母聖殿始建於 1671 年，並於 1696 年完工。它不僅是歷史城區的核心，更是這座世界遺產銀礦山城的精神信仰中樞。聖殿中最為珍貴的無價之寶，是供奉於主祭壇中央的『瓜納華托聖母像』。這尊精美的純木雕鍍金聖母像擁有著極其傳奇的歷史：她原本供奉於西班牙的安達盧西亞地區，西元 714 年摩爾人入侵西班牙時，虔誠的教徒為了保護聖母像不被破壞，將其深埋在一個地下潮濕的洞穴中，整整隱藏了 800 多年！直到 1557 年，西班牙國王菲利普二世為了表彰瓜納華托地區豐富的白銀產量對西班牙帝國的貢獻，特地將這尊剛重見天日不久的聖母像跨海贈予瓜納華托。至今，她已在這座山城守護了將近 500 個年頭，是全墨西哥最古老的木雕聖母像之一。", sec2Title: "👁️ 建築看點與白銀時代的奢華", tips: "【外觀：黃牆紅頂的視覺衝擊】：\n教堂外觀以鮮豔無比的亮黃色粉飾，搭配巨大的大紅色圓頂與兩側高聳的鐘樓。在錯綜複雜的狹窄巷弄中，這座建築始終是旅客最清晰的方位指南針。\n【內部：銀礦大亨贊助的祭壇與水晶吊燈】：\n在 18 世紀白銀產量達到世界頂峰時，當地的銀礦大亨們斥巨資贊助了教堂的內部裝修。主祭壇採用極為華麗的新古典主義風格，兩側懸掛著多盞由歐洲進口的巨型波西米亞水晶手工吊燈。", sec3Title: "📷 拍攝機位與參訪注意事項", sec3Text: "【最佳拍攝機位】：\n1. 和平廣場：站在教堂正前方的廣場花園，以三角形的綠地與噴泉為前景，能拍出教堂最壯麗的正立面全景。\n2. 皮皮拉觀景台俯拍：從山頂往下看，聖母聖殿的紅色大圓頂完美坐落在彩色積木房舍的中央，是辨識度最高的地標。\n【實用參訪提示】：教堂內部允許拍照，但請勿在彌撒進行期間使用閃光燈；入內請脫下帽子並保持安靜。", query: "Basílica Colegiata de Nuestra Señora de Guanajuato" },
+      "teatro-juarez": { type: "spot", tag: "🎭 白銀時代的極致奢華・謬思女神殿堂", title: "Teatro Juárez (胡亞雷斯劇院)", summary: "被譽為墨西哥最美麗的劇院之一。外部是莊嚴的羅馬多立克柱，內部則是極度奢靡華麗的天方夜譚摩爾式風格。", sec1Title: "📜 歷史背景與波費里奧時代的輝煌", sec1Text: "胡亞雷斯劇院無疑是瓜納華托白銀時代極度繁華與財富外顯的最高象徵。這座劇院始建於 1872 年，在經歷了長達 31 年的施工後，終於在 1903 年，由當時的墨西哥獨裁總統波費里奧·迪亞斯親自主持了盛大的揭幕典禮。在那個被稱為『波費里奧時代』的歷史階段，墨西哥統治階層極度推崇歐洲的古典藝術風格，瓜納華托的銀礦大亨們不惜重金，從歐洲進口大理石、青銅雕像與水晶吊燈，誓言要打造出一座能與巴黎歌劇院相媲美的藝術殿堂。如今，它不僅是瓜納華托交響樂團的駐地，更是每年 10 月國際知名『塞凡提斯藝術節』的最核心表演場地。", sec2Title: "👁️ 外部希臘神話與內部摩爾式奇觀", tips: "【外觀：羅馬多立克式門廊與 8 尊謬思女神】：\n劇院的正面立面極具氣勢，由 12 根巨大的羅馬多立克式石柱支撐。最引人注目的，是矗立在屋頂邊緣的 8 尊高大青銅雕像，她們是希臘神話中掌管藝術與科學的謬思女神。這些雕像皆是在美國俄亥俄州鑄造後千里迢迢運來，姿態優雅，俯視著下方的百年廣場。\n【內部：天方夜譚般的摩爾式奢華】：\n購票走入劇院內部，視覺風格瞬間從歐洲古典轉變為極度絢麗的阿拉伯摩爾式風格。觀眾席被設計成馬蹄形，四周環繞著五層樓高的雕花包廂，包廂欄杆上佈滿了精緻的幾何圖騰與純金箔裝飾。座椅鋪滿了深紅色的天鵝絨，整個空間彷彿《一千零一夜》中的蘇丹宮殿般令人目眩神迷。", sec3Title: "📷 拍攝機位與遊街音樂會集合點", sec3Text: "【最佳拍攝機位與門票資訊】：\n強烈建議支付微薄的門票進入劇院內部參觀，這是瓜納華托最值回票價的室內景點；站在一樓大廳抬頭仰拍五層紅色天鵝絨包廂與穹頂，是不可錯過的絕美構圖。\n【夜間的階梯廣場（Callejoneadas）】：\n劇院外部的巨大寬闊階梯，每到傍晚就會聚集許多穿著 17 世紀西班牙傳統服飾的『遊街音樂家』。他們會以劇院階梯為起點，帶領遊客穿梭在瓜納華托的狹窄巷弄中，邊走邊彈奏吉他、唱歌講述當地傳說。", query: "Teatro Juárez Guanajuato" },
+      "callejon-beso": { type: "spot", tag: "💋 寬度僅68公分・悽美殉情窄巷", title: "Callejón del Beso (接吻巷)", summary: "瓜納華托最著名的浪漫傳說發源地。這是一條寬度僅有 68 公分的極窄巷弄，流傳著富家千金與窮礦工的悲劇愛情故事。", sec1Title: "📜 歷史背景與羅密歐與茱麗葉般的傳說", sec1Text: "在瓜納華托錯綜複雜、依山而建的三維立體巷弄迷宮中，『接吻巷』（Callejón del Beso）無疑是最具傳奇色彩的一條。這條小巷的特色在於它極度狹窄，最窄處僅有 68 公分，兩側房屋的二樓陽台幾乎快要碰在一起。\n這裡流傳著一段宛如墨西哥版『羅密歐與茱麗葉』的悽美愛情故事：傳說在殖民時期，住在這裡的富家千金安娜愛上了一位在礦坑工作的貧窮年輕礦工卡洛斯。安娜的父親是一位嚴厲的西班牙貴族，發現兩人的戀情後大發雷霆，將安娜軟禁在二樓的房間內。癡情的卡洛斯不願放棄，他耗盡所有積蓄，租下了安娜房間正對面的那間屋子。由於兩側陽台距離極近，每到深夜，兩人便會跨出陽台，在半空中偷偷牽手與接吻。然而某天深夜兩人在陽台幽會時，被安娜的父親當場撞見。父親在盛怒之下，竟拔出匕首刺穿了自己女兒的胸膛。卡洛斯雖然緊緊握著安娜的手，卻只能眼睜睜看著愛人倒在血泊中。悲痛欲絕的卡洛斯隨後跳下了瓜納華托的主礦坑殉情。這段淒美的傳說，讓接吻巷成為了全墨西哥情侶必訪的朝聖地。", sec2Title: "👁️ 現場視覺亮點與陡峭巷弄奇觀", tips: "【色彩鮮豔的陡峭小巷】：\n撇開浪漫傳說不談，接吻巷本身就是瓜納華托獨特山城地形的最佳縮影。小巷兩側的房屋外牆被漆成鮮豔的橘紅色與芥末黃，階梯極度陡峭，完全是由當地人依著山勢硬生生開鑿出來的。抬頭仰望，那兩座傳說中的『相連陽台』如今依然保存完好，紅色的鍛鐵欄杆上掛滿了祈求愛情長久的愛情鎖與紅色緞帶。\n【第三級階梯的魔咒】：\n根據當地導遊的說法，接吻巷有一個不成文的浪漫魔咒：任何來到這裡的情侶，都必須並肩站在小巷由下往上數的『第三級紅色階梯』上深情接吻。傳說完成這個儀式的情侶，將會獲得長達七年的幸福與庇佑；但如果來到這裡卻沒有接吻，則會面臨七年的厄運與分離。", sec3Title: "📷 拍照機位與避開人潮提示", sec3Text: "【最佳拍攝方式】：\n除了在下方第三級階梯合影，當地居民現在也開放了傳說中『安娜與卡洛斯的房間』供遊客購票進入。情侶可以分別進入兩側的房屋，走到二樓的陽台上，由底下的攝影師由下往上拍攝兩人在半空中跨越陽台接吻的經典畫面。\n【實用行前提醒】：\n這條小巷名氣極大，每天中午過後到傍晚都會擠滿大排長龍的旅行團與當地遊客，甚至會堵塞整條階梯。強烈建議在清晨 9:00 前造訪，此時不僅不用排隊，清晨的斜射光線灑在狹窄的彩色巷弄中，拍出來的照片也最具質感與層次。", query: "Callejón del Beso Guanajuato" },
+      "uni-guanajuato": { type: "spot", tag: "🎓 可可夜總會原型・純白千層階梯", title: "Universidad de Guanajuato (瓜納華托大學)", summary: "全墨西哥最美麗的大學之一。其直通天際的純白色新古典主義百級大階梯，正是皮克斯動畫《可可夜總會》歌神宮殿的靈感來源。", sec1Title: "📜 歷史背景與塞凡提斯藝術節的搖籃", sec1Text: "瓜納華托大學不僅是這座城市的最高學府，更是整座山城的文化與思想引擎。它的前身可以追溯到 1732 年由耶穌會士創立的『聖三一學院』，在近三百年的歲月裡，它培育了無數墨西哥的政治家、藝術家與思想家。\n我們今日所看到的這座極具視覺震撼力的純白新古典主義主樓，以及那標誌性的巨大階梯，則是在 1940 年代中期完成的擴建工程。瓜納華托大學對這座城市最大的貢獻，莫過於在 1950 年代，大學的師生們開始在城市各個古老的廣場上，自發性地演出西班牙大文豪塞凡提斯的經典短劇。這股強大的街頭戲劇風潮，最終在 1972 年催生了享譽國際的『塞凡提斯國際藝術節』，讓瓜納華托一躍成為拉美最重要的表演藝術之都。", sec2Title: "👁️ 現場視覺亮點與動畫場景巡禮", tips: "【直通天際的 113 級純白階梯】：\n這所大學最著名的標誌，就是從街道一路延伸至主樓大門的巨大白色階梯，總共有 113 級。階梯採用當地特有的綠色粗面岩與純白色石材交替砌成。站在階梯底部往上看，高聳對稱的新古典主義外牆與城堡般的城垛，在深藍色天空的襯托下，顯得極其宏偉且不真實。\n【《可可夜總會》(Coco) 歌神宮殿的原型】：\n如果你是皮克斯動畫《可可夜總會》的影迷，來到這裡一定會感到無比熟悉！動畫中男主角米格（Miguel）潛入亡靈界大明星『歌神德拉庫斯』舉辦豪奢派對的宮殿時，那座需要爬得氣喘吁吁、氣勢磅礴的千層白色大階梯，其視覺靈感與原形，正是完全取材自瓜納華托大學的這座主階梯！", sec3Title: "📷 拍攝機位與攀登注意事項", sec3Text: "【最佳攝影機位】：\n1. 仰拍全景：退到階梯最下方的街道對面（注意來車），使用廣角鏡頭由下往上仰拍，能拍出階梯直入雲霄的壓迫感與氣勢。\n2. 俯瞰老城圓頂：強烈建議一口氣爬上 113 級階梯頂端！站在大學正門口的小平台上回頭俯瞰，可以清楚看見旁邊聖母聖殿的巨大紅色圓頂，以及周邊層疊的山城美景。\n【實用行前提醒】：\n階梯非常陡峭，攀爬時請務必注意腳下安全；下午時分這裡會聚集許多下課的大學生坐在階梯上聊天、看書，充滿濃厚的學院青春氣息。雖然遊客可以自由在階梯上拍照，但請注意不要干擾到學生的通行與校園安寧。", query: "Universidad de Guanajuato" },
+      
+      // 10/25 餐廳
+     "mercado-hidalgo-eats": { type: "restaurant", tag: "百年市場・市井美食精華", title: "Mercado Hidalgo（必吃名吃指南）", summary: "瓜納華托最具代表性的挑高鐵鑄傳統市場。除了第一天品嚐過的炸豬皮包，市場內還隱藏著多間在地人每天報到的靈魂名吃，適合中午直接在各攤點餐品嚐！", sec1Title: "⭐ 市場三大必吃名吃推薦", dishes: ["<strong>Gorditas de Chicharrón Prensado（現揉厚玉米餡餅）</strong>：市場現壓玉米餅攤位必點！厚實玉米麵糰包入紅香料慢熬濃縮的碎豬皮餡，鐵板乾烙至外脆內糯，剪開塞滿新鮮香菜、洋蔥與莎莎醬。", "<strong>Pozole Rojo / Verde（傳統慢熬玉米大骨濃湯）</strong>：家常熟食攤（Fonda）經典！大白玉米粒與豬肉慢火煨燉的高湯，上桌時擠入整顆青檸，配上脆生菜絲與小紅蘿蔔，鮮酸解膩又暖胃。", "<strong>Enchiladas Mineras（瓜納華托礦工安琪拉達捲）</strong>：瓜城必吃歷史名菜！玉米餅浸紅椒醬煎香後捲入起司，鋪上熱炒馬鈴薯塊與紅蘿蔔，撒滿白乾酪，香濃且飽足感極高。"], sec2Title: "💡 現場體驗與點餐提示", tips: "1. 飲品搭配：推薦到飲料攤點一杯大杯的 Horchata（肉桂米漿）或 Agua de Jamaica（洛神花茶），搭配油炸與濃郁肉食特別清爽。\n2. 用餐環境：一樓中央與周邊為熟食攤位，通常坐滿當地民眾，直接向老闆點餐即可；攤位皆僅收現金（披索現鈔或零錢）。\n3. 市場內走道較為狹窄熱鬧，建議隨身貴重包包前背，注意隨身財物。", query: "Mercado Hidalgo Guanajuato" },
+      "tacos-el-tigre": { type: "restaurant", tag: "🌮 在地人狂推・夜間限定街頭塔可", title: "Tacos el Tigre", summary: "瓜納華托在地學生與夜遊者的宵夜首選，提供香氣四溢的道地街頭烤肉。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Tacos al Pastor（旋轉烤豬肉塔可）</strong>：烤肉師傅刀法俐落，搭配現切鳳梨，肉質鮮嫩酸甜解膩。", "<strong>Volcanes（酥脆起司火山塔可）</strong>：在鐵板上將玉米餅烤至餅乾般酥脆，鋪上滿滿牽絲起司與烤肉。"], sec2Title: "💡 現場點餐提示", tips: "點餐速度極快，站著吃或坐在簡陋塑膠椅上吃是最地道的體驗，記得跟老闆說『Con todo（全加洋蔥與香菜）』！", query: "Tacos el Tigre Guanajuato" },
+
+      // 10/26 早餐 2選1
+      "lavanda-cafe": { type: "restaurant", tag: "💜 夢幻紫香・超人氣特色咖啡館", title: "Lavanda Café de Especialidad", summary: "聖米格爾最受歡迎的早午餐名店。將淡雅的天然薰衣草香氣完美融入精品咖啡與餐點中。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Latte de Lavanda（薰衣草拿鐵）</strong>：店內招牌！拉花精美，每一口都帶有淡雅而不刺鼻的天然薰衣草香氣。", "<strong>Huevos Benedictinos（班尼迪克蛋）</strong>：搭配特製荷蘭醬與新鮮烘焙的酸種麵包。", "<strong>Helado de Lavanda（薰衣草冰淇淋）</strong>：口感綿密，充滿花香，極度適合拍照。"], sec2Title: "💡 現場排隊提示", tips: "早上 8 點開門前就會大排長龍！強烈建議提早抵達。店內中庭座位採光極佳，非常適合享受聖米格爾的早晨。", query: "Lavanda Café San Miguel de Allende" },
+      
+      // 10/26 午、甜、晚
+      "mama-mela": { type: "restaurant", tag: "🥘 媽媽的味道・道地家常料理", title: "Mamá Mela", summary: "提供最正宗、無商業包裝的墨西哥家庭式私房菜，環境溫馨親切。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Enchiladas Verdes（綠醬雞肉捲）</strong>：玉米餅捲雞絲，淋上微酸微辣的新鮮綠番茄醬與酸奶。", "<strong>Guisados Tradicionales（傳統每日燉菜）</strong>：每天提供不同的家常燉菜，搭配紅米飯與現烤玉米餅。"], sec2Title: "💡 現場避坑提示", tips: "餐點現點現做，保留了最純粹的墨西哥家庭風味。價格親民，是避開觀光客高消費餐廳的極佳選擇。", query: "Mamá Mela San Miguel de Allende" },
+      "san-agustin": { type: "restaurant", tag: "🍫 女星開的店・濃郁西班牙熱可可", title: "Chocolates y Churros San Agustín", summary: "由知名阿根廷女星 Margarita Gralia 開設，是聖米格爾人氣最高的吉拿棒與熱巧克力專賣店。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Churros Rellenos（包餡吉拿棒）</strong>：較粗的吉拿棒，內部擠滿誘人的牛奶糖（Cajeta）或巧克力醬。", "<strong>Chocolate Español（西班牙熱巧克力）</strong>：極度濃稠，幾乎像布丁或巧克力醬一般的質地。"], sec2Title: "💡 現場點餐提示", tips: "西班牙熱巧克力濃稠到可以直接用吉拿棒『挖』著吃！這家店位於廣場旁，下午茶時段經常客滿。", query: "San Agustín Chocolates & Churros San Miguel de Allende" },
+      "los-milagros": { type: "restaurant", tag: "🌋 視覺震撼・火山石缽料理", title: "Restaurante Los Milagros", summary: "聖米格爾極具代表性的景觀餐廳，以豪邁的『Molcajete（高溫火山石臼）』料理聞名。", sec1Title: "⭐ 招牌必點料理", dishes: ["<strong>Molcajete Mixto（綜合石缽烤肉）</strong>：將高溫燒烤過的火山石臼盛滿滾燙的起司紅醬，裡面放滿烤牛排、雞胸肉、香腸與仙人掌片，視覺震撼力十足！", "<strong>Guacamole（桌邊現做酪梨醬）</strong>：服務生會推車到桌邊，依照你的口味偏好（辣度、洋蔥多寡）現場搗製新鮮酪梨醬。"], sec2Title: "💡 現場點餐提示", tips: "石缽上桌時仍在沸騰滋滋作響，非常燙手請小心！份量極大，建議 2-3 人分享一份 Molcajete 即可吃得非常飽足。", query: "Restaurante Los Milagros San Miguel de Allende" },
+
+     // 10/27 普埃布拉晚餐 3選1 餐廳
+      "puebla-comal": {
+        type: "restaurant",
+        tag: "🍲 大教堂景觀・經典平民傳統小吃",
+        title: "Comal Cocina Local",
+        summary: "座落於普埃布拉大教堂正對面的二樓景觀名店，以親民價格與極致地道的傳統街頭小吃聞名。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Pelonas（招牌炸圓麵包牛肉堡）</strong>：外層金黃酥脆的炸圓麵包，內餡夾滿慢燉手撕牛肉、黑豆泥、生菜與酸奶，酥脆而不油膩。",
+          "<strong>Chalupas Poblanas（經典查路帕脆餅）</strong>：現點現炸的小圓玉米餅，分別淋上紅綠雙色莎莎醬，撒上手撕豬肉與白洋蔥丁，是普埃布拉靈魂小吃。",
+          "<strong>Chanclas（浸汁肉餡三明治）</strong>：長型麵包塞入肉餡，整份浸泡在特調微辣辣椒番茄濃汁中，濃郁過癮。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 靠窗陽台座位視野極佳，直面夜間打燈的普埃布拉大教堂，建議傍晚前往搶佔二樓陽台座位。\n2. 份量精緻，非常適合與旅伴多點幾樣不同小吃一起分食品嚐！",
+        query: "Comal Cocina Local Puebla"
+      },
+      "puebla-mural": {
+        type: "restaurant",
+        tag: "🏆 普埃布拉美食天花板・傳奇壁畫經典國宴",
+        title: "El Mural de los Poblanos",
+        summary: "滿牆都是墨西哥藝術大師的傳奇壁畫，被公認為品嚐正宗普埃布拉莫雷醬（Mole Poblano）的最高殿堂。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Mole Poblano（經典普埃布拉莫雷燉雞/火雞）</strong>：由數十種乾辣椒、堅果、葡萄乾與頂級黑巧克力慢火熬煮數日的國寶醬汁，微甜微辣、層次極深。",
+          "<strong>Degustación de Moles（綜合莫雷品鑑拼盤）</strong>：一次品嚐四種招牌醬汁（經典黑莫雷、綠南瓜子 Pipián Verde、紅芝麻 Pipián Rojo 與白莫雷）。",
+          "<strong>Cemitas Poblanas（普埃布拉芝麻包）</strong>：外酥內軟的芝麻圓麵包，夾入酥炸牛排、大量手撕 Quesillo 白起司與特有香草 Pápalo。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 這家店極受歡迎且屬於高級傳統餐廳，強烈建議提早訂位；若未訂位建議傍晚 18:30 前抵達現場候位。\n2. 莫雷醬汁極度濃郁，搭配店家免費隨附的現烤玉米餅與紅米飯食用最對味。",
+        query: "El Mural de los Poblanos Puebla"
+      },
+      "puebla-mendrugo": {
+        type: "restaurant",
+        tag: " 17世紀古宅博物館・精緻傳統佳餚與爵士樂",
+        title: "La Casa del Mendrugo",
+        summary: "結合了考古博物館與 17 世紀古宅庭園的高雅餐廳，一邊聆聽現場音樂，一邊品嚐融合現代美學的普埃布拉佳餚。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Pipián Verde con Cerdo（綠南瓜子醬慢燉豬肉）</strong>：以烘烤南瓜子、綠番茄與香草研磨製成的翠綠醬汁，香氣清雅不膩。",
+          "<strong>Chalupas Gourmet（精緻雙色查路帕）</strong>：用傳統手法油炸玉米餅，搭配慢燉嫩肉絲與主廚特調紅綠莎莎醬，精緻典雅。",
+          "<strong>Tapas y Mezcal（西班牙風味佐酒小點與梅斯卡爾）</strong>：融合西班牙與墨西哥風味的冷切肉、熟成乳酪與特調雞尾酒。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 餐廳本身地下室與天井就是一座小型博物館（展出史前人類骨骼與原住民文物），用餐前後可免費參觀。\n2. 週末晚間常有現場爵士樂或吉他演奏，氣氛極佳，非常適合浪漫慢活晚餐。",
+        query: "La Casa del Mendrugo Puebla"
+      },
+
+    // 10/29 普埃布拉晚餐 3選1 餐廳
+      "puebla-comal": {
+        type: "restaurant",
+        tag: "🍲 大教堂景觀・經典平民傳統小吃",
+        title: "Comal Cocina Local",
+        summary: "座落於普埃布拉大教堂正對面的二樓景觀名店，以親民價格與極致地道的傳統街頭小吃聞名。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Pelonas（招牌炸圓麵包牛肉堡）</strong>：外層金黃酥脆的炸圓麵包，內餡夾滿慢燉手撕牛肉、黑豆泥、生菜與酸奶，酥脆而不油膩。",
+          "<strong>Chalupas Poblanas（經典查路帕脆餅）</strong>：現點現炸的小圓玉米餅，分別淋上紅綠雙色莎莎醬，撒上手撕豬肉與白洋蔥丁，是普埃布拉靈魂小吃。",
+          "<strong>Chanclas（浸汁肉餡三明治）</strong>：長型麵包塞入肉餡，整份浸泡在特調微辣辣椒番茄濃汁中，濃郁過癮。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 靠窗陽台座位視野極佳，直面夜間打燈的普埃布拉大教堂，建議傍晚前往搶佔二樓陽台座位。\n2. 份量精緻，非常適合與旅伴多點幾樣不同小吃一起分食品嚐！",
+        query: "Comal Cocina Local Puebla"
+      },
+      "puebla-mural": {
+        type: "restaurant",
+        tag: "🏆 普埃布拉美食天花板・傳奇壁畫經典國宴",
+        title: "El Mural de los Poblanos",
+        summary: "滿牆都是墨西哥藝術大師的傳奇壁畫，被公認為品嚐正宗普埃布拉莫雷醬（Mole Poblano）的最高殿堂。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Mole Poblano（經典普埃布拉莫雷燉雞/火雞）</strong>：由數十種乾辣椒、堅果、葡萄乾與頂級黑巧克力慢火熬煮數日的國寶醬汁，微甜微辣、層次極深。",
+          "<strong>Degustación de Moles（綜合莫雷品鑑拼盤）</strong>：一次品嚐四種招牌醬汁（經典黑莫雷、綠南瓜子 Pipián Verde、紅芝麻 Pipián Rojo 與白莫雷）。",
+          "<strong>Cemitas Poblanas（普埃布拉芝麻包）</strong>：外酥內軟的芝麻圓麵包，夾入酥炸牛排、大量手撕 Quesillo 白起司與特有香草 Pápalo。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 這家店極受歡迎且屬於高級傳統餐廳，強烈建議提早訂位；若未訂位建議傍晚 18:30 前抵達現場候位。\n2. 莫雷醬汁極度濃郁，搭配店家免費隨附的現烤玉米餅與紅米飯食用最對味。",
+        query: "El Mural de los Poblanos Puebla"
+      },
+      "puebla-mendrugo": {
+        type: "restaurant",
+        tag: " 17世紀古宅博物館・精緻傳統佳餚與爵士樂",
+        title: "La Casa del Mendrugo",
+        summary: "結合了考古博物館與 17 世紀古宅庭園的高雅餐廳，一邊聆聽現場音樂，一邊品嚐融合現代美學的普埃布拉佳餚。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Pipián Verde con Cerdo（綠南瓜子醬慢燉豬肉）</strong>：以烘烤南瓜子、綠番茄與香草研磨製成的翠綠醬汁，香氣清雅不膩。",
+          "<strong>Chalupas Gourmet（精緻雙色查路帕）</strong>：用傳統手法油炸玉米餅，搭配慢燉嫩肉絲與主廚特調紅綠莎莎醬，精緻典雅。",
+          "<strong>Tapas y Mezcal（西班牙風味佐酒小點與梅斯卡爾）</strong>：融合西班牙與墨西哥風味的冷切肉、熟成乳酪與特調雞尾酒。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 餐廳本身地下室與天井就是一座小型博物館（展出史前人類骨骼與原住民文物），用餐前後可免費參觀。\n2. 週末晚間常有現場爵士樂或吉他演奏，氣氛極佳，非常適合浪漫慢活晚餐。",
+        query: "La Casa del Mendrugo Puebla"
+      },
+
+      // 10/27 普埃布拉景點
+      "puebla-sapos": {
+        type: "spot",
+        tag: "🐸 波希米亞骨董街・河畔青蛙傳說",
+        title: "Plazuela de los Sapos (青蛙巷)",
+        summary: "充滿波希米亞風情與懷舊色彩的古董藝術聚落，每週末舉辦熱鬧的骨董與跳蚤市場。",
+        sec1Title: "📜 名稱由來與歷史轉變",
+        sec1Text: "位於普埃布拉歷史中心南側的 Plazuela de los Sapos（青蛙巷與青蛙廣場），是整座城市最具文藝氣息的角落。早期當 San Francisco 河仍在地面流淌時，河岸周遭每逢雨季氾濫便棲息大量青蛙，夜晚蛙聲此起彼落，居民因此將其暱稱為『Los Sapos（青蛙們）』。\n\n隨著河道加蓋，昔日河畔沼澤蛻變成了古董與藝術聚落。巷弄與廣場周邊保存了大量 18 世紀殖民建築，外牆漆成鵝黃、天藍、磚紅與粉橘色，木造陽台與斑駁木門透出濃郁歲月痕跡。",
+        sec2Title: "👁️ 週末跳蚤市場與慢活咖啡",
+        tips: "【週末骨董市集（Bazar de Antigüedades）】：每週末街邊攤鋪會擺出琳瑯滿目的古老鐘錶、黑膠唱片、復古相機、宗教聖像與二手家具。\n【巷弄漫步】：平日造訪則能享受靜謐石板路與爬滿藤蔓的古宅，隱身其中的獨立咖啡館與藝術工坊非常適合度過悠閒午後。",
+        query: "Plazuela de los Sapos Puebla"
+      },
+      "puebla-parian": {
+        type: "spot",
+        tag: "🏺 第一座傳統手工藝市集・活化石",
+        title: "Mercado El Parián (帕里安手工藝市集)",
+        summary: "普埃布拉第一座專門為手工藝品設立的傳統市集，完整保留 19 世紀初紅磚拱廊與豐富民俗工藝。",
+        sec1Title: "📜 歷史源流與市集地位",
+        sec1Text: "建立於 1801 年的 El Parián 是普埃布拉最具代表性的傳統市集。最初作為商隊、驛馬車與過往商旅卸貨、休憩與交易的中心（名稱源自菲律賓馬尼拉對商業集散地的稱呼），如今則完整保留了 19 世紀初的建築格局，成為普埃布拉傳統文化的活化石。\n\n走入市集，映入眼簾的是整齊劃一的紅磚拱廊、粉白相間牆面與深色木窗格，空氣中瀰漫著皮革與舊木頭的淡淡香氣。",
+        sec2Title: "👁️ 精選民俗工藝寶庫",
+        tips: "【塔拉韋拉陶器（Talavera）】：普埃布拉最具世界名氣的錫釉陶器，以濃郁鈷藍、黃、綠、橘等礦物色彩在純白底色上繪製繁複圖騰（購買時請認明底部防偽標記）。\n【傳統紡織與皮革】：手工編織彩虹披肩（Rebozos）、繡花棉質傳統襯衫、手工皮鞋與精細木雕面具，是挑選紀念伴手禮的絕佳去處。",
+        query: "Mercado El Parián Puebla"
+      },
+      "puebla-dulces": {
+        type: "spot",
+        tag: "🍬 修道院百年手工甜點・甜點控天堂",
+        title: "Calle de los Dulces (糖果街)",
+        summary: "位於 6 Oriente 街的百年糖果街，源自修道院修女們的獨特手藝，匯聚琳瑯滿目的傳統墨式糕點。",
+        sec1Title: "📜 修道院甜點的歷史淵源",
+        sec1Text: "位於 6 Oriente 街的 Calle de dulces de Sta. Clara（聖克拉拉糖果街）是專屬於甜點控的夢幻天堂。在西班牙殖民時期，普埃布拉曾擁有數十座天主教修道院。當時修女們為了招待政商顯要或籌措經費，發揮歐洲烹調技術與當地熱帶物產（蔗糖、堅果、可可、香草與水果）相結合的智慧，研發出多種獨一無二的修道院甜點（Dulces Conventuales）。時代變遷下，修道院周遭逐漸聚集了專門販售傳統甜點的百年老店鋪，使此地成為墨西哥傳統糖果發源重鎮。",
+        sec2Title: "👁️ 必嚐經典招牌甜點",
+        tips: "【玻利加多（Borrachitos）】：口感軟糯、外層裹滿細砂糖的軟糖，製作過程加入蘭姆酒或梅斯卡爾酒，帶有淡淡酒香。\n【甘薯糖（Tortitas de Santa Clara）】：以普埃布拉特產甜甘薯泥為基底，頂部覆蓋厚實濃郁的南瓜子或蛋黃糖霜，甜而不膩。\n【果仁糖與糖磚】：使用南瓜子、花生、核桃與焦糖熬製的香脆糖磚，充滿濃郁焦糖與乳香。",
+        query: "Calle de los Dulces Puebla"
+      },
+
+     // 10/28 喬魯拉早餐與甜點
+      "cholula-mercado": {
+        type: "restaurant",
+        tag: " 在地常民市井早餐・傳統玉米鹹點與手沖肉桂熱飲",
+        title: "San Pedro Cholula 市政市場早餐",
+        summary: "喬魯拉最熱鬧的市政傳統室內市場，充滿熱氣騰騰的市井煙火氣，是在地人最愛的平民早餐聚落。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Cecina de Cholula（喬魯拉鹹醃牛肉塔可）</strong>：現烤薄切鹹牛肉片，搭配新鮮酪梨塊、起司與現烤玉米餅。",
+          "<strong>Tamales y Atole（墨式玉米粽配香濃玉米熱飲）</strong>：包裹綠醬雞肉或紅醬的熱騰騰玉米粽，搭配一杯熱肉桂玉米飲（Atole）暖胃。",
+          "<strong>Memelas con Salsa（現壓雙色玉米厚餅）</strong>：現點現壓的手工厚玉米餅，塗上豬油與黑豆泥，淋上雙色莎莎醬並撒上新鮮白乳酪。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 建議走入熟食小吃攤位區（Comida corrida），挑選人潮最多、鐵板滋滋作響的攤位入座。\n2. 市場攤位多收現金，請提前準備好小面額披索零錢方便結帳。",
+        query: "Mercado Municipal San Pedro Cholula"
+      },
+      "puebla-churreria": {
+        type: "restaurant",
+        tag: "🍩 普埃布拉老字號吉拿棒・現炸酥脆與濃郁熱可可",
+        title: "Puebla La Churrería",
+        summary: "在地極富盛名的百年傳統吉拿棒老店，以現點現炸、外酥內軟的經典口感征服無數甜點控。",
+        sec1Title: "⭐ 招牌必點與吃法指南",
+        dishes: [
+          "<strong>Churros Tradicionales（經典現炸吉拿棒）</strong>：金黃酥脆的剛起鍋吉拿棒，趁熱裹上肉桂糖粉（Canela）或細白糖。",
+          "<strong>Chocolate a la Española（西班牙濃情熱巧克力）</strong>：質地極其濃稠滑順，最正宗的吃法就是拿酥脆吉拿棒直接沾著厚厚熱巧克力吃！",
+          "<strong>Churros Rellenos（包餡吉拿棒）</strong>：外酥內軟的厚切吉拿棒，擠滿濃郁焦糖牛奶醬（Cajeta）或香濃香草卡士達內餡。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 下午茶時段常有當地家庭前來享用，內用空間復古精緻，非常適合作為走完金字塔後的歇腳充電站。\n2. 熱巧克力濃稠度很高，兩個人點一份熱巧克力搭配一份綜合吉拿棒剛剛好。",
+        query: "Puebla La Churrería"
+      },
+
+     // 10/29 阿特利斯科美食（早餐、午餐、甜點）
+      "atlixco-eonia-coffee": {
+        type: "restaurant",
+        tag: "☕ 質感精品咖啡・手作甜點與早午餐",
+        title: "Eonia Coffee Suc 2",
+        summary: "阿特利斯科極具現代美學的高質感獨立咖啡館，主打專業淺中焙手沖咖啡、現烤可頌與輕食早午餐。",
+        sec1Title: "⭐ 招牌必點與推薦品項",
+        dishes: [
+          "<strong>Café de Especialidad（單品手沖咖啡）</strong>：精選墨西哥普埃布拉與恰帕斯高海拔莊園豆，果酸明亮、香氣細緻。",
+          "<strong>Croissant Relleno（特製可頌早午餐）</strong>：外皮酥脆化渣，夾入火腿、起司或自製果醬，香氣濃郁。",
+          "<strong>Flat White / Latte Artesanal</strong>：奶泡綿密細緻，拉花精美，是開啟小鎮漫步晨光的完美組合。"
+        ],
+        sec2Title: "💡 現場體驗與避坑提示",
+        tips: "1. 距離搭乘巴士的下車點不遠，店內氛圍安靜明亮，非常適合在這裡吃早餐、整理隨身裝備後再出發漫步小鎮。\n2. 店家自製的手作蛋糕與肉桂捲數量有限，若有出爐推薦順手點一份品嚐。",
+        query: "Eonia Coffee Suc 2 Atlixco"
+      },
+      "atlixco-enchiladas-lolita": {
+        type: "restaurant",
+        tag: "🥘 傳承數十年・阿特利斯科必吃安琪拉達老字號",
+        title: "Restaurante Enchiladas Lolita",
+        summary: "在地家喻戶曉的傳統料理老店，以份量豪邁、香氣撲鼻的現煎玉米安琪拉達捲（Enchiladas）稱霸小鎮。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Enchiladas Tradicionales（招牌綜合安琪拉達捲）</strong>：玉米餅迅速過油後裹上秘製濃郁紅/綠莎莎醬，包入手撕雞肉或起司，鋪滿洋蔥圈與新鮮酸奶白起司。",
+          "<strong>Cecina Atlixquense（特製炭烤鹹牛肉片）</strong>：阿特利斯科著名的薄切鹽漬牛肉，煎得焦香多汁，搭配安琪拉達捲一起吃是經典吃法！",
+          "<strong>Consomé de Pollo（清燉香草雞湯）</strong>：湯頭清甜鮮美，拌入洋蔥丁、香菜與現擠青檸汁，暖胃解膩。"
+        ],
+        sec2Title: "💡 現場點餐與避坑提示",
+        tips: "1. 份量非常實在，肉量與醬汁給得毫不手軟，兩人用餐建議先點一份綜合安琪拉達搭配一份肉盤分食。\n2. 綠醬（Verde）帶有微酸清香，紅醬（Roja）香濃微辣，如果猶豫不決可以直接點『Divorciadas（雙醬各半）』！",
+        query: "Restaurante Enchiladas Lolita en Atlixco Centro"
+      },
+      "atlixco-ximitl-helados": {
+        type: "restaurant",
+        tag: "🍨 國際獲獎傳奇・百年火山手工特色冰品",
+        title: "Ximitl Helados y Nieves Artesanales",
+        summary: "創立於 1950 年代的傳奇手工冰品名店，曾榮獲國際大獎！以天然水果雪酪與顛覆想像的特色口味聞名全墨。",
+        sec1Title: "⭐ 必嚐招牌與特色口味",
+        dishes: [
+          "<strong>Nieve de Ceniza del Popocatépetl（波波卡特佩特火山灰冰品）</strong>：店內最著名的獵奇招牌！以可食用活性植物炭與特殊香料製成，外觀如深黑火山灰，入口卻清爽微甜。",
+          "<strong>Helado de Chile en Nogada（核桃冷醬甘椒冰淇淋）</strong>：將普埃布拉傳奇國宴名菜化為冰品！融合核桃奶醬、石榴與香料，口感驚豔絕妙。",
+          "<strong>Nieves de Frutas Naturales（季節天然鮮果雪酪）</strong>：採用在地百香果、仙人掌果（Tuna）、番石榴現打現製，果香濃郁純粹。"
+        ],
+        sec2Title: "💡 現場品嚐與點餐提示",
+        tips: "1. 老闆與店員非常熱情，如果對奇特口味感到好奇，可以在決定前禮貌詢問試吃（¿Puedo probar?）。\n2. 冰品融化速度較快，拍照後請盡快享用；店內也有傳統脆皮甜筒可供選擇。",
+        query: "Ximitl Helados y Nieves Artesanales Atlixco"
+      },
+
+     // 10/30 瓦哈卡美食（午餐、甜點、晚餐）
+      "oaxaca-boulenc": {
+        type: "restaurant",
+        tag: "🥖 瓦哈卡排隊神店・天然酸種烘焙與質感早午餐",
+        title: "Boulenc Panadería y Café",
+        summary: "瓦哈卡人氣最高、獲國際媒體一致盛讚的歐式烘焙咖啡館。以自家天然酵母長時間低溫發酵的酸種麵包、精緻三明治與在地發酵飲品風靡全城。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Sourdough Toast con Aguacate（招牌酪梨酸種吐司）</strong>：厚切烘烤得外脆內韌的自製酸種麵包，鋪滿濃郁酪梨、菲達起司碎與特製香料種子油。",
+          "<strong>Sandwich de Pastrami Artesanal（手工煙燻牛肉三明治）</strong>：自製厚切煙燻牛肉，搭配醃黃瓜、融化起司與芥末籽醬，肉汁豐沛肉香撲鼻。",
+          "<strong>Croissant de Almendras（杏仁可頌）</strong>：層次分明極致酥脆，表面撒滿烤杏仁片與糖霜，內餡裹著香濃杏仁卡士達醬。"
+        ],
+        sec2Title: "💡 現場排隊與避坑提示",
+        tips: "1. 這家店全天幾乎都需要排隊！建議抵達後先向門口櫃檯登記姓名與人數，等待時可以到隔壁的自營發酵小雜貨鋪（Suculenta）逛逛果醬與發酵醃菜。\n2. 庭院綠意盎然採光極好，如果想買隔天行程的麵包車上吃，可直接在門口外帶區排隊購買外帶。",
+        query: "Boulenc Oaxaca"
+      },
+      "oaxaca-chima-cocao": {
+        type: "restaurant",
+        tag: "🍫 傳統石臼研磨・正宗瓦哈卡手工純可可",
+        title: "Chima Cocao",
+        summary: "專注於保留古老中美洲傳統工法的精品巧克力專賣店。現場展示原生可可豆烘焙、石磨（Metate）研磨與純天然香料調配。",
+        sec1Title: "⭐ 必買伴手禮與品飲推薦",
+        dishes: [
+          "<strong>Chocolate de Agua / Leche（純手工現煮熱可可）</strong>：傳統可可飲，可選擇傳統以水沖泡（De Agua）感受最純粹的微酸果香與苦甜，或加牛奶（De Leche）更顯滑順濃郁。",
+          "<strong>Tabletas de Cacao Artesanal（手作可可磚片）</strong>：加入肉桂、黑糖或杏仁石磨壓製的可可片，買回家直接加熱水或熱牛奶攪拌即可還原正宗風味。",
+          "<strong>Nibs de Cacao con Miel（蜂蜜可可碎）</strong>：低溫烘焙的可可豆碎包裹野生蜂蜜，天然無負擔的健康小零嘴。"
+        ],
+        sec2Title: "💡 現場選購提示",
+        tips: "1. 店家提供多種純度（從 60% 到 100% 無糖純可可）的免費試吃與試飲，可以依照個人對苦甜的偏好挑選。\n2. 傳統手工可可磚常溫耐放，非常適合包裝完好帶回台灣當作特色伴手禮。",
+        query: "Chima Cocao Oaxaca"
+      },
+      "oaxaca-lechoncito": {
+        type: "restaurant",
+        tag: "🌮 瓦哈卡深夜傳奇・脆皮烤乳豬塔可",
+        title: "El Lechoncito de Oro",
+        summary: "只在夜晚營業的街頭排隊神級攤位！專注於炭火慢烤乳豬，以酥脆卡茲作響的炸豬皮與鮮嫩多汁的手撕豬肉稱霸瓦哈卡宵夜圈。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Taco de Lechón con Chicharrón（招牌烤乳豬搭黃金脆皮塔可）</strong>：現烤熱玉米餅鋪上軟嫩入味的慢烤手撕乳豬肉，最靈魂的是抓上一大把現壓的金黃酥脆炸豬皮碎，雙重口感極度震撼！",
+          "<strong>Torta de Lechón（烤乳豬酥脆麵包三明治）</strong>：用扎實麵包夾滿乳豬肉與炸豬皮碎，淋上微辣的綠莎莎醬，極具飽足感。"
+        ],
+        sec2Title: "💡 現場排隊與吃法提示",
+        tips: "1. 攤位通常晚上 20:00 後才開門且大排長龍，但師傅手速極快，點餐時請直接跟師傅說要幾份 Taco 或 Torta。\n2. 攤位邊有一桶特調微酸的青酪梨莎莎醬，淋在熱騰騰的豬肉與脆皮上能完美化解油膩感！",
+        query: "Lechoncito de Oro Oaxaca"
+      },
+
+      // 10/31 瓦哈卡早餐 2選1
+      "oaxaca-dona-vale": {
+        type: "restaurant",
+        tag: "📺 Netflix《街頭絕味》爆紅・慢火炭烤厚玉米餅",
+        title: "Memelas Doña Vale (中央市場)",
+        summary: "隱身於瓦哈卡最大批發市場（Central de Abastos）深處的傳奇小攤，因 Netflix 紀錄片紅遍全球！Vale 阿嬤用滿是老繭的雙手在炭火瓦盤上現烤傳統 Memelas。",
+        sec1Title: "⭐ 靈魂必點料理",
+        dishes: [
+          "<strong>Memela con Salsa de Morita（招牌莫利塔煙燻辣椒玉米厚餅）</strong>：剛烤好的熱厚玉米餅，迅速抹上自煉豬油（Asiento）與濃黑豆泥，淋上阿嬤秘方炭火慢烘的煙燻 Morita 辣椒醬，撒上手撕 Quesillo 起司。",
+          "<strong>Costilla / Tasajo Adicional（加點炭火肋排或薄切牛肉）</strong>：坐在阿嬤旁邊的炭火烤網上現烤的帶骨鹹肋排或牛肉片，香氣撲鼻。"
+        ],
+        sec2Title: "💡 現場尋店與避坑提示",
+        tips: "1. 位於 Central de Abastos 批發市場內部，通道錯綜複雜，建議搭計程車在市場門口下車後，詢問在地人『¿Dónde está Doña Vale?』引路。\n2. 莫利塔辣醬帶有獨特煙燻香氣但後勁偏辣，不擅吃辣者可以請阿嬤『Poca salsa（少點醬）』。",
+        query: "Memelas Doña Vale Mercado Central de Abastos Oaxaca"
+      },
+      "oaxaca-pasillo-humo": {
+        type: "restaurant",
+        tag: "🔥 煙霧肉廊震撼奇觀・炭烤肉攤現點現夾",
+        title: "Pasillo de Humo (煙霧肉廊 / 11月20日市場)",
+        summary: "坐落於 Mercado 20 de Noviembre 內的炭烤長廊。一走入便煙霧瀰漫、肉香四溢，是全墨西哥視覺與味覺最震撼的傳統烤肉大匯集。",
+        sec1Title: "⭐ 烤肉走廊點餐攻略",
+        dishes: [
+          "<strong>Tasajo（瓦哈卡鹽漬薄切牛肉）</strong>：肉質扎實帶有淡淡鹽味，在鐵網炭火上高溫直烤至焦香四溢。",
+          "<strong>Cecina Enchilada（香料辣醃豬肉片）</strong>：以紅木香料與辣椒醃製入味的薄豬肉片，烤後香氣濃烈撲鼻。",
+          "<strong>Chorizo Oaxaqueño（傳統瓦哈卡紅香腸）</strong>：外皮微脆、油脂飽滿，咬下肉汁迸發。"
+        ],
+        sec2Title: "💡 點餐流程與現場步驟",
+        tips: "1. 挑一家順眼的肉攤挑肉秤重（通常各抓一小條 Tasajo、Cecina 與香腸組合成一盤）。\n2. 肉在炭火上現烤時，會有其他攤販過來問要不要買現烤玉米餅、青蔥（Cebollitas）、酪梨與新鮮生菜盤，建議點一份來包肉吃，才是最道地的吃法！",
+        query: "Pasillo de Humo Mercado 20 de Noviembre Oaxaca"
+      },
+
+      // 11/02 瓦哈卡午餐
+      "oaxaca-quince-letras": {
+        type: "restaurant",
+        tag: "👑 國寶級莫雷名店・瓦哈卡傳統七大醬汁殿堂",
+        title: "Las Quince Letras (已預訂)",
+        summary: "由墨西哥傳奇名廚 Celia Florián 掌杓、榮獲無數拉美美食大獎的最高代表店。是深入體驗瓦哈卡名列世界文化遺產之『七大莫雷醬（7 Moles）』的最佳朝聖地。",
+        sec1Title: "⭐ 招牌必點與國寶菜色",
+        dishes: [
+          "<strong>Trilogía de Moles（經典三大莫雷品鑑拼盤）</strong>：一次嚐遍店內招牌黑莫雷（Mole Negro，巧克力與焦香辣椒深邃沉靜）、紅莫雷（Mole Rojo）與清爽微酸的綠莫雷（Mole Verde）。",
+          "<strong>Mole Negro con Pavo / Pollo（黑莫雷火雞肉）</strong>：慢火細熬數日、由三十種以上香料與可可融合的頂級黑醬，搭配鮮嫩火雞肉，層次繁複無比。",
+          "<strong>Tlayuda Tradicional de la Casa（主廚特製大脆餅）</strong>：薄脆直徑達三十公分的巨大玉米烘餅，鋪滿黑豆泥、特選肉品與新鮮拉絲起司。"
+        ],
+        sec2Title: "💡 現場用餐提示",
+        tips: "1. 餐廳已提前預訂完成，抵達時向服務人員出示訂位大名即可由專人帶位。\n2. 莫雷醬層次極深，建議搭配店家精選的手工梅斯卡爾調酒（Mezcal Cocktail）或在地白酒，能將醬汁中的堅果香氣完美引出。",
+        query: "Las Quince Letras Oaxaca"
+      },
+
+     // 11/03 墨西哥城美食
+      "cdmx-bobo-burgers": {
+        type: "restaurant",
+        tag: "🍔 潮流美式漢堡・極致酥脆厚牛肉餅與奶昔",
+        title: "Bobo Burgers & Café",
+        summary: "坐落於文藝街區的潮流漢堡早午餐店，以邊緣煎至焦脆的美式 Smash Burger 與香濃精品奶昔聞名。",
+        sec1Title: "⭐ 招牌必點與推薦",
+        dishes: [
+          "<strong>Bobo Classic Cheeseburger（經典雙層起司漢堡）</strong>：手打優質牛肉餅在高溫鐵板壓至極薄焦脆，夾入融化切達起司、酸黃瓜與特調醬汁，麵包鬆軟奶香濃郁。",
+          "<strong>Papas Fritas Crujientes（特製脆薯佐松露醬）</strong>：外酥內軟的波浪薯條，搭配自製蒜味松露沾醬。",
+          "<strong>Cold Brew & Milkshakes（冷萃咖啡與經典奶昔）</strong>：提神清爽的精釀冷萃，或濃郁香甜的香草肉桂奶昔。"
+        ],
+        sec2Title: "💡 現場用餐提示",
+        tips: "1. 適合剛抵達墨城、前往飯店 Check-in 前後迅速補充體能的輕鬆早午餐據點。\n2. 店內座位不多且極具美式復古感，尖峰時段若客滿可選擇外帶。",
+        query: "Bobo Burgers & Café Mexico City"
+      },
+      "cdmx-el-califa": {
+        type: "restaurant",
+        tag: "🥩 墨城高端塔可始祖・傳奇菲力牛肉薄片",
+        title: "Taquería El Califa",
+        summary: "墨西哥城高級塔可的先驅名店，乾淨明亮、服務極佳，以整片原塊軟嫩菲力牛肉製作的塔可稱霸全城。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Taco Gaonera（招牌高內拉菲力牛排塔可）</strong>：必點第一名！整片頂級軟嫩菲力牛排在鐵板迅速快煎，肉汁豐沛，只撒少許海鹽提味，純粹而極致的牛肉香氣。",
+          "<strong>Costra de Queso（焦香起司脆皮塔可）</strong>：將起司直接在鐵板上煎成香脆金黃的起司脆皮，捲入炭烤牛肉或肋排肉，香濃罪惡。",
+          "<strong>Al Pastor con Queso</strong>：經典旋轉烤豬肉配現切鳳梨，搭配融化起司。"
+        ],
+        sec2Title: "💡 現場吃法與醬料指南",
+        tips: "1. 桌上附有多種新鮮莎莎醬，吃 Gaonera 時推薦先咬一口原味肉香，再擠入幾滴青檸汁與少許酪梨綠醬。\n2. 店內環境舒適有冷氣，非常適合不習慣街邊站著吃塔可的旅人。",
+        query: "Taquería El Califa Reforma Mexico City"
+      },
+      "cdmx-orinoco": {
+        type: "restaurant",
+        tag: "🥓 蒙特雷北部粗獷風格・酥脆油渣炸豬皮",
+        title: "Taquería Orinoco",
+        summary: "來自墨西哥北部蒙特雷（Monterrey）的現象級排隊神店！復古白磁磚紅招牌，以極度酥脆的炸豬皮與醃烤肉風靡全墨城。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Taco de Chicharrón（招牌炸豬皮塔可）</strong>：必吃傳奇！帶肉帶油脂的豬皮油炸至金黃酥鬆，浸入濃郁肉汁中，外酥內綿、膠質滿滿。",
+          "<strong>Taco de Res / Trompo（炭烤牛肉與旋轉烤肉塔可）</strong>：北部厚實牛肉片，或紅木香料醃烤肉，肉香濃烈。",
+          "<strong>Papas Aplastadas（特製手壓酥炸小馬鈴薯）</strong>：整顆小馬鈴薯壓扁酥炸，撒上香料鹽，搭配多種莎莎醬食用。"
+        ],
+        sec2Title: "💡 現場點餐提示",
+        tips: "1. 餅皮可以選擇傳統玉米餅（Tortilla de Maíz）或北部經典麵粉餅（Tortilla de Harina），推薦點麵粉餅包裹炸豬皮！\n2. 隨餐會附上 5 種特調醬料與醃洋蔥，其中乳白色的特調蒜醬非常驚艷。",
+        query: "Taquería Orinoco Roma Norte Mexico City"
+      },
+      "cdmx-don-asado": {
+        type: "restaurant",
+        tag: "🥩 烏拉圭炭火直烤・頂級熟成牛排與紅酒",
+        title: "Don Asado Rio Lerma (需訂位)",
+        summary: "隱身於 Cuauhtémoc 街區的傳統烏拉圭牛排館，以巨大的開放式炭火烤架（Parrilla）與豪邁厚切熟成牛排聞名。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Bife de Chorizo（厚切紐約客牛排）</strong>：整塊厚切牛肉在炭火慢火炙烤，外層焦香封住滿滿肉汁，肉質軟嫩多汁。",
+          "<strong>Vacío Uruguayo（烏拉圭腹協牛排）</strong>：油花均勻、肉味濃郁，搭配店家特製的阿根廷香草青醬（Chimichurri）。",
+          "<strong>Provoleta a la Parrilla（鐵板焦香烤起司）</strong>：整塊普羅沃洛內起司在炭火鐵盤上烤至表面微焦、內部牽絲流淌。"
+        ],
+        sec2Title: "💡 現場用餐提示",
+        tips: "1. 餐廳座位有限且在地商務人士極多，請務必提前預約；抵達時出示訂位大名即可。\n2. 份量非常厚實豪邁，兩人用餐建議點一份大牛排搭配一份烤起司與沙拉分食。",
+        query: "Don Asado Rio Lerma Mexico City"
+      },
+
+      // 11/04 墨西哥城美食
+      "cdmx-coyoacan-market": {
+        type: "restaurant",
+        tag: "🍳 芙烈達故鄉百年傳統市場・道地日常早餐",
+        title: "Mercado de Coyoacán (市場早餐)",
+        summary: "坐落於歷史悠久的科約阿坎藝術街區中心，充滿色彩斑斕的蔬果與熟食香氣，是感受墨城居民悠閒早晨的最佳去處。",
+        sec1Title: "⭐ 推薦早餐必吃品項",
+        dishes: [
+          "<strong>Chilaquiles con Huevos（經典炸玉米片佐雙蛋）</strong>：酥脆三角玉米片浸入熱騰騰的紅/綠莎莎醬中，鋪上雙荷包蛋、鮮奶油、白起司碎與黑豆泥。",
+          "<strong>Quesadillas Fritas（現捏現炸起司餡餅）</strong>：在鐵板現壓的藍玉米餅皮，包入南瓜花（Flor de Calabaza）、玉米黑穗菌（Huitlacoche）或手撕起司油炸至酥脆。",
+          "<strong>Jugos Naturales（現榨綜合熱帶鮮果汁）</strong>：現場點選柳橙、仙人掌果、鳳梨現榨，清甜消暑。"
+        ],
+        sec2Title: "💡 現場漫步提示",
+        tips: "1. 找到熟食攤位區『Trinidad Ritual de Sabores』或人潮熱絡的早餐吧台就坐即可。\n2. 市場內亦有許多傳統手工藝品與木雕攤位，吃完早餐順路散步非常舒適。",
+        query: "Mercado de Coyoacán Mexico City"
+      },
+      "cdmx-panaderia-rosetta": {
+        type: "restaurant",
+        tag: "🥐 墨城烘焙天花板・傳奇招牌芭樂酥捲",
+        title: "Panadería Rosetta",
+        summary: "由名廚 Elena Reygadas 創立的夢幻烘焙名店！將墨西哥在地原生食材與歐式精緻千層烘焙完美融合，長年吸引全球饕客朝聖。",
+        sec1Title: "⭐ 招牌必點甜點與麵包",
+        dishes: [
+          "<strong>Rol de Guayaba（招牌芭樂起司酥捲）</strong>：店內靈魂之作！千層酥皮薄脆如紙、層層化渣，內餡包裹酸甜適口的天然芭樂果醬與濃郁馬斯卡彭起司，驚艷絕倫。",
+          "<strong>Rol de Canela con Cardamomo（豆蔻肉桂捲）</strong>：加入小豆蔻增添細緻香氣，甜而不膩。",
+          "<strong>Concha Tradicional</strong>：墨西哥國民甜麵包，表面酥菠蘿紋理精美，奶香濃郁。"
+        ],
+        sec2Title: "💡 現場排隊與選購提示",
+        tips: "1. 門口長年大排長龍，如果只想吃芭樂酥捲，可以直接在『外帶窗口（Para llevar）』排隊購買，速度通常快很多。\n2. 買完後可以漫步到旁邊 Álvaro Obregón 大道的綠蔭長椅上，搭配一杯咖啡享用。",
+        query: "Panadería Rosetta Colima Mexico City"
+      },
+"cdmx-trinidad": {
+        type: "restaurant",
+        tag: "🌮 Coyoacán 市場排隊名店・傳統風味與手作玉米餅",
+        title: "Trinidad Ritual De Sabores",
+        summary: "坐落於 Coyoacán 傳統市場熟食區的超人氣攤位，以現壓藍玉米餅、豐沛餡料的 Quesadillas 與傳統燉肉聞名。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Quesadillas Fritas（現炸起司酥餅）</strong>：現壓藍玉米餅包裹南瓜花（Flor de Calabaza）、玉米黑穗菌（Huitlacoche）或慢燉雞肉，炸至金黃酥脆，香氣四溢。",
+          "<strong>Tlacoyos de Frijol y Queso（厚玉米餡餅）</strong>：傳統橢圓形厚玉米餅，內餡包入黑豆泥，表面鋪滿新鮮仙人掌（Nopal）、白起司與自製綠莎莎醬。",
+          "<strong>Gorditas Rellenas（手作塞肉玉米胖餅）</strong>：剖開熱騰騰的玉米厚餅，塞入油封肉碎與融化起司，份量十足。"
+        ],
+        sec2Title: "📍 地址與現場用餐提示",
+        tips: "【餐廳地址】：Mercado de Coyoacán, Ignacio Allende, Del Carmen, Coyoacán, 04100 Ciudad de México, CDMX\n\n1. 位於 Coyoacán 市場內熟食走道（若找不到可詢問攤商 Trinidad 位置），直接在吧台或走道座位就坐。\n2. 隨餐提供多種現調莎莎醬，先咬一口感受玉米原香，再淋上酪梨青醬與擠上檸檬汁風味絕佳！",
+        query: "Mercado de Coyoacan Ignacio Allende Coyoacan Mexico City"
+      },
+      "cdmx-la-once-mil": {
+        type: "restaurant",
+        tag: "⭐ 米其林推薦現代 Taquería・現壓手工玉米餅與頂級肉品",
+        title: "La Once Mil - Roma Norte",
+        summary: "Roma Norte 備受推崇的米其林指南推薦名店，將街頭塔可昇華為精緻料理，以頂級肉品直火快炙搭配極品莎莎醬。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Taco de Picaña（炙燒巴西牛臀肉塔可）</strong>：店內人氣王！外緣焦香、內裡粉嫩多汁的 Picaña 薄切，搭配溫熱軟韌的現壓手工玉米餅，脂香四溢。",
+          "<strong>Taco de Arrachera（嫩煎醃烤側腹牛排塔可）</strong>：經特製香料醃漬的厚實牛肉，炭烤香氣極濃，肉質軟嫩有嚼勁。",
+          "<strong>Costra de Res（香脆起司煎脆卷）</strong>：起司在鐵板上煎出誘人金黃焦脆外殼，包裹大塊牛肉，層次感極強。"
+        ],
+        sec2Title: "📍 地址與現場用餐提示",
+        tips: "【餐廳地址】：Orizaba 83, Roma Nte., Cuauhtémoc, 06700 Ciudad de México, CDMX\n\n1. 位於熱鬧的 Orizaba 綠蔭大道旁，尖峰用餐時段若人潮較多可稍候入座。\n2. 桌上的多款自製莎莎醬非常出色，吃 Picaña 塔可建議先嚐一口原味，再淋上少許青檸汁與綠莎莎醬提味。",
+        query: "La Once Mil Orizaba Roma Norte Mexico City"
+      },
+      "cdmx-tacos-del-valle": {
+        type: "restaurant",
+        tag: "🌮 Roma Norte 經典排隊神店・極致多汁油封牛胸與牛舌",
+        title: "Tacos del Valle (Roma Norte)",
+        summary: "當地人極度熱愛的排隊名店，以大銅鍋慢火油封的 Suadero（牛胸肉）與旋轉烤肉爐聞名，香氣四溢、道地無比。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Taco de Suadero（招牌慢燉油封牛胸肉塔可）</strong>：必點第一名！牛胸肉浸在特製高湯油鍋中慢燉至軟爛，再於鐵板上俐落剁碎快煎，外微脆內爆汁。",
+          "<strong>Taco de Lengua（極嫩燉牛舌塔可）</strong>：厚切牛舌燉煮得如布丁般軟嫩化口，毫無腥味，搭配洋蔥丁與香菜絕配。",
+          "<strong>Gringa al Pastor（融化起司雙層小麥餅烤肉）</strong>：以小麥麵粉餅夾入旋轉烤豬肉、現切烤鳳梨與牽絲起司，鹹甜濃郁超滿足。"
+        ],
+        sec2Title: "📍 地址與現場用餐提示",
+        tips: "【餐廳地址】：Av. Álvaro Obregón 130, Roma Nte., Cuauhtémoc, 06700 Ciudad de México, CDMX\n\n1. 位於 Alvaro Obregón 大道精華地段，晚餐時段常有排隊人潮，翻桌速度很快。\n2. 嗜辣者強烈推薦嚐嚐他們的特調紅辣椒油莎莎醬，幾滴就能徹底引出 Suadero 的肉汁鮮甜！",
+        query: "Tacos del Valle Av Alvaro Obregon Roma Norte Mexico City"
+      },
+
+      // 11/05 特奧蒂瓦坎與市區美食
+      "cdmx-el-torito": {
+        type: "restaurant",
+        tag: "🌮 歷史中心老字號・慢燉牛雜與牛頰肉塔可",
+        title: "El Torito Tacos",
+        summary: "隱匿於歷史老城區巷弄內的傳奇燉肉名店，專門以大銅鍋慢燉各部位牛肉，是老墨城饕客的心頭好。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Taco de Suadero（慢燉牛腹肉塔可）</strong>：在大圓盤鍋中以牛脂長時間慢煨至極致軟爛，起鍋前煎得外焦內嫩。",
+          "<strong>Taco de Cabeza / Mejilla（鮮嫩牛頰肉塔可）</strong>：蒸煮至入口即化的牛頰肉，膠質豐厚、肉質軟嫩無比。",
+          "<strong>Taco de Lengua（慢燉厚切牛舌塔可）</strong>：口感軟嫩彈牙，毫無羶味，老饕必點。"
+        ],
+        sec2Title: "💡 現場點餐提示",
+        tips: "1. 走訪完特奧蒂瓦坎金字塔返回市區後的絕佳體力補給點，環境充滿熱鬧市井氣息。\n2. 點餐時記得說『Con todo（全加蔥花香菜）』，搭配桌上的辣椒醬與現剖青檸汁更添風味。",
+        query: "El Torito Tacos Centro Historico Mexico City"
+      },
+      "cdmx-pasteleria-ideal": {
+        type: "restaurant",
+        tag: "🏰 百年歷史宮殿級糕餅店・壯觀點心海洋",
+        title: "Pastelería Ideal (16 de Septiembre)",
+        summary: "創立於 1927 年的傳奇百年糕餅宮殿！走進店內會被挑高大廳中數千種排列如山、色彩繽紛的手工傳統糕點所震撼。",
+        sec1Title: "⭐ 必買推薦點心",
+        dishes: [
+          "<strong>Galletas y Polvorones（傳統酥餅與糖粉餅）</strong>：入口即化的牛油酥餅，滿口濃郁小麥香與香草香。",
+          "<strong>Pastel de Tres Leches（經典三奶蛋糕）</strong>：浸滿三種鮮乳、煉乳的濕潤海綿蛋糕，甜美綿密。",
+          "<strong>Pan Dulce Tradicional（傳統綜合甜麵包）</strong>：幾百款各色造型的墨西哥傳統早餐麵包，便宜又大碗。"
+        ],
+        sec2Title: "💡 現場採購流程",
+        tips: "1. 獨特的自助流程：先在門口拿一個大鐵盤與夾子，穿梭在點心長廊中自由夾取，夾滿後交給包裝人員用傳統棉繩打包成精美禮盒，再拿單子去櫃台結帳。\n2. 二樓是壯觀的婚禮蛋糕博物館，有時間非常推薦順道上樓參觀！",
+        query: "Pastelería Ideal 16 de Septiembre Mexico City"
+      },
+      "cdmx-gran-abanico": {
+        type: "restaurant",
+        tag: "🐖 全墨城手撕豬肉王者・大銅鍋慢火油封",
+        title: "Taquería El Gran Abanico",
+        summary: "被眾多美食家評為墨西哥城最強的 Carnitas（油封豬肉）排隊名店！巨大傳統銅鍋中數十公斤豬肉慢燉翻滾，香氣四溢。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Taco de Carnitas Maciza con Cuerito（油封瘦肉搭嫩豬皮塔可）</strong>：必點黃金組合！香嫩不乾柴的油封瘦肉，搭配軟糯吸滿精華的Q彈豬皮，口感層次絕妙。",
+          "<strong>Taco de Costilla（油封肋排肉塔可）</strong>：帶骨熬製至骨肉輕易分離的肋排部位，脂香四溢。",
+          "<strong>Chicharrón Crujiente（現炸巨型脆豬皮片）</strong>：香脆無比，直接掰碎包入塔可增添卡茲酥脆口感。"
+        ],
+        sec2Title: "💡 現場排隊與吃法提示",
+        tips: "1. 用餐時段人潮極多，但翻桌速度快；店內現切肉師傅刀工精湛，點餐時可指定部位（Maciza 純瘦肉、Cuerito 豬皮、Costilla 肋排）。\n2. 隨桌附贈大量香菜、洋蔥丁與醃仙人掌（Nopales），堆疊在塔可上一起吃最道地！",
+        query: "Taquería El Gran Abanico Mexico City"
+      },
+
+      // 11/06 墨西哥城美食
+      "cdmx-mendl-delicatessen": {
+        type: "restaurant",
+        tag: "🥯 紐約風猶太熟食館・自製煙燻牛肉貝果",
+        title: "Mendl Delicatessen",
+        summary: "位於 Condesa 綠蔭街區的高質感紐約風猶太熟食店，以自家慢烤煙燻牛肉（Pastrami）、手工貝果與酸種三明治聞名。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Pastrami on Rye / Bagel（厚切煙燻牛肉黑麥三明治/貝果）</strong>：招牌台柱！手工醃製並煙燻數日的牛肉薄切堆疊如小山，肉質軟嫩爆汁，搭配黃芥末與酸黃瓜。",
+          "<strong>Bagel con Salmón Ahumado（經典煙燻鮭魚乳酪貝果）</strong>：自烘外脆內韌的手工貝果，抹上厚實奶油乳酪（Cream Cheese），鋪滿特選煙燻鮭魚、酸豆與紫洋蔥圈。",
+          "<strong>Matzo Ball Soup（傳統猶太無酵餅丸雞湯）</strong>：金黃清澈的香濃雞湯，漂浮著鬆軟扎實的特製丸子，極致暖胃舒適。"
+        ],
+        sec2Title: "💡 現場用餐提示",
+        tips: "1. 適合偏好西式精緻、優雅早午餐風格的早晨，店內裝潢復古溫馨，採光極佳。\n2. 份量十足，若食量不大建議兩人分食一份 Pastrami 三明治再搭配一碗雞湯。",
+        query: "Mendl Delicatessen Condesa Mexico City"
+      },
+      "cdmx-esquina-chilaquil": {
+        type: "restaurant",
+        tag: "🌶️ 街頭傳奇排隊奇觀・炸玉米片夾心包",
+        title: "La Esquina Del Chilaquil",
+        summary: "Condesa 街角排隊數十公尺的市井傳奇！將熱騰騰的莎莎醬炸玉米片（Chilaquiles）塞入法棍麵包做成巨無霸碳水三明治。",
+        sec1Title: "⭐ 招牌點法與必吃組合",
+        dishes: [
+          "<strong>Torta de Chilaquiles con Pechuga Deshebrada（招牌炸玉米片夾心包加雞絲）</strong>：現烤外脆內軟的法棍（Bolillo），先抹上厚黑豆泥，塞滿剛出鍋熱騰騰裹著紅/綠濃辣醬的炸玉米片，鋪滿手撕水煮雞絲、濃酸奶與新鮮白起司。",
+          "<strong>Torta con Milanesa（炸肉排玉米片三明治）</strong>：在玉米片上方再豪邁疊上一整塊剛炸好的酥脆大肉排，份量震撼無比！"
+        ],
+        sec2Title: "💡 現場排隊秘笈",
+        tips: "1. 每天早上 8:00 開攤前就會排滿長龍！但阿姨們流水線分工速度飛快，通常等待 20-30 分鐘即可拿到。\n2. 辣醬分為綠醬（Verde 微酸微辣）與紅醬（Roja 香濃偏辣），可以跟老闆點『Campechana（紅白雙醬混合）』！",
+        query: "La Esquina Del Chilaquil Condesa Mexico City"
+      },
+      "cdmx-pancita-roma": {
+        type: "restaurant",
+        tag: "🍲 傳承近百年・墨西哥國民解酒牛肚老火湯",
+        title: "La Pancita de la Roma",
+        summary: "創立於 1930 年代、深受在地居民推崇的牛肚湯老字號。以數種乾辣椒與香草慢火精燉數小時的深紅牛肚湯名震全城。",
+        sec1Title: "⭐ 招牌必點料理",
+        dishes: [
+          "<strong>Caldo de Pancita Tradicional（招牌香辣牛肚濃湯）</strong>：處理得乾淨無羶味的牛肚切塊，在紅亮香辣的高湯中煨煮至軟糯彈牙，湯頭濃烈醇厚、香辣回甘。",
+          "<strong>Tacos de Cecina con Queso（炭烤鹹牛肉起司塔可）</strong>：如果不習慣內臟，店家現煎的薄切鹹牛肉起司玉米餅也是一絕。",
+          "<strong>Aguas Frescas Caseras（自製鮮果水）</strong>：點一杯清涼解辣的羅望子水（Tamarindo）或牙買加洛神花水（Horchata）是完美搭配。"
+        ],
+        sec2Title: "💡 現場地道吃法指南",
+        tips: "1. 喝 Pancita 的靈魂儀式：熱湯上桌後，必須撒入大量現捏乾燥奧勒岡香草（Orégano）、現切白洋蔥碎，並擠滿新鮮青檸汁，搭配剛出爐熱玉米餅撕著吃！\n2. 辣度適中偏暖辣，是墨西哥人走訪完上午行程、中午舒緩腸胃與醒腦的最佳傳統滋補聖品。",
+        query: "La Pancita de la Roma Mexico City"
+      },
+
+      // 10/29 阿特利斯科三大地標景點
+      "atlixco-escalera": {
+        type: "spot",
+        tag: "🎨 爆紅立體畫布・花卉與民俗節慶階梯",
+        title: "寬階梯彩繪壁畫 (Escalinata de los Arcos)",
+        summary: "市區山腰處的巨大立體畫布，將歷史、文化與盛開花卉化為階梯壁畫，彷彿流動的戶外美術館。",
+        sec1Title: "📜 藝術階梯的誕生與主題",
+        sec1Text: "位於阿特利斯科市區山腰處的這處階梯，是近年讓整座小鎮在國際社群媒體上爆紅的視覺藝術地標。正式名稱為 Escalinata de los Arcos（或常被稱為藝術階梯 Escalinata de la Fama），原本是連接市區與山頂聖米格爾修道院的重要步行階梯。\n\n當地政府邀請多位優秀壁畫家與社區藝術家，將整座長達數十階的寬闊階梯變成一幅巨大的立體畫布。畫作以阿特利斯科的歷史、文化與花卉傳統為核心主題。",
+        sec2Title: "👁️ 三大壁畫看點與光影交融",
+        tips: "【繽紛花卉與大自然】：身為墨西哥最重要的花卉產地，階梯上繪滿了怒放的巨型玫瑰、萬壽菊與熱帶花草。\n【傳統文化與慶典】：生動描繪當地最具代表性的 Atlixcáyotl 舞蹈節盛況，身著傳統服飾的舞者與民俗樂手躍然石階之上。\n【火山與地方神話】：結合背景中雄偉的波波卡特佩特火山與納瓦特爾原住民神話符號。\n【視覺效果】：由下往上仰望，階梯與兩旁充滿殖民風情的白色拱門（Arcos）完美交融，是拍照打卡的最佳去處。",
+        query: "Escalera Ancha Atlixco"
+      },
+      "atlixco-zocalo": {
+        type: "spot",
+        tag: "🌳 繁花環繞殖民迴廊・慢活社交核心",
+        title: "主廣場 (Zócalo de Atlixco)",
+        summary: "被西班牙殖民迴廊建築環繞的小鎮心臟，擁有茂密亞熱帶花園與消暑手工冰淇淋。",
+        sec1Title: "📜 小鎮的心臟與慢活生活",
+        sec1Text: "主廣場（Zócalo de Atlixco）是阿特利斯科的心臟地帶。四周被帶有濃厚西班牙殖民色彩的迴廊建築、百年老店與各色餐廳所環繞，是當地居民與遊客日常聚會、散步、喝咖啡的最核心社交場所。",
+        sec2Title: "👁️ 亞熱帶花園與在地消暑特產",
+        tips: "【綠意盎然的亞熱帶花園】：廣場中央擁有修剪整齊的常綠樹木、噴泉與色彩繽紛的花壇。因為氣候溫和、土壤肥沃，植物生長得格外茂盛翠綠。\n【在地特色小吃與冰品】：周邊環繞著販售當地特色小吃與飲品的店家。來到這裡絕對不能錯過阿特利斯科最著名的消暑聖品——當地傳統手工冰淇淋（Helados de Atlixco），以及融合多種辣椒與堅果香氣的傳統料理。\n【露天咖啡】：周遭咖啡館設有戶外露天座位，坐在遮陽傘下品嚐墨西哥咖啡、看著廣場慢活步調，極度悠閒。",
+        query: "Zócalo de Atlixco"
+      },
+      "atlixco-mirador": {
+        type: "spot",
+        tag: "🌋 懸空透明玻璃步道・直面覆雪活火山",
+        title: "透明玻璃觀景台 (Mirador de Cristal)",
+        summary: "懸空延伸出山崖峭壁的透明玻璃步道，帶來懸浮空中的刺激感與波波卡特佩特活火山震撼全景。",
+        sec1Title: "📜 懸空刺激與震撼全景視野",
+        sec1Text: "這座懸空設計的觀景台延伸出山崖峭壁之外，地面採用了高強度的透明強化玻璃。當您站在觀景台上往下看，腳下數十公尺處的市區紅瓦屋頂與街道一覽無遺，帶來一種彷彿懸浮在空中的刺激與奇妙感，是整趟阿特利斯科行程的視覺最高潮！",
+        sec2Title: "👁️ 兩大世界級視覺亮點",
+        tips: "【直面火山絕景】：觀景台正對著氣勢磅礡、山頂終年覆雪的波波卡特佩特活火山（Popocatépetl）。如果天氣晴朗，可以清晰看見火山不時冒出的陣陣白色蒸汽，壯麗的自然景觀與下方的彩色小鎮交織成震撼人心的對比畫面。\n【全景俯瞰】：整個阿特利斯科峽谷盆地、棋盤式街道、各色教堂鐘樓以及遠處綿延綠意盡收眼底。黃昏時刻夕陽將火山染成金紅色的魔幻時刻最為動人。",
+        query: "Mirador de Cristal Atlixco"
+      },
+
+      // 10/31 瓦哈卡兩大核心活動景點
+      "oaxaca-mercado-benito": {
+        type: "spot",
+        tag: "🌼 亡靈節前夕最後衝刺・常民五感交響",
+        title: "Mercado Benito Juárez 市場探訪",
+        summary: "瓦哈卡常民生活的五感交響。亡靈節前夕瀰漫著萬壽菊草本香、剛出爐亡靈麵包與黑陶工藝的市井煙火氣。",
+        sec1Title: "📜 亡靈節前夕的祭壇與食材備料",
+        sec1Text: "坐落於瓦哈卡歷史中心核心地帶的貝尼托·胡亞雷斯市場，距離主廣場（Zócalo）僅幾步之遙。10 月 31 日這天踏入市場，空氣中立刻會被專屬於亡靈節前夕的芬芳包裹：成千上萬朵鮮豔萬壽菊（Cempasúchil）的草本香，混合著烤辣椒、烘焙巧克力的濃郁氣味。\n\n作為亡靈節（11/1 與 11/2）前夕的最後衝刺採買日，當地人忙著為家中的祭壇（Ofrenda）添購最神聖的供品：金黃一片的萬壽菊象徵引導靈魂回家的燈塔；剛出爐、帶有骨骼造型的亡靈麵包（Pan de Muerto）散發橙花水與奶油甜香；還有深黑或紅棕色的神聖莫雷醬膏（Mole Oaxaqueño）。",
+        sec2Title: "👁️ 手工藝品與在地特產寶庫",
+        tips: "【傳統石臼巧克力】：現場將可可豆、糖與肉桂磨成粉並壓製成圓片，香氣撲鼻。\n【梅斯卡爾酒（Mezcal）】：瓦哈卡是梅斯卡爾的故鄉，市場內有許多小攤位提供傳統陶碗試飲，帶有獨特煙燻風味。\n【原住民織品與黑陶（Barro Negro）】：可找到精緻手工刺繡服飾，以及用特有黑黏土燒製、散發金屬光澤的黑陶藝術品。",
+        query: "Mercado Benito Juárez Oaxaca"
+      },
+      "oaxaca-dia-de-muertos": {
+        type: "spot",
+        tag: "💀 跨越生死的絢麗之夜・人類非物質文化遺產",
+        title: "亡靈節慶典狂歡 (Día de Muertos)",
+        summary: "這不是悲傷的悼亡，而是一場盛大、熱烈、充滿音樂與色彩的靈魂重逢派對，全城化身活人與死者共舞的嘉年華。",
+        sec1Title: "📜 亡靈節核心哲學：死亡不是終點",
+        sec1Text: "聯合國教科文組織（UNESCO）已將墨西哥亡靈節列為人類非物質文化遺產。在瓦哈卡，這一天並不是悲傷的悼亡之日，而是一場盛大熱烈的『靈魂重逢派對』。\n\n對墨西哥人而言，死亡並非生命消滅，而是生命循環的另一階段。他們相信在 11/1（幼靈節）與 11/2（成靈節），逝去的親人會透過萬壽菊花香與燭光指引回到人間團聚。因此 10/31 深夜正是迎接靈魂歸來的關鍵時刻，全城瀰漫著神聖而狂喜的氛圍。",
+        sec2Title: "👁️ 沉浸式體驗四大亮點",
+        tips: "【華麗骷髏裝扮與盛裝遊行（Comparsas）】：憲法廣場與聖多明哥教堂周邊，民眾與遊客紛紛畫上精緻的『卡特琳娜骷髏妝』，伴隨銅管樂隊（Banda）在街頭載歌載舞。\n【璀璨公共與家戶祭壇（Ofrendas）】：老宅、餐廳與教堂搭建了層次分明的祭壇，擺滿照片、生前喜愛食物、梅斯卡爾酒與糖骷髏，用萬壽菊花瓣鋪設迎靈花路。\n【墓園燭光守夜（Panteón / Vigilia）】：深夜前往周邊墓園，家屬聚集在墳旁點燃數百支蠟燭、擺放鮮花，在吉他歌聲下享用美食通宵守夜，充滿家族團聚笑語。\n【街頭音樂與流動派對】：整座歷史中心徹夜不眠，空氣中混雜著烤玉米、肉桂與焚香氣息，感受生命與愛的真諦。",
+        query: "Templo de Santo Domingo de Guzmán Oaxaca"
+      },
+
+     // 11/01 薩波特克文明與靈獸木雕村 - 1. 阿爾班山薩波特克高山遺跡
+      "monte-alban": { 
+        type: "spot", 
+        tag: " 削平山頂的天空之城・薩波特克千年第一帝都", 
+        title: "阿爾班山高山遺跡 (Zona Arqueológica de Monte Albán)", 
+        summary: "中美洲最早的高原天空帝都！早在西元前 500 年先民以石器硬生生削平整座山頭，在海拔兩千公尺雲端築起宏偉大廣場。擁有暗黑殘酷的舞者戰俘浮雕、傾斜箭頭天文台與轟動全球的 7 號墓黃金奇蹟。", 
+        sec1Title: "📜 削峰填谷神話、暗黑舞者真相與 7 號墓黃金寶藏", 
+        sec1Text: "【削峰填谷：在雲端建立的無水帝都】\n西元前 500 年左右，薩波特克（Zapotec）統治菁英為了確立無可撼動的霸權，離開水源充沛的谷底登上孤峰。在沒有金屬工具、輪子與馱獸的時代，數以萬計的勞工以石器硬生生削平陡峭山脊、填平深溝，在海拔 1,940 公尺高空開闢出長 300 公尺、寬 200 公尺的巨型大廣場（Gran Plaza）。山頂無任何河流與泉水，全城數萬人仰賴極精密的石砌雨水收集系統與巨大地下蓄水池生存，這種對雨水的極端依賴，造就了薩波特克人對『雨神考西霍（Cocijo）』融入骨髓的崇拜。\n\n【舞者石雕（Los Danzantes）的暗黑歷史翻轉】\n大廣場西南側鑲嵌著數百塊奇特石雕，早期西方學者看到扭曲姿態誤以為是『歡愉跳舞的藝人』。現代銘文破解揭露了令人不寒而慄的真相：這些人全是赤裸的（古印第安貴族極重華服，唯囚徒被剝光羞辱）、雙眼緊閉（代表死亡）、嘴部痛苦號哭；胸膛刻著被黑曜石刀剜出心臟的裂口，胯下捲曲的雕飾則是遭閹割後噴濺的鮮血！他們是被薩波特克擊敗並屠戮的敵對城邦國王與將領。統治者將其刻於入口石牆，向所有前來朝貢的外邦使節宣告：『反抗阿爾班山者下場皆如此』。\n\n【傾斜的五角箭頭：J 建築（Edificio J）與征服石碑】\n大廣場中唯一與整體軸線歪斜 45 度的建築！它兼具兩大劃時代功能：一是『天空雷達天文台』，箭頭尖端在特定日子精準對齊恆星五車二（Capella），用以判定雨季與播種日；二是外牆鑲嵌了 40 多塊刻有『倒吊人頭（Cabeza Invertida）』與緊閉雙眼的征服石板（Lápidas de Conquista），記錄帝國向外擴張吞併周邊部落的軍功戰報。\n\n【美洲圖坦卡門：7 號墓（Tumba 7）黃金傳奇】\n西元 850 年薩波特克衰亡後，米斯特克人（Mixtec）將此聖地作為貴族安葬所。1932 年考古之父阿方索・卡索掘開著名的 7 號墓，出土超過 500 件極盡奢華的純金面具、黃金胸飾、綠松石骨雕與整塊天然水晶雕成的水杯，被譽為美洲考古史上最震撼的黃金發現（原件現藏於瓦哈卡市區聖多明各修道院博物館）。", 
+        sec2Title: "👁️ 大廣場聲學、神殿金字塔與神聖球場密碼", 
+        tips: "1. 大廣場（Gran Plaza）的帝王回音聲學：整座長達 300 公尺的廣場被四周神殿平台嚴密包圍，形成天然封閉共鳴箱。大祭司站在神壇頂端開口或吹響海螺號角時，聲音沿著平整石板與斜面牆反彈共鳴，數千名群眾在遠端皆能清晰聽見宛如天神下凡的威嚴敕令。\n\n2. 神殿金字塔與『斜坡平臺』（Talud-Tablero）建築密碼：觀察神殿台階側面，傾斜石坡（Talud）支撐著垂直石框帶（Tablero）。這正是西元 4-6 世紀北方霸主『特奧蒂瓦坎（Teotihuacán）』的標誌性建築語彙，見證了兩大古文明跨越千里的政治結盟與文化交融。\n\n3. 神聖球場（Juego de Pelota Grande）：東北角的下沉式 I 字形球場是模擬星辰運行的生死祭典現場。與瑪雅球場不同，這裡無垂直石環，球員需用臀肘擊打重達數公斤的實心天然橡膠球在斜坡反彈，賽後由祭司將獲選者獻祭給雨神考西霍以祈求甘霖。\n\n4. 北台（Plataforma Norte）權力核心：大廣場最宏偉的石階通向頂端的柱廳與下沉庭院（Patio Hundido），平民不得踏入一步，是薩波特克統治階層與最高祭司舉行占卜秘術的權力中樞禁地。", 
+        sec3Title: "📷 帝王全景機位、參觀動線與防曬提醒", 
+        sec3Text: "【📸 兩大史詩級攝影機位】：\n1. 南台頂端（Plataforma Sur）帝王視角：登上南台寬闊的巨型石階頂端回望，整座長達 300 公尺的大廣場縱深在腳下鋪展，中央的 J 建築與神殿金字塔星羅棋布，背景襯托瓦哈卡山谷連綿起伏的翠綠群山，極具史詩磅礴氣勢。\n2. 舞者石雕牆側光角度：在西側舞者建築群（Edificio L），貼近石壁利用晨曦或午後斜射側光拍攝，黑曜石刀刻鑿出的人物痛苦紋理與輪廓最為深邃生動。\n\n【⚠️ 現場參觀指南】：\n• 開放時間：每日 08:00 - 16:30（建議 08:30 一開門抵達，氣溫最適宜且能避開午後強光與旅行團人潮）。\n• 防曬與補水必備：遺址位於海拔近兩千公尺開闊山脊，全程毫無綠蔭遮蔽，紫外線極強烈且風勢乾燥，務必攜帶遮陽帽、太陽眼鏡並準備至少 1-1.5 公升飲用水。\n• 參觀動線建議：入口博物館與 7 號墓位置 → 穿過球場進入大廣場 → 仰望北台柱廳 → 深入西側舞者石碑群 → 探索中央 J 建築天文台 → 登上南台飽覽帝王全景，全程約需 2.5 - 3 小時。", 
+        query: "Zona Arqueológica de Monte Albán" 
+      },
+      "arrazola-alebrijes": {
+        type: "spot",
+        tag: "🦊 《可可夜總會》奇幻靈獸發源地・科帕爾神木雕刻工坊",
+        title: "阿拉索拉靈獸木雕工藝村 (San Antonio Arrazola)",
+        summary: "皮克斯動畫《可可夜總會》死後世界神獸原型發源地！工匠順應神聖通靈科帕爾木天然枝枒釋放奇獸身軀，以極細毫毛筆點繪米特拉古神廟幾何圖騰。提供薩波特克生日守護靈（Tona）查詢與直覺選獸指南。",
+        sec1Title: "📜 夢境起源、神木科帕爾與本命守護靈哲學",
+        sec1Text: "【高燒瀕死夢境與工藝革命】\n1936 年墨西哥城紙雕藝人佩德羅・利納雷斯（Pedro Linares）重病高燒昏迷，在瀕死夢境中看見奇異森林裡的岩石與雲霧化作怪獸：長驢耳的公雞、長牛角的獅子、生蝴蝶翅膀的蜥蜴，怪物齊聲高喊著毫無意義卻震撼的詞彙：『Alebrijes！Alebrijes！』康復後利納雷斯以紙漿重現夢境。而真正將狂想注入木頭靈魂的，是阿拉索拉村的天才木雕師曼紐爾・希梅內斯（Manuel Jiménez）。曼紐爾自幼在山野放牧雕木，1950 年代他將紙雕怪獸與薩波特克神話融合，開創了科帕爾木雕 Alebrijes，風靡全球並成為皮克斯《可可夜總會》神獸（如長鷹翅的美洲豹佩皮塔）的原型！\n\n【神聖科帕爾木（Copal）的靈性對話】\n科帕爾樹是薩波特克神木，其樹脂正是古代祭祀雨神、驅邪通靈燃燒的神聖薰香（Copal）。工匠清晨在山野尋找被風吹斷的枝枒，從不強行雕刻，而是對著樹枝冥想數日，觀察天然樹瘤與弧線：『這根彎曲的枝枒不是我要雕成尾巴，而是它本來就想變成一隻伺機撲躍的豹尾。』公樹質地緊密雕身軀，母樹質地輕盈雕翅膀，順應天工賦予每隻木雕獨一無二的生命。\n\n【如何尋找你的專屬守護靈獸？】\n當地工匠深信挑選靈獸有兩種最傳統神聖的方式：\n1. 薩波特克古曆本命獸（Tona）：瓦哈卡古老傳統中，新生兒降生時長老在屋舍四周撒白石灰粉，隔日清晨第一隻踩過石灰留下腳印的動物，便是孩子一生的守護靈（Tona），代表性格天賦與精神防線。工坊通常備有對照冊，提供西元出生年月日即可查出 20 種古神獸週期中對應的本命靈獸。\n2. 直覺心靈感應（Nahual 連接法）：若挑選複合奇獸，工匠建議放下理性，在展架間尋找第一時間眼神撞擊你心臟的木雕。當地人深信：不是你在挑靈獸，而是靈獸感應到了你當下人生階段所缺乏的能量！",
+        sec2Title: "🐾 8 大常見靈獸象徵寓意速查表與工藝細節",
+        tips: "【8 大常見靈獸象徵寓意與人生指引】：\n1. 美洲豹 (Jaguar)：力量、領袖威嚴、黑夜洞察力、消除恐懼。薩波特克大地之王，能在黑暗中看穿虛妄，適合面臨重大決策與需要勇氣開拓新局者。\n2. 老鷹 (Águila)：遠見、自由意志、超脫格局、神明信使。象徵不被眼前困境拘束，適合追求事業突破與需要宏觀視野者。\n3. 貓頭鷹 (Búho)：智慧、神秘直覺、黑夜守護、穿透迷霧。通曉陰陽兩界秘密，守護旅人不被惡念侵擾，適合學者、創作者或需要清明指引者。\n4. 狐狸 (Zorro)：機敏、靈活適應、智慧破局、化險為夷。善於在複雜環境找到出路，適合職場應變與商務談判者。\n5. 蜂鳥 (Colibrí)：喜悅、純粹的愛、療癒傷痛、無限生機。傳遞思念的吉祥使者，能將愛帶給疲憊的心，適合渴望溫暖與迎向喜悅者。\n6. 兔子 (Conejo)：繁盛、豐饒、敏銳感知、家庭美滿。與月亮和豐收緊密相連，適合祈求家庭興旺與充滿生活靈感者。\n7. 鬣蜥/蜥蜴 (Iguana)：平靜、堅韌耐心、深層冥想、長壽自足。在烈日巨石上靜默蓄力的智者，適合需要平靜力量與長遠耐力者。\n8. 複合奇獸 (Alebrije 佩皮塔型)：全方位守護、陰陽平衡、跨越障礙。結合鷹翅（遠見）+ 豹身（力量）+ 鹿角（溫和），適合作為跨越人生重要關卡的終極護身符。\n\n【薩波特克圖騰微雕】：\n木雕自然風乾數月後，工匠以豪豬刺或僅數根毛的極細筆尖，點繪出源自米特拉（Mitla）古神廟的幾何密碼，繁複的點線面分別代表風、雨、太陽、豐收與生死輪迴。",
+        sec3Title: "🔍 真偽辨別心法、大師工坊推薦與參觀禮儀",
+        sec3Text: "【🔍 如何一眼辨別大師手作 vs 廉價量產品】：\n1. 看木材一體性：劣質品多用廉價碎木以化學膠水粗糙拼接；頂級 Alebrije 大多由整塊原生科帕爾木順紋一體雕刻（除較大翅膀與尾巴為榫卯活動插接外，身軀完全一體成形）。\n2. 看筆觸細密度：流水線紀念品色塊粗疏；真正匠人作品以豪豬刺或極細貂毛筆描繪，幾何圖騰細如髮絲，放大看毫無暈染，且層層套色極具立體感。\n3. 看底座落款：真正的藝術家工坊會在木雕腳底或腹部，以極細筆跡簽上工匠姓名、村名（Arrazola, Oax.），甚至附帶工坊原產地認證證書。\n\n【⚠️ 現場參觀指南與禮儀】：\n• 開放時間：村內多數家庭工坊每日 10:00 - 18:00 開放參觀。\n• 推薦走訪：村內創始人後裔的 Taller Manuel Jiménez 或巷弄間掛有木牌的家庭小工坊，工匠非常樂意展示剛砍下削皮的科帕爾木原塊與天然顏料磨製過程。\n• 議價禮儀：一件頂級木雕往往需耗費匠人全家數週甚至數月的日夜心血，屬於當代民藝珍品而非廉價工藝品，在工坊請尊重匠人雙手，避免過度殺價。",
+        query: "San Antonio Arrazola Oaxaca"
+      },
+
+      // 11/02 瓦哈卡街區與歷史核心終章
+      "oaxaca-jalatlaco": {
+        type: "spot",
+        tag: "🎨 石板巷巨型沙雕花毯・最純粹社區人情味",
+        title: "Jalatlaco 彩色街區 (Barrio de Jalatlaco)",
+        summary: "瓦哈卡最古老迷人的殖民街區。亡靈節街道鋪滿巨型彩色沙雕花毯，家戶大門敞開展示溫馨祭壇與柯巴脂芬芳。",
+        sec1Title: "📜 亡靈節期間的視覺奇觀與社區凝聚力",
+        sec1Text: "坐落於瓦哈卡市中心東北側的 Jalatlaco，是瓦哈卡最古老、也最迷人的殖民地街區之一。這裡遠離商業區喧囂，保留了鵝卵石鋪成的安靜街道、低矮粉彩房屋與爬滿老牆的古樹。\n\n在亡靈節期間，Jalatlaco 更被公認為全瓦哈卡將節慶氛圍與社區凝聚力發揮到極致的藝術街區。沒有商業化的浮誇，只有最純粹、最富人情味的社區祭祀，漫步其中能感受每一面牆與轉角藏著的驚喜與感動。",
+        sec2Title: "👁️ 三大街區漫步亮點",
+        tips: "【巷弄巨型沙雕與花毯（Tapetes de Arena y Flores）】：居民與藝術家在石板路上，用彩色沙子、花瓣、豆類與鋸末精心拼湊出巨大的卡特琳娜骷髏頭與薩波特克神話畫作。\n【家戶門前的溫馨祭壇（Ofrendas）】：居民將大門敞開，在走廊庭院搭建層次豐富的祭壇，空氣中飄散濃郁柯巴脂香（Copal）與萬壽菊芬芳。\n【現代塗鴉與傳統美學交融】：街區為瓦哈卡街頭藝術重要基地，融合原住民文化與現代設計感的精美壁畫與老建築碰撞出極具張力的美學。",
+        query: "Barrio de Jalatlaco Oaxaca"
+      },
+      "oaxaca-centro-historico": {
+        type: "spot",
+        tag: "🏰 世界遺產歷史核心・亡靈節輝煌終章",
+        title: "Oaxaca Centro (市中心歷史核心與最後一夜狂歡)",
+        summary: "瓦哈卡世界文化遺產跳動的心臟。在 11 月 2 日夜晚迎來亡靈節最輝煌激動的終章，用笑聲、燭光與音樂向祖先深情道別。",
+        sec1Title: "📜 核心地標與不可錯過的亮點",
+        sec1Text: "作為聯合國教科文組織認定的世界文化遺產，瓦哈卡市中心在 11 月 2 日夜晚將迎來亡靈節整場慶典最輝煌、最激動人心的終章。\n\n隨著午夜逼近，11 月 2 日的結束也意味著逝去的靈魂將依依不捨地重返另一個世界。此時市中心的街頭派對達到最高潮，人們在煙火、歌聲與梅斯卡爾酒的微醺中向祖先獻上最深情的道別，並期盼來年的再度重逢。這份超越生死、將悲傷化為慶典的生命厚度，是整趟旅程中最永誌難忘的靈魂記憶。",
+        sec2Title: "👁️ 兩大核心地標與狂歡氛圍",
+        tips: "【憲法廣場與武器廣場（Zócalo & Alameda de León）】：聚集無數身穿傳統服飾與骷髏妝容的民眾，百年拱廊下擺滿巨型公共祭壇，銅管樂隊演奏歡快民謠，展現『用笑聲與音樂歡送靈魂』的生死觀。\n【聖多明哥教堂（Templo de Santo Domingo）】：巴洛克火山石教堂外被成千上萬支明亮蠟燭、萬壽菊巨型拱門與燈光裝置點綴得如夢似幻，燭光倒映古老石牆，莊嚴而神祕。",
+        query: "Templo de Santo Domingo Oaxaca"
+      },
+
+      // 11/03 墨西哥城兩大國家級地標
+      "mexico-antropologia": {
+        type: "spot",
+        tag: " 隨身策展導覽・中美洲神話、血祭與文明聖殿",
+        title: "國立人類學博物館 (Museo Nacional de Antropología)",
+        summary: "拉美最高規格考古聖殿。依一樓黃金逆時針動線，揭開創世神話、死神審判、殘酷血祭真相與王室珠寶秘辛。",
+        sec1Title: "🧭 參觀指南與入口中庭世界之樹",
+        sec1Text: "【最佳動線】：一樓為古代文明考古廳，採逆時針順序參觀（奧爾梅克 ➔ 特奧蒂瓦坎 ➔ 托爾特克 ➔ 阿茲特克 ➔ 瓦哈卡 ➔ 馬雅）。\n\n【中庭倒立傘水幕（El Paraguas）】：這根支撐巨頂的單柱象徵瑪雅宇宙觀的「世界之樹（Ceiba）」。柱身浮雕刻劃鷹羽武士與西班牙征服者融為一體，傾瀉而下的水幕象徵生命之泉滋養大地。",
+        sec2Title: "👁️ 深度策展隨身導覽（按展廳順序與必看彩蛋）",
+        tips: "【Sala 4 奧爾梅克・母文明巨石頭像】\n・一眼認出：展廳中央數噸重玄武岩巨頭，面闊鼻平、厚唇、戴美式足球頭盔造型。\n・神祇八卦：統治者自稱是女人與神聖美洲豹交配產生的「美洲豹人」。石雕並非神明，而是死去的國王或蹴球隊長。石料產自百公里外火山區，在無輪子與役畜時代全靠人力運送。\n・肉眼彩蛋：繞至側面看耳飾雕刻，頭盔兩側各刻有專屬家族圖騰。\n\n【Sala 4 墨西哥灣沿岸・微笑泥俑之謎】\n・一眼認出：展櫃內集體露出燦爛大笑神情的陶俑。\n・殘酷真相：中美洲雕塑大多冷酷肅穆，唯獨此處集體微笑。考古證實他們並非快樂，而是即將被送上獻祭台的祭品，生前被灌入大量烏羽玉（Peyote）等致幻草藥，在神智恍惚的狂喜狀態下走向死亡。\n\n【Sala 5 特奧蒂瓦坎・眾神之城真跡】\n・羽蛇神神廟彩繪復原立面：金字塔現場已風化，此處按殘留色素還原兩千年前的鮮紅底色與翠綠蛇身。羽蛇神（晨星與風之神）與圓眼雨神特拉洛克交替排列。雨神極度殘忍，祭祀時需孩童嚎哭以祈求充沛雨水。\n・活人獻祭遺骸：神廟地基下挖出逾 200 具雙手反綁戰俘，展櫃陳列他們佩戴的「人類下頜骨項鍊」，以敵人下巴骨骼炫耀戰功。\n・肉眼彩蛋：尋找水神 Chalchiuhtlicue 巨石雕像，欣賞石器時代以黑曜石鑿出的俐落幾何裙擺。\n\n【Sala 6 托爾特克・金字塔頂武士巨柱 (Atlantes)】\n・一眼認出：高 4.6 公尺手持投槍器的巨型玄武岩戰士柱。\n・肉眼彩蛋：戰士胸前佩戴「展開雙翼的蝴蝶胸甲」，象徵陣亡勇士在烈火中昇華的靈魂。\n\n【Sala 7 阿茲特克 Mexica・帝國核心與血祭聖物】\n・太陽石 (Piedra del Sol)：重 24 噸巨盤，非單純日曆，而是「宇宙末日倒數祭壇」。阿茲特克人相信前四個太陽紀皆毀滅，現處第五紀元，終將毀於大地震；必須以活人熱血持續供奉太陽以延緩毀滅。中央第五太陽神雙手緊抓被掏出的人心，舌頭為渴望鮮血的黑曜石刀；外圈兩條火蛇象徵無限循環時間。\n・大地之母寇特利庫艾 (Coatlicue)：高 2.5 公尺安山岩巨像。頭部並非面孔，而是斷頸後噴射出的兩道鮮血化為對視的巨蛇之眼；胸前項鍊串起血淋淋的人心、人手與骷髏；裙擺由數十條活響尾蛇編織而成。必看彩蛋：看雕像正下方鏡子反射，底部雕刻著冥界神浮雕，是專供地底神明與亡靈瞻仰的秘密設計。\n・提索克之石 (Piedra de Tízoc)：帶凹槽的巨型石柱，為掏心獻祭平台，鮮血沿血槽順流而下匯入中央石皿。\n・冥界死神米克特蘭特庫特利 (Mictlantecuhtli)：真人大小陶塑骨瘦如柴，雙手呈鷹爪狀，胸腔下方撕裂垂掛著死神最愛吞噬的「人類肝臟」。頭頂孔洞在古代插滿死者真髮並澆灌鮮血。\n・美洲豹神鷹之皿 (Ocelotl-Cuauhxicalli)：背部被掏空的石雕美洲豹，此凹洞正是盛裝剛掏出、尚在跳動溫熱人心的專用托盤。\n・剝皮之神西佩托堤克 (Xipe Tótec)：掌管春季萌芽與重生，祭司將戰俘整張皮剝下套在身上長達 20 天直至脫落。肉眼彩蛋：仔細觀察陶俑手腕與面部，清晰可見外層耷拉的死人手掌與鬆弛的雙層皮膚。\n・查克穆爾 (Chac Mool)：側首仰臥人像，腹部托盤用於盛裝割耳放血的染血紙草與心臟。\n\n【Sala 8 瓦哈卡・蒙特阿爾班與王室黃金】\n・舞者石雕 (Los Danzantes)：阿爾班山遺址出土，扭曲痛苦的姿態實為被閹割折磨的垂死戰俘，下腹刻有如鮮花噴湧的血痕。\n・7 號墓 (Tumba 7) 寶藏：逃過西班牙人熔煉浩劫的極少數純金真品。欣賞米斯特克金匠登峰造極的純金項鍊、綠松石面具與精雕美洲豹骨手柄。\n\n【Sala 9 馬雅 Maya・皇家陵墓與外星人傳說】\n・帕卡爾大帝翡翠面具與玉衣：由數百片危地馬拉頂級翡翠拼合而成，眼白以海螺貝殼打磨、黑曜石為瞳孔，呈現貴族尊榮象徵的「微鬥雞眼」美學；十指佩戴純玉戒，口含潤玉以備冥界買路之需。\n・石棺蓋浮雕（破解外星人迷思）：直立觀看為馬雅創世神學——帕卡爾大帝落入大地怪物之口，身後升起貫通天界、人間與冥府的「十字生命樹」，頂端駐足神鳥，象徵國王化身玉米神衝破冥府重生昇華；橫看則常被古代太空人論者誤解為駕駛太空船發射尾焰。\n・斬首蹴球賽石環：重實心橡膠球賽是太陽與冥界的較量，浮雕生動刻畫隊長獻祭後斷頸噴射七道化為藤蔓的鮮血生命之泉。\n・奇琴伊察紅玉美洲豹寶座：硃砂血紅豹身鑲嵌天然綠松石斑點與玉石雙眸。\n\n【二樓民俗廳彩蛋】\n・蒙特蘇馬羽毛冠 (Penacho)：一比一精緻還原件，動用逾四百根珍稀綠咬鵑尾羽與純金配件編織而成，折射出帝王無上神權的翠綠光澤。",
+        query: "Museo Nacional de Antropología Mexico City"
+      },
+      "mexico-vasconcelos": {
+        type: "spot",
+        tag: "📚 《星際效應》現實版超立方體・懸浮鋼骨書架與幾何鯨骨",
+        title: "巴斯孔塞洛斯圖書館 (Biblioteca Vasconcelos)",
+        summary: "被譽為 21 世紀最前衛賽博龐克圖書館！挑高 30 公尺中庭由懸臂樑鋼構吊掛層層懸空書架，中央漂浮著親筆繪滿幾何波紋的真實巨鯨骨骸，四周環抱 6 萬株綠植構成的生態方舟。",
+        sec1Title: "📜 懸浮星際矩陣、幾何巨鯨與廢棄火車站生態奇蹟",
+        sec1Text: "【懸掛在半空中的星際矩陣】\n由墨西哥本土前衛建築大師阿爾貝托・卡拉奇（Alberto Kalach）設計，2006 年落成時震驚全球建築界！這座建築徹底顛覆了千百年來圖書館書架『立於地面』的傳統——長達 250 公尺、挑高 30 公尺的宏偉中庭內，所有鋼構書架皆由上方巨大的懸臂樑系統『懸吊於半空中』。書架之間穿插著半透明毛玻璃天橋與金屬網格地板，穿梭在三、四樓的懸空走道上，腳下是垂直通透的深淵，左右是被數十萬冊書籍包圍的幾何維度，視覺震撼堪比電影《星際效應》（Interstellar）中的五維時空超立方體與《全面啟動》（Inception）的立體摺疊空間。\n\n【中庭漂浮巨獸神作：Matrix Móvil】\n挑高中軸線正中央，懸掛著當代藝術大師加布里埃爾・奧羅斯科（Gabriel Orozco）的傳世裝置作品《移動矩陣》（Matrix Móvil）。這是一具長達 12 公尺的真實灰鯨骨骼標本，由藝術家在下加利福尼亞半島沙灘上拾獲。奧羅斯科帶領助手耗費數月清理，並以石墨鉛筆在數百塊巨大鯨骨表面，親手手繪出無數精密重疊的同心圓與幾何波紋，象徵時間、海洋洋流與宇宙運動。巨鯨骨架靜默『游弋』於冰冷理性的鋼鐵書架之間，形成遠古自然與未來工業文明的強烈衝擊美學！\n\n【廢棄火車站化身生態綠色方舟】\n此地前身是墨西哥城北部荒廢髒亂的布埃納維斯塔（Buenavista）鐵路調車場。卡拉奇的設計核心哲學是『將圖書館埋在森林裡』，建築四周開闢了廣達 2.6 公頃的植物園（Jardín Botánico），種植了超過 60,000 株、涵蓋近 170 種墨西哥本土原生植物。巨型全透明雙層玻璃帷幕引入了高原充沛天光與通風，既實現自然採光節能，又將市中心的喧囂車流完全隔絕於綠蔭之外。\n\n【以何為名？『宇宙種族』何塞・巴斯孔塞洛斯】\n圖書館得名於 1920 年代墨西哥革命後的教育部長何塞・巴斯孔塞洛斯（José Vasconcelos）。他是推動墨西哥壁畫運動（里維拉、歐羅斯柯）的靈魂舵手，更提出了著名的『宇宙種族（La Raza Cósmica）』哲學——深信拉丁美洲融合了全球血統與文化，將誕生超越種族偏見的新文明。這座圖書館正是其『知識平權、全民免費啟蒙』理念的具象化神殿。",
+        sec2Title: "👁️ 現場三大空間震撼與視覺亮點",
+        tips: "1. 懸空鋼構書架迷宮：搭乘透明景觀電梯緩緩升起，或步行登上頂層走道。半透明磨砂玻璃步道向虛空中延伸，陽光透過外層百葉與玻璃幕牆灑落，金屬格柵與書本陰影在大廳交織出極具科幻感的超立方體光影矩陣。\n\n2. 近距離凝視幾何巨鯨（Matrix Móvil）：站立在一樓中庭正下方仰望，或走上二樓連通道平視，灰鯨脊椎、肋骨與下顎上細密繁複的鉛筆幾何同心圓紋理清晰可見，骨骸的有機弧線與四周筆直的冷硬鋼樑形成絕妙對話。\n\n3. 環館熱帶植物方舟漫步：走出館外即可步入四周幽靜的植物園步道，仙人掌、龍舌蘭、棕櫚樹與本土灌木環繞著現代主義混凝土基座，是鬧市中難得的靜謐綠洲。",
+        sec3Title: "📷 絕美懸浮機位、相機禁忌與參觀指南",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 四樓北側盡頭俯拍（超廣角震撼）：站在最高層北側邊緣的透明走道，使用手機 0.5x 超廣角鏡頭垂直縱向俯拍，懸空書架的層次透視與遠處的灰鯨骨骸一同收入畫面，最具《星際效應》的超空間縱深感。\n2. 一樓中庭仰拍巨鯨：退至一樓大廳地面中央，向上仰拍灰鯨腹部，讓鯨骨在層疊懸浮鋼樑與天窗自然天光間穿梭，充滿未來科幻張力。\n\n【⚠️ 現場重要拍照禁令與參觀須知】：\n• 嚴禁專業相機：館內『嚴格禁止使用單眼相機（DSLR/無反相機）、長鏡頭或腳架』，門口警衛安檢極嚴，攜帶會被要求存包或立即吹哨制止（需提前付費申請商業許可）。\n• 手機拍照合法：使用『一般智慧型手機拍照完全合規且免費』，但拍照時請關閉快門聲音、絕對禁止使用閃光燈，切勿打擾在場自習閱讀的學生與研究人員。\n• 開放時間：每日 08:30 - 19:30，免費開放入館。\n• 交通提醒：搭乘地鐵 B 線或輕軌 Suburban 到 Buenavista 站，出站步行 2 分鐘即達。",
+        query: "Biblioteca Vasconcelos Mexico City"
+      },
+      // 11/04 墨西哥城 Roma 文藝街區
+      "mexico-roma": {
+        type: "spot",
+        tag: "🌿 獨立藝術與當代美學聚落・電影《羅馬》時空",
+        title: "Roma 區文藝街區 (Roma Norte)",
+        summary: "墨西哥市首屈一指的獨立藝術、文學、精品咖啡與當代美學聚落。林蔭大道旁佇立著新藝術與裝飾藝術風格的百年歐式洋房。",
+        sec1Title: "📜 街區身世與建築美學亮點",
+        sec1Text: "坐落於墨西哥市中心西南側的羅馬區，建於 20 世紀初的波菲里奧·迪亞斯統治時期。這裡最初是為菁英階層打造的歐洲風格高級住宅區，街區規劃棋盤井然，大量引入法國新藝術運動（Art Nouveau）與裝飾藝術（Art Deco）風格。\n\n經過百年時代變遷，如今的羅馬區（特別是 Roma Norte 區域）已經蛻變為墨西哥市首屈一指的獨立藝術、文學、精品咖啡與當代美學聚落，常被國際媒體拿來與紐約布魯克林或巴黎瑪萊區相提並論。",
+        sec2Title: "👁️ 必訪的街區靈魂與生活步調",
+        tips: "【綠樹成蔭的林蔭大道】：Álvaro Obregón 大道中央設有帶狀步行綠帶，兩旁種滿參天老樹與棕櫚，陽光灑在老洋房與鍛鐵陽台上極為優雅。\n【獨立書店與文學咖啡館】：孕育豐富當代文學與獨立出版文化，如知名的 Péndulo 複合式書店，在滿牆選書中品嚐恰帕斯手沖咖啡。\n【第三波精品咖啡浪潮核心】：聚集許多設計感頂級的獨立咖啡館（如 Cucurucho、Buna），以及頂尖主廚操刀的融合料理餐廳與質感小酒館。\n【街頭藝術與獨立藝廊】：轉入巷弄隨處可見驚豔的當代壁畫與大型塗鴉，老洋房二樓藏著獨立當代藝術藝廊。\n【電影《羅馬》(Roma) 的真實場景】：奧斯卡名導艾方索·柯朗自傳電影的拍攝地，漫步石板路能與 1970 年代的溫柔記憶產生強烈共鳴。",
+        query: "Colonia Roma Norte Mexico City"
+      },
+
+      // 11/05 特奧蒂瓦坎古文明 - 諸神之城金字塔群
+      "teotihuacan-pyramids": {
+        type: "spot",
+        tag: "☀️ 眾神誕生之地・中美洲古羅馬宇宙神權超級都會",
+        title: "特奧蒂瓦坎金字塔群 (Zona Arqueológica de Teotihuacán)",
+        summary: "全美洲古代文明的巔峰大都會！鼎盛期達 20 萬人。擁有直指宇宙秩序的亡者大道、鎮守地底創世洞穴的太陽金字塔、完美借景神山的月亮金字塔，以及地底流淌真實水銀冥河的羽蛇神廟。",
+        sec1Title: "📜 無名建立者、阿茲特克第五太陽紀創世與覆滅之火",
+        sec1Text: "【神秘無名帝國與阿茲特克的震撼】\n特奧蒂瓦坎興起於西元前 100 年、西元 650 年神秘焚毀廢棄。這座大都會全盛時期規模超越同時代的羅馬帝國，但現代考古至今不知道建立這座城市的民族叫什麼名字、使用何種語言，城內更未發現任何歌頌單一帝王或國王的紀念碑，極可能是長老集體神權統治。西元 14 世紀，阿茲特克人來到這座被黃沙掩埋的宏偉空城，震驚於其壯麗，深信『當前人類所處的世界（第五個太陽紀）』正是在此誕生——神話記載，長滿爛瘡的貧弱神靈奈納瓦特辛（Nanahuatzin）為給宇宙帶來光芒，毅然縱身跳入熊熊烈火化為太陽升起，另一自負神靈跟隨跳下化為月亮。阿茲特克人因而將其命名為 Teotihuacán（人成為神的地方/眾神誕生之地）。\n\n【貫穿天地的宇宙中軸：亡者大道（Calzada de los Muertos）】\n寬達 40 公尺、長逾 2 公里的南北主幹道兩側排列著無數對稱的平臺建築。阿茲特克人誤以為平臺下埋葬著歷代帝王陵墓而取名『亡者大道』，實則皆為祭司神殿與行政中樞。整座城市的棋盤街道並非正南正北，而是精準偏東 15.25 度——這個神秘幾何角度在每年 8 月 13 日（中美洲古曆長曆創世紀日）正好對齊地平線太陽落下的方位，將整座百萬人口的超級都會打造成一座龐大的地表天文鐘。\n\n【神權階級的覆滅之火】\n西元 7 世紀這座超級都會神秘走向終局，考古證實並非源於外族入侵，而是一場由下而上的內部平民大起義！整座城池中只有亡者大道兩側代表統治階層的神殿與貴族宮殿被精準放火焚燒、砸毀雕像，而平民百姓的居住街區卻完好無損。統治階層在烈火中灰飛煙滅，倖存平民四散流亡，古城從此封入歷史黃沙。",
+        sec2Title: "👁️ 三大核心神殿建築深度解密（太陽・月亮・羽蛇神）",
+        tips: "1. 太陽金字塔（Pirámide del Sol）與四葉草創世洞穴：高約 65 公尺（相當於 20 層樓高），底座長寬達 220×230 公尺，體積超過 100 萬立方公尺，底座規模幾乎與埃及胡夫大金字塔相當。在無輪子、金屬器與馱獸的時代，完全由勞工以背簍搬運玄武岩與浮石築成。全盛時期外表曾塗抹數英尺厚純白熟石灰並漆上耀眼硃砂紅，烈日下宛如燃燒的血紅巨山！1970 年代在西側階梯下方 6 公尺處發現長達 103 公尺的人工秘道，通往天然四葉草形狀的熔岩洞穴。在古印第安宇宙觀中，洞穴（Chicomoztoc）是七大部落誕生的大地子宮與死後冥界通道，這座金字塔正是刻意壓蓋在神聖洞穴正上方以鎮守宇宙起源中軸心。主階梯完全面向西方，精準對準 5 月 19 日與 8 月 13 日太陽直射與古曆創世紀落日方位。\n\n2. 月亮金字塔（Pirámide de la Luna）與借景神山祭祀地宮：矗立於亡者大道最北端，高約 43 公尺。雖比太陽金字塔矮，但因建於天然斜坡高處，頂部祭壇與東側太陽金字塔頂部驚人地維持在同一條完美地平水平線上！建築師巧妙運用『神聖借景工藝』——站在月亮廣場中央仰望，金字塔階梯輪廓線與後方海拔 3,050 公尺的塞羅戈多神山（Cerro Gordo）山脊完全重合，象徵匯聚雨雲的綠裙水神（Chalchiuhtlicue）在大地的縮影。1998-2004 年發掘出 7 層疊加層與 4 座恐怖殉葬坑：出土數十具雙手反綁背後、佩戴下顎骨項鍊的戰俘士兵骨骸，以及裝在木籠裡活埋的美洲豹、狼與猛禽，骨骼分析顯示猛獸生前曾被長期圈養並餵食人肉，展現統治階層掌控兇殘掠食者的至高神權。\n\n3. 羽蛇神廟與城堡廣場（Templo de Quetzalcóatl）的水銀冥河奇蹟：位於南段佔地 16 萬平方公尺的城堡廣場（La Ciudadela）核心，四面築有高聳城牆平台，可容納 10 萬人進行封閉式閱兵與大典。神廟採用標誌性斜坡平臺（Talud-Tablero）建築語彙，外牆雕刻 366 個立體神頭像：長著獠牙大嘴、頸繞十一片格查爾鳥羽的羽蛇神（掌管風、雲與金星），以及戴著圓形護目鏡面具的雨神特拉洛克（掌管雷霆與暴雨），古代塗滿硃砂紅、孔雀藍彩繪。2003 年考古機器人在神廟深處 18 公尺地下發掘長達 103 公尺的秘道：天花板塗滿黃鐵礦與赤鐵礦粉末，火光下如繁星璀璨的浩瀚宇宙夜空；盡頭石室地面更驚人發現大量流動的液態金屬水銀，人工模擬出閃耀銀光的冥界河流與太古湖泊，用以安撫創世始祖神靈。",
+        sec3Title: "📷 絕美機位、登頂現狀與極限防曬指南",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 月亮廣場主階梯平臺向南遠眺：站在月亮金字塔前方寬闊的主祭壇平臺上向南取景，筆直深邃的亡者大道縱深在眼前鋪展，左側太陽金字塔雄偉的梯形輪廓與連綿山巒一同入鏡，層次最為壯麗。\n2. 羽蛇神廟正面斜角特寫：近距離以 45 度斜角拍攝斜坡平臺上的立體石雕，羽蛇神張開的獠牙羽毛與雨神特拉洛克的護目鏡大眼在高原側光下陰影立體、張力十足。\n\n【⚠️ 現場重要參觀須知與防曬警訊】：\n• 永久禁止攀爬登頂：為保護千年火山岩結構與遊客安全，目前『太陽金字塔與月亮金字塔均已永久封閉禁止登頂攀爬』，但遊客可登上金字塔前方的大型基座平臺拍照。\n• 極限防曬與補水必備：遺址縱深長達數公里，全程毫無任何遮蔽樹蔭，高原正午紫外線極度灼熱，務必準備遮陽帽、防曬乳、太陽眼鏡並備足 1.5 公升以上飲用水。\n• 參觀動線建議：建議清晨 08:00 開門由 1 號門（城堡廣場/羽蛇神廟）進場，順光參觀羽蛇神廟後，沿亡者大道向北步行至太陽金字塔，最後抵達月亮金字塔與月亮廣場，由 2 號門或 3 號門離開，避開折返路程與午後烈日。",
+        query: "Zona Arqueológica de Teotihuacán"
+      },
+
+     // 11/05 歷史城區三大核心地標 - 1. 憲法廣場 (Zócalo)
+      "mexico-zocalo": {
+        type: "spot",
+        tag: " 全球最大城市廣場・阿茲特克湖心帝都與殖民信仰交會核心",
+        title: "憲法廣場 (Zócalo / Plaza de la Constitución)",
+        summary: "現代墨西哥跳動的心臟！官方名稱為憲法廣場，源自爛尾紀念碑基座的幽默暱稱。腳下踩著阿茲特克特斯科科湖心神廟，四周環抱向地心沉降的美洲最大主教座堂、國家宮與沉睡數百年的大神廟遺址。",
+        sec1Title: "📜 爛尾基座身世、湖上巨城神話與毒藥基督傳奇",
+        sec1Text: "【『Zócalo』爛尾基座的幽默身世】\n廣場官方正式名稱為『憲法廣場（Plaza de la Constitución）』，紀念 1812 年西班牙卡迪斯憲法。然而全墨西哥人都稱其為『Zócalo』（西班牙語意為基座/底座）。1843 年獨裁總統聖安納（Santa Anna）原計畫在廣場中央興建一座高聳入雲的獨立紀念碑，不料工人剛砌好一個巨大的圓形石基座（Zócalo），政府便宣告破產且爆發美墨戰爭，工程徹底爛尾！這個孤零零的石基座在廣場上閒置了數十年，市民相約皆稱『在底座見』，久而久之『Zócalo』便成了全墨西哥各城鎮主廣場的通用代名詞。\n\n【踩在特斯科科湖（Lago de Texcoco）與神鷹之上】\n西元 1325 年，阿茲特克人遵循太陽神神諭，在特斯科科湖中央的小島上看見『神鷹停於仙人掌上吞食毒蛇』的神蹟，就此奠基建立了浮於水上的宏偉帝都特諾奇蒂特蘭（Tenochtitlán）。今日的 Zócalo 正好座落於當年最神聖的祭祀與宮殿島嶼核心，見證了原住民水上文明被填平抽乾、覆蓋上殖民石造建築的歷史斷層。\n\n【主教座堂（Catedral Metropolitana）的沉降懸錘與毒藥基督】\n北側聳立著全美洲最龐大的天主教座堂，歷經近三個世紀（1573-1813 年）施工，融合文藝復興、巴洛克、丘里格拉（Churrigueresque）與新古典主義。1521 年科爾特斯拆毀阿茲特克大神廟後，直接搬運其玄武岩與浮石作為地基建材。由於整座城市建於鬆軟未乾的古湖泥之上，數萬噸重的教堂數百年來嚴重不均勻下沉、甚至地面龜裂，大殿天花板至今垂掛著巨大的雷射校準『重力懸錘』，在地板刻度上記錄著教堂陷入地心的毫米軌跡！走入大門即可瞻仰寬恕之壇供奉的『毒藥基督（Señor del Veneno）』黑木雕——傳說殖民時期有仇家在基督雕像腳趾塗抹劇毒暗殺每日吻足的虔誠神父，雕像神蹟般縮回雙腳並吸盡劇毒，通體瞬間化為焦黑救了神父一命，成為傳奇聖蹟。",
+        sec2Title: "👁️ 大神廟月亮女神、薩滿淨化與國家宮巡禮",
+        tips: "1. 大神廟遺址（Templo Mayor）與 1978 年月亮女神驚天大發現：座堂後方長眠數百年的阿茲特克雙子神廟，1978 年 2 月因電纜工人在地下挖掘時鐵鎬撞擊堅石而重見天日！出土了一塊重達 8 噸、直徑 3.25 公尺的月亮女神柯約爾夏烏基（Coyolxauhqui）巨型圓雕石盤。石盤刻畫著女神被斬首、四肢被砍斷剝離的震撼身軀，完美印證了阿茲特克神話：戰神威齊洛波契特利在蛇山誕生時，手持烈火之蛇將叛亂的姐姐月亮女神斬殺並拋下山崖摔碎。現場木棧道可直面 7 層擴建的雙神廟基座（左側藍色雨神特拉洛克、右側紅色戰神威齊洛波契特利）。\n\n2. 原住民薩滿柯巴脂煙燻淨化（Limpia Tradicional）：座堂外圍常年聚集著身披羽冠與猛獸毛皮、腳踝繫著乾燥果殼鈴鐺的原住民薩滿（Curanderos）。他們手持陶爐燃燒神聖柯巴脂（Copal）薰香，手持草藥束拍打身軀、吹響深沉海螺號角為民眾驅除負能量祈福，展現 500 年前古文明在現代首都心臟最強韌的生命力。\n\n3. 國家宮（Palacio Nacional）：廣場東側長達 200 公尺的新古典建築，前身為阿茲特克末代皇帝蒙特祖馬二世（Moctezuma II）的新宮，後改建為西班牙總督府。內部中央階梯完整保留國寶大師迭戈・里維拉（Diego Rivera）歷時 22 年創作的史詩級壁畫《墨西哥的歷史》，生動呈現自羽蛇神創世、原住民農耕、西班牙殘酷征服至獨立革命的壯麗歷史畫卷。",
+        sec3Title: "📷 傍晚降旗儀式、絕美景觀露台機位與實戰指南",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. Gran Hotel 或 El Balcón del Zócalo 頂樓高空視角：登上大廣場周邊歷史飯店（如 Gran Hotel de la Ciudad de México 或 El Balcón del Zócalo）的頂樓露台餐廳，點一杯咖啡俯瞰整座大廣場，廣場中央飄揚的巨幅國旗、宏偉主教座堂全景與遠方山巒盡收眼底，黃昏落日時分光影最為震撼。\n2. 主教座堂廣場視角：站在座堂南側階梯前，以飄揚的巨幅三色國旗為中軸前景，兩側帶入國家宮與古典殖民迴廊，捕捉廣場上川流不息的人群與莊嚴石殿的歷史張力。\n\n【⚠️ 現場重要活動與參觀指南】：\n• 震撼降旗儀式（Ceremonia de la Bandera）：每日清晨 06:00 升旗、傍晚 18:00 舉行降旗儀式。全副武裝的陸軍儀隊與軍樂隊自國家宮整齊步出，數十名士兵齊力托舉收折重達數百公斤的巨幅國旗，場面肅穆宏大，極度推薦傍晚 17:45 提前卡位觀禮。\n• 薩滿體驗禮儀：若想體驗柯巴脂煙燻淨化，一般行情報酬約 50-100 墨西哥披索（MXN），請帶著尊重之心體驗，拍攝薩滿儀式前宜先禮貌點頭示意。\n• 防扒與安全提醒：大廣場周圍人潮摩肩接踵，請隨時將背包背於胸前，妥善保管手機與貴重財物。",
+        query: "Plaza de la Constitución Zocalo Mexico City"
+      },
+      "mexico-palacio-nacional": {
+        type: "spot",
+        tag: "🎨 總統府權力中樞・里韋拉史詩壁畫《墨西哥的歷史》殿堂",
+        title: "國家宮 (Palacio Nacional)",
+        summary: "坐落於憲法廣場東側的聯邦政治中樞與總統府！地基原為阿茲特克蒙特祖馬二世新宮，以神廟火山石改建而成。中央大階梯珍藏國寶壁畫大師迭戈・里韋拉歷時 22 年創作的史詩巨製《墨西哥的歷史》與《原住民文明世界》長廊。",
+        sec1Title: "📜 權力沉積岩身世、多洛雷斯建國之鐘與總統府日常",
+        sec1Text: "【權力的沉積岩：從阿茲特克新宮到現代總統府】\n緊鄰憲法廣場東側長達 200 公尺的新古典巴洛克巨構，是墨西哥最高權力交替的沉積岩。此地最早為阿茲特克末代皇帝蒙特祖馬二世（Moctezuma II）的豪華『新宮（Casas Nuevas）』，內部曾設有皇帝私人猛獸動物園、草藥植物園與堆滿朝貢金銀羽毛的國庫。1521 年西班牙征服者科爾特斯攻陷帝都後將其徹底夷平，直接搬運阿茲特克神廟拆卸下的黑紅色火山浮石（Tezontle）築起私人防禦要塞。其後西班牙王室買回擴建為統治中美洲的新西班牙總督官邸；墨西哥獨立後正式定為聯邦政府與總統府所在地。近年更成為總統正式官邸，每天清晨在此召開全國直播的晨間記者會（Mañanera），古代宮殿至今仍是國家政治心跳的直接跳動處！\n\n【正門陽台上的建國名物：多洛雷斯之鐘（Campana de Dolores）】\n國家宮中央正門陽台上方的鐘樓中，懸掛著全墨西哥最神聖的歷史文物——多洛雷斯之鐘。1810 年 9 月 16 日凌晨，獨立之父伊達爾戈神父敲響此鐘號召起義，拉開了反抗西班牙統治的序幕。每年 9 月 15 日獨立日前夕深夜，墨西哥總統皆會親自走上此陽台拉響多洛雷斯之鐘，向憲法廣場上聚集的數十萬民眾揮舞國旗、高呼『Viva México!（墨西哥萬歲！）重演建國呼聲（El Grito）。",
+        sec2Title: "👁️ 里韋拉史詩巨作《墨西哥的歷史》三面主牆與二樓長廊密碼",
+        tips: "1. 中央大階梯《墨西哥的歷史》（Epopeya del pueblo mexicano）：國寶壁畫大師迭戈・里韋拉（Diego Rivera）自 1929 年起耗費心血繪製的史詩巨製，是為不識字的大眾打造的視覺歷史百科全書：\n• 北側牆面（遠古原住民黃金時代）：描繪西班牙人抵達前的烏托邦。羽蛇神魁札爾科亞特爾以白膚長髯智者形象教導先民天文、農耕與玉米栽培，湖畔原住民安居樂業、織布雕石。\n• 中央主牆面（血淚征服、獨立與大革命）：下層刻畫西班牙鐵甲騎兵的野蠻征服，里韋拉特意將科爾特斯畫得駝背、面色灰黃以諷刺殖民者；中層展現伊達爾戈神父、莫雷洛斯等獨立先烈的抗爭；上層生動呈現 1910 年墨西哥革命，農民領袖薩帕塔（Emiliano Zapata）身繫子彈帶高舉『土地與自由（Tierra y Libertad）』大旗。\n• 南側牆面（馬克思主義未來展望與弗里達彩蛋）：描繪 20 世紀初資本主義金融家的貪婪與無產階級覺醒，頂端卡爾・馬克思手指南方理想藍圖；畫面中央特別畫入愛妻弗里達・卡蘿（Frida Kahlo），她胸佩紅星徽章、神情堅毅地向年輕工人們分發革命傳單。\n\n2. 二樓長廊《原住民文明世界》（Mundo Indígena）：里韋拉在二樓繪製的 11 幅精細風俗壁畫。其中最著名的《特拉特洛科大市集（El Gran Mercado de Tlatelolco）》以透視法細膩重現阿茲特克水上市集：商人以可可豆與玉石以物易物，販售火雞、辣椒、仙人掌果、陶器與草藥；《染色工藝》則記錄了原住民從仙人掌上的胭脂蟲（Cochinilla）萃取極致鮮紅染料的古老智慧。",
+        sec3Title: "📷 超廣角階梯機位、嚴格預約規定與參觀指南",
+        sec3Text: "【📸 明信片級攝影機位】：\n中央榮譽階梯起點仰拍（0.5x 超廣角必備）：站在中央樓梯起步平台的正中軸線，利用手機超廣角鏡頭向上仰拍，巴洛克雙層石柱拱廊與整面三折史詩壁畫在自然天光下完美展現，色彩飽和、歷史壓迫感與透視張力無與倫比。\n\n【⚠️ 現場重要參觀規定與安檢須知】：\n• 超高門檻預約制：因國家宮為現任總統辦公與居住之最高行政中樞，『目前不開放現場自由隨意購票入場』！參觀必須提前透過官方網站或指定預約信箱登記官方導覽團，由專職導覽員帶隊進場。\n• 護照正本安檢：入內安檢規格等同機場，『參觀當日所有人必須出示有效護照正本』，嚴禁攜帶大型背包、液體、刀具或專業相機腳架。\n• 參觀動線：安檢進場 → 穿過典雅的中央榮譽庭院（Patio Central） → 登上中央主階梯細讀《墨西哥的歷史》大壁畫 → 漫步二樓長廊欣賞《原住民文明世界》→ 探訪貝尼托・胡亞雷斯故居紀念館，全程約需 1.5 - 2 小時。",
+        query: "Palacio Nacional Mexico City"
+      },
+      "mexico-bellas-artes": { 
+        type: "spot", 
+        tag: "🎭 純白大理石文藝聖殿・蒂凡尼百萬玻璃帷幕與壁畫世紀復仇", 
+        title: "藝術宮 (Palacio de Bellas Artes)", 
+        summary: "拉丁美洲最高文化藝術殿堂！外觀由義大利卡拉拉純白大理石與金黃穹頂構築，內部卻藏著 1930 年代冷峻裝飾藝術（Art Deco）。劇院擁有蒂凡尼打造的百萬片彩色玻璃火山帷幕，三樓更珍藏里韋拉向洛克菲勒世紀復仇的國寶級壁畫《宇宙掌控者》。", 
+        sec1Title: "📜 獨裁者虛榮、大理石下沉詛咒與三十年風格分裂", 
+        sec1Text: "【獨裁者的虛榮與下沉兩公尺的工程詛咒】\n1904 年親歐美的獨裁總統波菲里奧・迪亞斯（Porfirio Díaz）為迎接 1910 年獨立百年大慶，下令興建一座超越歐洲所有歌劇院的奢華殿堂，聘請義大利名建築師亞當博・博卡里（Adamo Boari）操刀。博卡里自義大利進口數萬噸純白溫潤的卡拉拉大理石（Mármol de Carrara）。然而這座無比沉重的大理石巨構建在鬆軟未乾的古湖泥之上，施工未半整棟建築便以驚人速度向地心垂直不均勻沉降了近 2 公尺！\n\n【革命停工與雙重風格碰撞（Art Nouveau vs. Art Deco）】\n1910 年墨西哥大革命爆發，迪亞斯流亡海外、博卡里逃回義大利，工期全面凍結長達二十年，淪為市中心巨大的大理石爛尾鋼架。直到 1930 年代墨西哥本土建築師費德里科・馬里斯卡爾（Federico Mariscal）接手完成。這造就了藝術宮獨步全球的雙重性格：外觀為歐洲浪漫柔美、布滿植物雕刻與金黃玻璃穹頂的『新藝術運動（Art Nouveau）』；內部挑高大廳與迴廊卻是 1930 年代俐落冷峻、融入馬雅與阿茲特克幾何神廟圖騰的『裝飾藝術風格（Art Deco）』！\n\n【蒂凡尼（Tiffany）百萬片彩色玻璃雙火山帷幕】\n主劇院舞台擁有全球絕無僅有、由紐約蒂凡尼公司打造的 24 噸重水晶防焰帷幕（Cortina de Cristal）。由工匠耗費數年以近 100 萬片微型不透明彩色玻璃手工拼貼而成，描繪墨西哥谷地著名的雙火山神話——沉睡的『伊斯塔西瓦特爾白女峰（Iztaccíhuatl）』與守護在她身旁噴吐濃煙的『波波卡特佩特火山（Popocatépetl）』。當舞台特製燈光亮起，彩色玻璃折射出黎明破曉至夕陽落日的迷幻漸層，宛如遠古神話再現。", 
+        sec2Title: "👁️ 壁畫三巨頭：里韋拉向洛克菲勒的世紀復仇", 
+        tips: "1. 迭戈・里韋拉《宇宙掌控者》（El hombre controlador del universo）：三樓最震撼全球藝術史的復仇神作！1933 年美國首富洛克菲勒重金邀請里韋拉為紐約洛克菲勒中心大廳繪製壁畫，里韋拉因堅持在畫中加入蘇聯共產領袖列寧肖像，遭洛克菲勒憤而下令用鑿子將整面壁畫徹底砸碎！1934 年藝術宮落成，里韋拉憑草稿在三樓將其原寸復活重現——不僅重新畫上列寧牽著工人們的手，更狠辣地將洛克菲勒本人畫在夜總會紙醉金迷的牌桌前，頭頂盤旋著梅毒螺旋體與細菌顯微鏡圖像，向資本主義展開最辛辣的世紀嘲諷！\n\n2. 何塞・克萊門特・奧羅斯科《宣洩》（Catarsis）：對面牆上筆觸狂暴粗獷的史詩巨製，描繪現代人類被烈火、槍砲、冷酷機器與放縱肉慾吞噬的末日廢墟，批判力道直刺心靈深處。\n\n3. 大衛・阿爾法羅・西蓋羅斯《新民主》（Nueva Democracia）：極具超現實雕塑張力的巨作，畫中衝破沉重鎖鏈、胸膛淌血的強壯女性象徵擺脫法西斯禁錮的新生民主，雙手緊握火炬向前狂奔，動能澎湃。", 
+        sec3Title: "📷 全網封神明信片機位、夜景藍調與參觀指南", 
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. Sears 百貨 8 樓景觀咖啡館（Café Don Porfirio 上帝視角）：全網公認拍藝術宮最震撼的角度不在地面！走到正對面 Sears 百貨搭電梯上 8 樓露天咖啡館陽台，點一杯咖啡即可居高臨下俯瞰整座卡拉拉白大理石飛簷與琥珀金黃玻璃穹頂，背景襯托阿拉米達公園綠蔭；特別推薦傍晚日落黃昏至藍調點燈時刻，璀璨華麗如夢似幻。\n2. 阿拉米達公園噴泉地面仰拍：漫步至藝術宮西側公園大理石噴泉旁，以水花與百年老樹枝枒為前景，仰拍金光閃爍的中央穹頂，洋溢濃郁的 20 世紀初巴黎優雅風情。\n\n【⚠️ 現場重要參觀須知】：\n• 開放時間與門票：建築大廳與二、三樓壁畫博物館每週二至週日 10:00 - 18:00 開放（週一休館）；入內參觀壁畫需於現場購票（週日墨西哥居民免費，因此週日人潮極為擁擠，強烈建議安排平日上午造訪）。\n• 玻璃帷幕觀賞條件：蒂凡尼火山玻璃帷幕位於主劇院內部，平時閉幕不對外開放，需購票欣賞芭蕾舞團（Ballet Folklórico de México）正式演出或參加特定內部導覽方能一睹真容。", 
+        query: "Palacio de Bellas Artes Mexico City" 
+      },
+
+  // 11/06 墨西哥城兩大經典亮點 - 1. 查普爾特佩克城堡
+      "mexico-chapultepec": {
+        type: "spot",
+        tag: "👑 美洲唯一真正皇家城堡・改革大道浪漫源頭與黑白棋盤露台",
+        title: "查普爾特佩克城堡 (Castillo de Chapultepec)",
+        summary: "全美洲大陸絕無僅有的真正皇家城堡！矗立於阿茲特克蝗蟲聖山之巔，曾為西班牙總督夏宮。見證奧地利哈布斯堡大公馬克西米利安一世的帝國悲歌，開闢壯麗的改革大道，並保留美墨戰爭少年英雄裹國旗跳崖的悲壯傳奇。",
+        sec1Title: "📜 蝗蟲聖山身世、美洲唯一皇城與哈布斯堡傀儡悲歌",
+        sec1Text: "【阿茲特克聖山與全美洲唯一皇城身世】\n坐落於查普爾特佩克公園（Chapultepec Park）中央制高點的城堡，自古在納瓦特爾語中意為『蝗蟲之山（Cerro del Chapulín）』，曾是阿茲特克歷代君王修養身心與安葬先祖骨灰的神聖禁地，山腳下更遺留著引甘泉入湖上特諾奇蒂特蘭的古引水渠。西班牙殖民時期改建為總督夏宮。美洲大陸雖遍布防禦堡壘與總督府，但『真正由歐洲正統皇帝加冕定居、設有皇家宮廷沙龍的城堡』，全美洲僅此一座！\n\n【哈布斯堡大公的傀儡悲歌與改革大道浪漫由來】\n1860 年代法國拿破崙三世入侵墨西哥，扶植奧地利哈布斯堡王朝的馬克西米利安大公（Maximilian I）與比利時公主卡洛塔（Carlota）加冕為墨西哥皇帝與皇后。這對年輕貴族熱愛墨西哥，將陰冷城堡改造成凡爾賽風格的浪漫宮殿。每天早晨卡洛塔皇后在城堡露台目送皇帝乘金色馬車前往市中心憲法廣場辦公，為使愛人有一條無遮無攔的筆直御道，馬克西米利安下令以巴黎香榭麗舍大道為藍本修築了一條直通市中心的宏偉林蔭大道，正是今日舉世聞名的『改革大道（Paseo de la Reforma，初名皇后大道）』！然而法軍隨後撤離，卡洛塔赴歐求援無果終生陷入瘋癲，皇帝拒絕拋下軍隊逃跑，最終於 1867 年被共和軍槍決身亡，臨刑前將金幣分予劊子手高呼『墨西哥萬歲』，留下淒美歷史終局。\n\n【浴血高塔：少年英雄（Niños Héroes）壯烈殉國】\n城堡見證了美墨近代最慘烈一幕。1847 年 9 月 13 日美墨戰爭首都淪陷前夕，美軍猛攻這座最後防線。當正規軍崩潰時，留守高塔的是六位年僅 13 至 19 歲的軍校學生。在彈盡援絕、美軍即將奪下城堡主旗之際，學員胡安・埃斯庫蒂亞（Juan Escutia）扯下墨西哥國旗將自己緊緊包裹，毅然自城堡懸崖高塔縱身躍下深淵粉身碎骨，以死捍衛國旗不落敵手！山腳下巍峨的六根白色大理石巨柱紀念碑，正是為了永恆銘記這六位守護國格的少年先烈。",
+        sec2Title: "👁️ 黑白棋盤露台、彩繪玻璃長廊與皇家沙龍巡禮",
+        tips: "1. 黑白西洋棋幾何大理石露台（Terraza del Alcázar）：城堡最富標誌性的空間，地面鋪設黑白相間的新古典幾何大理石磚，四周環繞著精緻鑄鐵欄杆與噴泉，正對城市天際線，陽光灑落時宛如置身歐洲古典宮廷。\n\n2. 彩色玻璃長廊（Galería de los Emplomados）：連接寢宮的封閉拱廊，整面牆鑲嵌著描繪希臘神話女神（果樹女神波摩娜、花神佛洛拉等）的精細彩繪玻璃窗，日光穿透時在黑白石階上倒映出絢爛迷幻的彩色光斑。\n\n3. 皇家奢華沙龍與空中花園（Jardín del Alcázar）：完整保留卡洛塔皇后的象牙雕花鋼琴、路易十五金箔扶手椅、拿破崙三世贈予的綠松石鐘錶與水晶吊燈；露天空中花園修剪整齊的法式樹籬與盛開玫瑰，將軍事要塞化為雲端浪漫花海。\n\n4. 國立歷史博物館（Museo Nacional de Historia）：城堡主體兼作國家歷史博物館，展出征服時期的鐵甲長劍、殖民時期總督黃金馬車、以及描繪墨西哥獨立革命與卡洛塔皇后的珍貴歷史油畫。",
+        sec3Title: "📷 改革大道天際線機位、攻頂坡道與參觀指南",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 黑白棋盤露台俯拍改革大道縱深：站在主露台的大理石欄杆旁正對中軸線取景，筆直向地平線延伸的改革大道在眼前鋪展，兩側現代摩天大樓、遠處獨立天使紀念碑與近處古典皇宮石柱同框，展現震撼的古今時空穿梭感。\n2. 彩色玻璃長廊順光剪影：利用長廊彩繪玻璃灑落的五彩自然天光，側身倚靠窗櫺拍攝人像剪影，光影極具油畫質感。\n\n【⚠️ 現場重要參觀須知與健行指引】：\n• 開放時間與門票：每週二至週日 09:00 - 17:00 開放（每週一全館休館）；需於山腳售票處或入口購買門票（週日墨西哥居民免費人潮眾多，強烈建議平日上午造訪）。\n• 攻頂坡道與接駁車：城堡高居山巔，從山腳公園檢票口需沿著綠樹成蔭的螺旋石板坡道徒步健行約 15-20 分鐘上山；若不想步行爬坡，山腳備有付費接駁小火車可直達城堡大門。\n• 安檢規定：入口安檢嚴格，館內『嚴禁攜帶任何外食、含糖飲料（僅可攜帶透明瓶裝水）及大型背包』，違者需於山腳存包處寄放。",
+        query: "Castillo de Chapultepec Mexico City"
+      },
+      "mexico-ciudadela": {
+        type: "spot",
+        tag: "🛍️ 全墨最大工藝品集散地・導遊私房必買寶庫",
+        title: "La Ciudadela 工藝市集 (Mercado de Artesanías)",
+        summary: "墨西哥市規模最大、品項最全、價格最公道的手工藝市集。匯聚全國各州特色民俗藝術品與伴手禮寶藏。",
+        sec1Title: "📜 市集定位與採買指南",
+        sec1Text: "Mercado de Artesanías La Ciudadela（La Ciudadela 工藝市集）是全墨西哥市規模最大、品項最齊全、價格最公道的傳統工藝品集中地。\n\n這裡匯聚了來自墨西哥全國各地（包括瓦哈卡、普埃布拉、哈利斯科等州）最具代表性、純手工製作的民間藝術品，是採買伴手禮的絕佳去處！",
+        sec2Title: "👁️ 導遊私房推薦：必買清單大公開",
+        tips: "【塔拉韋拉陶器（Talavera Pottery）】：來自普埃布拉的傳統錫釉陶器，以純白為底繪製濃郁鈷藍與幾何花紋，馬克杯、小盤與杯墊極具收藏價值（認明底部官方防偽標記）。\n【瓦哈卡奇獸木雕（Alebrijes）】：由科帕爾木純手工雕刻、彩繪繁複幾何圖騰的小動物（貓頭鷹、狐狸、蜥蜴），擺在家中極具藝術質感。\n【手工編織羊毛地毯與披肩（Rebozos）】：天然植物染色的羊毛與棉麻織品，來自恰帕斯或瓦哈卡原住民手工編織，適合做桌旗、抱枕套或披肩。\n【生命之樹（Árbol de la Vida）】：墨西哥標誌性陶塑，由人工捏塑彩繪無數花朵、天使與動物的立體燭台雕塑，象徵生命繁衍。\n【梅斯卡爾陶杯與熱可可杯（Barro Jarritos）】：手工燒製的梅斯卡爾小酒杯（Caballitos）與經典彩色帶耳陶杯，品飲極具情調。\n【真皮皮件與手工刺繡襯衫（Blusas Bordadas）】：手工真皮斜背包、皮鞋，以及繡有精美手工花鳥圖騰的純棉民俗上衣，舒適且充滿拉美風情。",
+        query: "Mercado de Artesanías La Ciudadela Mexico City"
+      },
+// 11/06 墨西哥城美食
+      "cdmx-fogo-de-chao": {
+        type: "restaurant",
+        tag: "🥩 頂級巴西窯烤・桌邊現切炭火烤肉與精緻鮮食吧",
+        title: "Fogo de Chão Insurgentes Sur (已訂位 19:30)",
+        summary: "知名巴西烤肉（Churrascaria）殿堂級品牌，以高溫直火旋轉慢烤多款特選原塊牛肉，由主廚手持大烤叉桌邊俐落厚切。",
+        sec1Title: "⭐ 招牌必吃推薦肉品",
+        dishes: [
+          "<strong>Picanha（巴西經典牛後臀尖肉）</strong>：店內絕對靈魂！外層保留一圈金黃焦香油脂，只以粗海鹽炭烤，肉質軟嫩、肉汁極度豐沛。",
+          "<strong>Fraldinha & Costela（牛側腹肉與慢烤牛小排）</strong>：經數小時慢火直烤，肉質軟爛化口、筋膜膠質濃郁入味。",
+          "<strong>Cordeiro（炙烤羊排與羊腿肉）</strong>：以新鮮薄荷與紅酒醃漬入味，炭火焦香無羶味。",
+          "<strong>Market Table & Feijoada（精緻鮮食吧與巴西黑豆燉肉）</strong>：提供現刨帕瑪森起司、燻鮭魚、新鮮蘆筍與熱騰騰木薯粉現烤起司麵包（Pão de Queijo）。"
+        ],
+        sec2Title: "📍 地址與現場用餐提示",
+        tips: "【餐廳地址】：Av. de los Insurgentes Sur 724, Col del Valle Nte, Benito Juárez, 03100 Ciudad de México, CDMX\n\n1. 已完成 19:30 訂位，抵達現場向接待櫃檯出示預約大名即可入座。\n2. 桌上有雙面翻牌（綠色代表繼續上肉，紅色代表暫停），可依照進食節奏隨時翻牌切換。",
+        query: "Fogo de Chao Insurgentes Sur Mexico City"
+      },
+
+     // 11/07 克雷塔羅景點 - 1. 克雷塔羅宏偉水道橋
+      "queretaro-acueducto": {
+        type: "spot",
+        tag: " 74座粉紅火山岩巨拱・侯爵與修女的傳奇愛情水利神蹟",
+        title: "克雷塔羅宏偉水道橋 (Acueducto de Querétaro / Los Arcos)",
+        summary: "18 世紀美洲大陸最壯麗的古羅馬式水利超級工程與世界文化遺產！全長 1.28 公里、74 座巨大半圓拱門跨越山谷。源於西班牙侯爵為心愛修女傾家蕩產引清泉的傳奇愛情，夕陽時分整排巨拱染上溫柔玫瑰金，入夜宛如騰空金龍。",
+        sec1Title: "📜 侯爵與禁忌修女的愛情紀念碑、火山岩工程與皇帝終局",
+        sec1Text: "【美洲最昂貴的單戀：侯爵與禁忌修女的愛情傳奇】\n這座落成於 1738 年的世界文化遺產巨構，被譽為『美洲最浪漫也最絕望的愛情紀念碑』。18 世紀初克雷塔羅因水源嚴重污染，霍亂與傷寒肆虐。富可敵國的西班牙貴族比利亞德爾比亞爾侯爵（Marqués de la Villa del Villar del Águila，唐・胡安・安東尼奧）造訪皇家聖克拉拉修道院時，對發願終生守貞的美麗修女瑪塞拉（Sor Marcela）一見傾心。在嚴苛戒律下感情註定無果，修女婉拒愛意並吐露全城百姓苦於無水之痛，懇求侯爵引來山泉。侯爵當即立誓：『若我不能擁有妳，我便讓純淨甘泉洗滌妳的生活！』他自掏腰包承擔整座工程超過 70% 的驚人天價費用，動用數千名原住民石匠歷經 12 年（1726-1738），硬生生將 9 公里外的拉霍亞（La Joya）純淨山泉越嶺引入聖克拉拉修道院噴泉，進而造福全城世代居民。\n\n【古羅馬水利工程與粉紅火山岩（Cantera Rosa）】\n水道橋高架跨谷段全長達 1,280 公尺，由 74 座巨大半圓形石砌拱門巍然支撐，最高拱跨度距地面高達 28.4 公尺（近 10 層樓高）！整座橋就地取材自克雷塔羅特有的粉紅火山凝灰岩（Cantera Rosa）。石塊間未使用現代水泥，而是沿用古羅馬配方——以生石灰、火山灰，甚至傳說混合牛血與仙人掌黏液調製成強韌灰漿，歷經近三百年地震與風雨沖刷依然屹立不搖、滴水不漏。\n\n【噴泉之城與皇帝圍城歷史餘波】\n清泉入城後分流至市內數十座精美巴洛克噴泉（如海神噴泉 Fuente de Neptuno），特設挑水伕（Aguadores）制度終結傳染病浩劫，讓克雷塔羅一躍成為繁榮的『噴泉之城』。1867 年墨西哥第二帝國崩潰，哈布斯堡大公馬克西米利安一世皇帝率殘軍退守克雷塔羅，共和軍切斷這座水道橋水源圍城數月，皇帝最終在橋附近的鐘之丘（Cerro de las Campanas）被俘槍決，使水道橋再度見證帝國落幕。",
+        sec2Title: "👁️ 74 座巨拱視覺震撼與建築細部看點",
+        tips: "1. 74 座半圓巨拱的宏偉陣列：自東向西跨越開闊山谷，拱門間距與比例精確承襲古羅馬引水渠美學，展現西班牙巴洛克工程技術在美洲大陸的最高成就。\n\n2. 終點分流與蓄水池（Caja de Agua）：位於修道院附近的蓄水終點，泉水在此平靜沉澱後分流至全城修道院、官邸與公共噴泉，是理解殖民時期城市水利網絡的活教材。\n\n3. 拱底仰望空間壓迫感：沿著 Bernardo Quintana 大道漫步至第 25-30 號中央最高拱門正下方，近 30 公尺的粉紅石拱高聳入雲，人車穿梭其間宛如微小螻蟻，視覺震撼極致。",
+        sec3Title: "📷 觀景台透視機位、玫瑰金日落與藍調夜景指引",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 克雷塔羅拱門觀景台（Mirador de los Arcos 經典全景）：位於水道橋西側起點的制高點（鄰近十字架修道院 Templo de la Cruz）。站在觀景台大理石欄杆旁，順著 74 座拱門向東方地平線遠眺，巨拱在山谷間層疊延伸的透視縱深感無與倫比！\n2. 橋底仰拍人像幾何大片：走到中段最高拱跨下方，利用手機超廣角鏡頭由下往上仰拍，粉紅石塊的粗獷紋理與半圓拱頂的完美幾何弧度極富幾何張力。\n\n【⚠️ 現場最佳造訪時刻與夜景指引】：\n• 玫瑰金夕陽時刻：水道橋朝向東西軸線，強烈推薦『傍晚日落時分（約 17:30 - 18:30）』造訪觀景台！西沉落日的金色餘暉照射在粉紅火山岩上，會將整排巨拱染成極其溫柔濃烈的『玫瑰金（Rose Gold）』。\n• 藍調夜景點燈：入夜天色轉為深藍時（約 19:00 起），整座水道橋會亮起暖黃色夜間景觀投光燈，74 座巨拱在黑夜中宛如一條騰空飛躍的金色巨龍，璀璨奪目，是克雷塔羅最浪漫的散步夜景。",
+        query: "Acueducto de Querétaro"
+      },
+      "queretaro-centro": {
+        type: "spot",
+        tag: "🏰 世界文化遺產・純金巴洛克狂瀾、獨立搖籃與奇蹟十字架樹",
+        title: "克雷塔羅歷史城區 (Centro Histórico de Querétaro)",
+        summary: "全墨西哥氛圍最優雅、治安極佳的世界文化遺產古城！兼具原住民迷宮與西班牙棋盤格局。漫步於粉紅火山石街道，見證女地方官敲地板改寫國運的獨立傳奇、聖克拉拉 24K 純金箔祭壇、全墨最美石雕中庭與長出天然十字架刺的神秘奇蹟樹。",
+        sec1Title: "📜 雙重城市格局、女地方官敲地板建國傳奇與歷史命運",
+        sec1Text: "【世界遺產雙重格局：原住民迷宮與西班牙棋盤】\n克雷塔羅古城被列為世界文化遺產的核心奇蹟，在於其獨一無二的城市雙重性格：東半部完整保留了奧托米族（Otomí）與塔拉斯卡族原住民蜿蜒曲折、無序生長的巷弄迷宮；西半部則是西班牙殖民者規劃的嚴正幾何棋盤網格。兩種對立的空間型態在此和諧共生近五百年，街道鋪滿細緻鵝卵石與溫潤粉紅火山石（Cantera Rosa），洋溢著全墨西哥最典雅從容的貴族氣息。\n\n【女地方官（La Corregidora）踩地板通風報信的獨立傳奇】\n古城核心武器廣場（Plaza de Armas）北側為地方官宅邸（Palacio de la Corregidora）。1810 年此地為反抗西班牙統治的秘密核心，地方官夫人多娜・霍塞法（Josefa Ortiz de Domínguez）暗中鼎力支持起義。當丈夫察覺事態危急將其反鎖在二樓臥室企圖阻攔時，多娜機智地脫下高跟鞋用力踩踏木質地板敲擊暗號！樓下門房心領神會，連夜策馬飛奔數十公里至聖米格爾與多洛雷斯通知伊達爾戈神父，促使神父提前敲響獨立之鐘，引爆了席捲全墨的獨立大革命！\n\n【歷史三度交會的宿命：共和國劇院（Teatro de la República）】\n城內這座莊嚴的新古典主義劇院三次親手改寫國家命運：1854 年在此首度唱響墨西哥國歌《Himno Nacional Mexicano》；1867 年哈布斯堡大公馬克西米利安一世皇帝戰敗後在此接受軍事審判並被判處槍決；1917 年制憲代表在此激辯數月，最終正式簽署頒布了現行《1917 年墨西哥憲法》（人類歷史上首部將勞工權益與土地改革入憲的進步法典）。",
+        sec2Title: "👁️ 純金聖克拉拉、全墨最美巴洛克石雕庭院與十字架奇樹",
+        tips: "1. 聖克拉拉教堂（Templo de Santa Clara de Asís）純金狂瀾：水道橋侯爵深愛的修女所在之皇家修道院！外觀低調質樸，推開厚重大門內部卻是令人屏息的極致奢華——整面牆壁與祭壇鋪滿厚重的 24K 純金箔木雕飾帶（丘里格拉 Churrigueresque 風格），密密麻麻的天使、卷草藤蔓與聖徒雕像在昏黃燭光下反射出刺目的金光，展現新西班牙白銀帝國富可敵國的財富極限。\n\n2. 聖奧古斯丁修道院（Ex-Convento de San Agustín / 藝術博物館）：被建築史學家譽為『全美洲最美的巴洛克石雕庭院』！二樓迴廊的石柱上雕刻著誇張扭曲的石雕巨人（Atlantes），雙手用力托舉拱頂，柱身爬滿繁複葡萄藤、天使與神魔面孔，強烈光影交錯下極具戲劇張力。\n\n3. 聖十字修道院（Templo y Convento de la Cruz）與神秘十字架樹：古城東側制高點的古老聖地，相傳 1531 年西班牙騎士與原住民血戰時天降發光十字架而得名。內庭生長著一種舉世罕見的神秘灌木，其長出的天然堅硬長刺，純天然呈現完美的『三維立體十字架』形狀，修士常將落下的天然十字刺贈予信徒作為護身符。",
+        sec3Title: "📷 典雅漫步動線、中庭巨雕機位與夜間傳說遊行",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 聖奧古斯丁修道院二樓俯拍中庭：登上二樓迴廊，以石雕巨人的健碩拱柱與繁複雕花為前景，俯拍一樓幾何石板中庭與中央噴泉，巴洛克對稱美學張力十足。\n2. 武器廣場露天咖啡座黃昏街景：傍晚坐在廣場老榕樹下的露天座，以噴泉、殖民拱廊與典雅鑄鐵路燈為背景，捕捉古城在暖橘夕陽下的悠閒貴族氛圍。\n\n【⚠️ 現場散步動線與夜間活動推薦】：\n• 經典黃金散步動線：聖十字修道院（觀賞十字架奇樹） → 沿著 Andador 5 de Mayo 步行街漫步 → 武器廣場（地方官宅邸） → 共和國劇院 → 聖克拉拉教堂（純金祭壇） → 聖奧古斯丁修道院（藝術博物館），全程平緩舒適約需 2.5 - 3 小時。\n• 週末夜間傳說之旅（Callejoneadas）：每逢週五至週日傍晚，會有身穿西班牙中世紀斗篷的學生樂團（Estudiantina）帶領遊客穿梭古城小巷，手提復古油燈、彈奏吉他歡唱，生動講述女地方官敲地板與古宅幽靈的民間傳奇，氣氛極為歡樂熱鬧！",
+        query: "Centro Historico Queretaro"
+      },
+
+     // 11/08 克雷塔羅農莊（起司參訪 2選1）
+      "rancho-santa-marina": {
+        type: "spot",
+        tag: "🧀 自然循環生態農莊・草原老樹下品嚐新鮮綿羊乳酪與白酒",
+        title: "Rancho Santa Marina (起司農莊)",
+        summary: "坐落於克雷塔羅鄉村的知名生物動力法有機生態農莊。漫步於放牧綿羊的綠意草地、探索地下熟成石窖，享受無菜單鄉村起司盛宴。",
+        sec1Title: "🌾 農莊體驗與生態導覽看點",
+        sec1Text: "農莊遵循嚴謹的有機與自然動力循環農法，園區內放養著健康快樂的綿羊、乳牛群。訪客可由專業導覽員帶領，親自走入香草花園採摘香料、參觀綿羊擠奶房，並深入天然低溫地下石窖，親眼見證不同熟成月份的乳酪在木架上慢慢轉化出天然凝脂與風味。\n\n導覽結束後的重頭戲是在百年大樹遮蔭的戶外長桌上，享用農莊手工烘焙的酸種麵包、特級冷壓橄欖油、自製鮮果醬，以及 5 至 6 款不同熟成度的綿羊起司品嚐拼盤，並搭配在地酒莊的清爽白酒或自然酒。",
+        sec2Title: "💡 預約與參訪實用提示",
+        tips: "1. 農莊採全預約制（通常需透過官網或 WhatsApp 事前確認場次），不接受現場散客直接入園。\n2. 戶外草地走動時間較長，建議穿著防滑好走平底鞋並做好防曬防蚊措施。\n3. 農莊附設小商店提供真空包裝的熟成乾酪與有機果醬，非常適合買回台灣或帶在旅途車上享用。",
+        query: "Rancho Santa Marina Queretaro"
+      },
+      "rancho-josemaria": {
+        type: "spot",
+        tag: "🏆 世界起司大賽獲獎名莊・頂級手工綿羊乾酪工藝",
+        title: "Rancho San Josemaría (頂級起司名莊)",
+        summary: "墨西哥最具代表性的頂級手工羊乳酪名莊！多次在英國舉辦的世界起司大獎（World Cheese Awards）中擊敗歐洲名莊榮獲金銀獎肯定。",
+        sec1Title: "🧀 世界級起司工藝與品鑑看點",
+        sec1Text: "這座精品家庭式農莊以極致純淨的綿羊乳品聞名拉美，是墨西哥唯一多次榮登世界起司殿堂的傳奇名莊。莊園主人將傳統歐洲熟成工藝與墨西哥在地風土融為一體，開發出令人驚豔的特有乾酪品種。\n\n在這裡可以深入了解如何用純鮮綿羊奶提煉凝乳，並品嚐獲獎無數的招牌名品——例如在紅酒槽中低溫浸潤熟成的軟質紫皮乳酪、以傳統木灰裹附熟成的金字塔灰起司，以及熟成超過 12 個月、帶有濃郁堅果香氣與焦糖結晶的頂級硬質羊乾酪。",
+        sec2Title: "💡 現場品酩與購買提示",
+        tips: "1. 參訪行程包含專人解說的深度起司與葡萄酒品鑑搭配（Maridaje），每款起司都會由侍酒師推薦最合拍的產區酒品。\n2. 每日接待人數嚴格受限，必須提前預約確認預約單號。\n3. 獲獎的金牌硬質起司耐放且方便長途攜帶，真空包裝可在常溫陰涼處維持極佳品質。",
+        query: "Rancho San Josemaría Quesos Queretaro"
+      },
+
+     // 11/09 克雷塔羅景點 - 1. 武器廣場 (Plaza de Armas)
+      "queretaro-plaza-armas": {
+        type: "spot",
+        tag: "☕ 貴族露天客廳・引水侯爵噴泉與女地方官高跟鞋敲地起義現場",
+        title: "武器廣場 (Plaza de Armas / Plaza de la Independencia)",
+        summary: "克雷塔羅最典雅浪漫的社交心臟與戶外客廳！百年印度榕樹綠蔭環繞，粉紅火山石鋪面，中央坐落引水侯爵噴泉。北側為女地方官脫高跟鞋踩地板敲暗號改寫國運的歷史州宮，周圍林立巴洛克豪宅與露天肉桂陶壺咖啡座。",
+        sec1Title: "📜 衛隊操場演變客廳、引水侯爵噴泉與女地方官暗號驚魂",
+        sec1Text: "【從衛隊軍械操練場到市民貴族客廳】\n坐落於克雷塔羅古城正中央的武器廣場，是整座城市最具歷史重量與法式優雅氛圍的靈魂心臟。殖民時期此地原為西班牙總督衛隊集結操練、存放火槍軍械的禁地，因而得名『武器廣場』。然而隨著時代演進，廣場四周被修剪成圓柱狀的茂密百年印度榕樹（Ficus）環抱，地面鋪滿溫潤的粉紅火山石板，褪去了軍事肅殺，徹底轉變為市民、文人與貴族談笑社交的『城市戶外大客廳』。\n\n【中央噴泉的深情主角：引水侯爵雕像】\n廣場正中央建於 1843 年的新古典主義噴泉水池中，矗立著一位身著西班牙華服的貴族雕像——正是水道橋的主角比利亞德爾比亞爾侯爵（Marqués de la Villa del Villar del Águila）！雕像底座由四隻口吐清泉的石雕神犬守護。當年侯爵為心愛修女傾家蕩產引來的山泉，正是源源不絕注入此處噴泉供市民免費取水飲用，將浪漫愛情永恆銘刻於市民生活日常。\n\n【女地方官宅邸（Palacio de la Corregidora）的生死暗夜】\n廣場北側矗立著擁有典雅拱廊與高大木窗的兩層殖民府邸（現為克雷塔羅州政府大樓）。1810 年此地為獨立運動前夕最危險的心臟地帶，地方官夫人多娜・霍塞法（Josefa Ortiz de Domínguez，尊稱 La Corregidora）每週在此以『文學哲學讀書會』為掩護，召集伊達爾戈神父與阿連德將軍秘密籌劃武裝起義。9 月 13 日密謀外洩，忠於王室的丈夫將其反鎖於二樓臥室企圖阻攔；多娜機智地脫下高跟鞋用力踩踏木質地板敲擊暗號，樓下門房佩雷斯心領神會連夜飛馬傳訊，成就了改變命運的獨立呼聲！",
+        sec2Title: "👁️ 厄瓜拉老宅巴洛克雕花、古宅傳奇與貴族建築密碼",
+        tips: "1. 厄瓜拉老宅（Casa de Ecala）：坐落於廣場東南角，被譽為克雷塔羅最奢華的殖民豪宅典範！二樓陽台外牆擁有全城最繁複極致的巴洛克白色粉刷浮雕（Alfeñique），藤蔓、貝殼花飾與神話人物交織環繞，搭配沉重典雅的古老黑鐵鑄花欄杆，展現 18 世紀白銀貴族的滔天財力。\n\n2. 州政府宮中庭歷史壁畫：走入北側州宮大廳，天井中庭保留著描繪墨西哥獨立建國、女地方官多娜踩地板傳訊、以及各民族融合的壯闊壁畫，歷史壓迫感強烈。\n\n3. 周邊古老巷弄幽靈傳奇：廣場周圍巷弄散落著諸多殖民傳說老宅（如著名的黑魔法宅邸 Casa de Don Bartolo），古老厚重的木門與生鏽鐵環，隨處可見數百年歲月留下的滄桑痕跡。",
+        sec3Title: "📷 侯爵噴泉機位、肉桂陶壺咖啡與夜間漫步指南",
+        sec3Text: "【📸 兩大明信片級攝影機位】：\n1. 侯爵噴泉對角線構圖：蹲在中央噴泉西南側，以噴湧水花和侯爵雕像為前景，背景帶入州宮莊嚴典雅的新古典柱廊拱門與二樓歷史陽台，晨光順光時色彩飽和、歷史層次感極佳。\n2. 厄瓜拉豪宅側光浮雕特寫：午後斜陽時分，在廣場南側以長焦鏡頭仰拍 Casa de Ecala 陽台，強烈側光在白色巴洛克雕飾與粉紅火山石牆面上投下立體陰影，精緻度宛如象牙微雕。\n\n【⚠️ 現場慢活美學體驗與參觀須知】：\n• 慢活咖啡與吉拿棒體驗：廣場長廊下排滿法式藤椅與遮陽傘露天座，極度推薦午後點一杯加入肉桂與黑糖熬煮的墨西哥傳統陶壺咖啡（Café de Olla），或搭配一份剛出鍋酥脆的吉拿棒（Churros）沾濃郁熱巧克力，享受噴泉潺潺水聲與古城慢活步調。\n• 州宮參觀指南：州宮平日作為政府辦公場所，白天有時開放中庭供遊客免費安檢參觀壁畫（需出示證件），請保持肅靜。\n• 夜間安全與氛圍：廣場周圍設有常態警力巡邏，治安極佳，夜間點起溫暖瓦斯街燈後浪漫非凡，非常適合餐後悠閒散步吹風。",
+        query: "Plaza de Armas Queretaro"
+      },
+      "queretaro-finca-vai": {
+        type: "spot",
+        tag: "🧀 百年家族乳業傳承・純天然熟成起司與在地白酒",
+        title: "Quesos VAI 百年乳酪莊園 (Finca VAI)",
+        summary: "墨西哥著名的乳酪與葡萄酒之路標誌性莊園。深入地下熟成石窖參觀手撕起司工藝，在草原老樹下享用起司拼盤與在地美酒。",
+        sec1Title: "📜 牧場到餐桌的沉浸式體驗",
+        sec1Text: "位於克雷塔羅郊外、著名的『乳酪與葡萄酒之路』上的標誌性莊園 Quesos VAI，擁有深厚的家族傳承歷史，根基可追溯至 1920 年代的乳業傳統。\n\n在 Finca VAI，遊客不僅能參觀現代化乳酪生產線與熟成石窖，還能走入農場與動物互動，深入了解 100% 純天然乳品（不含激素與抗生素）的製作工藝。融合歐洲傳統熟成技術與墨西哥風土，誕生出多種屢獲殊榮的頂級起司。",
+        sec2Title: "👁️ 品嚐推薦與伴手禮採買",
+        tips: "【招牌起司品鑑（Degustation）】：提供專業起司拼盤試吃，推薦濃郁歐式風味的 Vecchio、口感豐富的半沙漠起司（Semidesierto）、獨特香氣的 Reblochon 與清爽農場起司。\n【結合葡萄酒的饗宴】：莊園常與周邊知名葡萄園緊密結合，享用手工起司時搭配一杯克雷塔羅高原出產的在地葡萄酒，享受舌尖饗宴。\n【伴手禮採買】：商店販售真空包裝手工起司、果醬、餅乾與特色酒品，非常適合帶回家當紀念品。",
+        query: "Quesos VAI Queretaro"
+      }
+    };
+
+    var citiesData = [
+      {
+        groupIndex: 1, 
+        tag: "世界遺產銀礦山城",
+        name: "Guanajuato 瓜納華托",
+        intro: "昔日世界最大的白銀產地，如今是充滿彩色積木房與地下隧道的迷人大學城。這裡擁有最原汁原味的墨西哥街頭音樂與夜生活。",
+        landmarks: [
+          {
+            name: "瓜納華托聖母聖殿",
+            detail: "亮黃色外牆與大紅色圓頂的歷史核心，供奉隱藏 800 年的純木雕鍍金聖母像。",
+            query: "Basílica Colegiata de Nuestra Señora de Guanajuato",
+            targetDayId: "day-1025" 
+          },
+          {
+            name: "皮皮拉紀念碑展望台 (El Mirador)",
+            detail: "俯瞰彩色積木山城與地下隧道全貌的最佳夕陽與夜景機位。",
+            query: "Monumento Al Pipila Guanajuato",
+            targetDayId: "day-1024"
+          }
+        ]
+      }
+    ];
+
+    var cityGroups = [
+      {
+        tabLabel: "Guadalajara",
+        days: [
+          {
+            id: "day-1021",
+            shortDate: "10/21 瓜達拉哈拉",
+            date: "10月21日 週三",
+            city: "瓜達拉哈拉 Guadalajara",
+            remarks: ["入住後先買隔日 Tequila 來回車票（去程 8 點出發）、確認上車地點與末班車時間", "到超市買隔日早餐"],
+            schedule: [
+              { time: "上午", title: "班機與交通接駁", detail: "華航（LAX T3 9:55 → GDL T1 14:15）、換匯、搭公車進市區", mapTargets: [{ name: "飯店導航", query: "Hotel Emperador Guadalajara" }] },
+              { 
+                time: "晚餐 (2選1)", title: "晚餐安排：瓜達拉哈拉特色名店 2選1", type: "multiOption", detail: "點擊下方卡片查看詳細必點菜色與避坑提示：",
+                options: [
+                  { id: "karne-garibaldi", tag: "候選 1・金氏紀錄肉汁牛", title: "Karne Garibaldi", desc: "創下 13.5 秒極速上菜傳奇！專注慢燉高湯牛肉片，拌入培根碎與甜玉米黑豆泥。", query: "Karne Garibaldi Sucursal Catedral Guadalajara" },
+                  { id: "tomate-taqueria", tag: "候選 2・炭烤牧羊人起司脆皮", title: "TOMATE Taquería", desc: "瓜城排隊名店！特製炭烤旋轉豬肉與將起司煎至金黃酥脆的靈魂 Costra 脆皮捲。", query: "TOMATE Taqueria Av Mexico Guadalajara" }
+                ]
+              },
+              { time: "景點 (晚上)", title: "Plaza de la Liberación (解放廣場)", detail: "漫步瓜城殖民老城核心十字樞紐，欣賞夜間打燈的雙塔大教堂。", featureId: "plaza-liberacion", featureBtnText: " 景點導覽", mapTargets: [{ name: "解放廣場", query: "Plaza de la Liberación Guadalajara" }] }
+            ]
+          },
+          {
+            id: "day-1022",
+            shortDate: "10/22 特基拉",
+            date: "10月22日 週四",
+            city: "特基拉 Tequila",
+            remarks: ["Cantaritos el Güero #1 要先跟司機講提早下車地點，參觀完到對面看龍舌蘭田再叫車進市區"],
+            schedule: [
+              { time: "上午", title: "Cantaritos el Güero #1 與藍色龍舌蘭田", detail: "品嚐大陶罐現剖柑橘調酒，參觀對面被列為世界遺產的藍色龍舌蘭田火山景觀。", featureId: "cantaritos-el-guero", featureBtnText: "🍹 陶罐調酒攻略", mapTargets: [{ name: "Cantaritos el Güero #1", query: "Cantaritos el Güero #1 Amatitan" }] },
+              { time: "午餐", title: "Patio Mayahua (特基拉庭園餐廳)", detail: "特基拉老鎮中心的綠意殖民庭園，以龍舌蘭酒香醃烤牛排聞名的私房料理。", featureId: "patio-mayahua", featureBtnText: " 推薦餐點", mapTargets: [{ name: "Patio Mayahua", query: "Patio Mayahua Tequila" }] },
+              { time: "下午 13:30 (酒廠)", title: "Tequilera Hacienda La Cofradía (莊園酒廠導覽)", detail: "金額一人 $390 及 $550 MXN（13:30 預約完成，可現金或信用卡付款）。", featureId: "hacienda-la-cofradia", featureBtnText: "️ 酒莊導覽", mapTargets: [{ name: "Hacienda La Cofradia", query: "Hacienda La Cofradia Tequila" }] },
+              { time: "下午 (景點)", title: "Plaza Principal Tequila (特基拉主廣場)", detail: "小鎮歷史核心漫步，參觀 18 世紀聖地牙哥大教堂、採收工雕像。", featureId: "plaza-principal-tequila", featureBtnText: " 景點導覽", mapTargets: [{ name: "Plaza Principal", query: "Plaza Principal Tequila" }] },
+              { 
+                time: "晚餐 (2選1)", title: "晚餐安排：特基拉淹水三明治名店 2選1", type: "multiOption", detail: "點擊下方卡片查看詳細必點菜色與避坑提示：",
+                options: [
+                  { id: "mi-esperanza", tag: "候選 1・淹水三明治", title: "Mi Esperanza", desc: "在地人熱門老字號，外皮酥脆的鹹法棍浸入濃辣番茄紅醬，搭配清爽發酵玉米冰飲。", query: "Restaurante Mi Esperanza Tequila Jalisco" },
+                  { id: "dona-jose", tag: "候選 2・炭火瓦罐燉肉", title: "Birriería doña Jóse", desc: "專注於慢燉牛肉/羊肉湯與鐵板拉絲 Quesabirria，炭香肉質軟嫩至極。", query: "Birriería y Menudo doña Jóse Tequila" }
+                ]
+              }
+            ]
+          },
+          {
+            id: "day-1023",
+            shortDate: "10/23 特拉克帕克",
+            date: "10月23日 週五",
+            city: "特拉克帕克 Tlaquepaque",
+            remarks: [],
+            schedule: [
+              { 
+                time: "早餐 (3選1)", title: "早餐探索：瓜達拉哈拉三種經典風味 3選1", type: "multiOption", detail: "點擊下方卡片查看各店主打特色與必吃菜色：",
+                options: [
+                  { id: "las-9-esquinas", tag: "候選 1・傳統燉羊肉", title: "Las 9 Esquinas", desc: "百年廣場旁的瓷磚老鋪，招牌低溫慢焙羊肉湯（Birria），肉質軟嫩無羶味。", query: "Birriería las 9 Esquinas Guadalajara" },
+                  { id: "taco-fish", tag: "候選 2・酥炸海鮮塔可", title: "Taco Fish La Paz", desc: "超高人氣排隊名店，現炸酥脆鮮魚與炸蝦塔可，搭配豐富自選醬料吧。", query: "Taco Fish La Paz Guadalajara" },
+                  { id: "mercado-34", tag: "候選 3・生猛海鮮朝市", title: "Mercado del Mar 34", desc: "在地海鮮集散市場，清晨現開新鮮帶殼生蠔、青檸酸辣生醃鮮蝦。", query: "Mercado del Mar de la 34 Guadalajara" }
+                ]
+              },
+              { 
+                time: "下午 (景點 2選1)", title: "漫遊陶瓷藝術文化中心與殖民莊園步行街", type: "multiOption", detail: "特拉克帕克最著名的藝術聚落 2選1：",
+                options: [
+                  { id: "el-refugio", tag: "候選 1・百年修道院遺址", title: "Centro Cultural El Refugio", desc: "擁有無盡純白長拱廊與幽靜中庭，現為當代拉美陶瓷藝術雙年展的最高殿堂。", query: "Centro Cultural El Refugio Tlaquepaque" },
+                  { id: "tlaquepaque-centro", tag: "候選 2・殖民藝術步行街", title: "Tlaquepaque Centro", desc: "獨立大街兩側修復完好的 18 世紀貴族莊園，藏著頂級藝廊與流浪樂隊廣場。", query: "Jardín Hidalgo Tlaquepaque" }
+                ]
+              },
+              { 
+                time: "晚餐 (2選1)", title: "晚餐安排：北部炭烤與首都鐵板風味 2選1", type: "multiOption", detail: "在地極受歡迎的兩大塔可名店對決：",
+                options: [
+                  { id: "la-yaquesita", tag: "候選 1・索諾拉州炭火烤肉", title: "Tacos La Yaquesita", desc: "主打北部風格的高品質炭烤牛肉與肋排肉，搭配極具嚼勁的手工麵粉餅皮。", query: "Tacos La Yaquesita Tlaquepaque" },
+                  { id: "tacos-estilo-mexico", tag: "候選 2・墨西哥城旋轉烤肉", title: "TACOS 'ESTILO MEXICO'", desc: "完美復刻首都街頭風味的旋轉烤豬肉佐鳳梨與鐵板慢燉牛腹肉塔可。", query: "TACOS ESTILO MEXICO Tlaquepaque" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        tabLabel: "Guanajuato",
+        days: [
+          {
+            id: "day-1024",
+            shortDate: "10/24 瓜納華托",
+            date: "10月24日 週六",
+            city: "瓜納華托 Guanajuato",
+            remarks: ["Monumento Al Pipila 上面沒廁所，請在山下如廁"],
+            schedule: [
+             { time: "09:00", title: "Primera Plus 移動 (09:00 - 13:00)", detail: "車次 1968, Sala 1 (乘車大廳 1 ), 座位 3 & 4。月台螢幕與廣播會顯示終點站【San Miguel De Allende】", mapTargets: [{ name: "車站", query: "https://maps.app.goo.gl/f5iSqTWqBFajq72T9" }], ticket: "GDL到Guanajuato車票.pdf" },
+              { 
+                time: "午餐 (2選1)", title: "午餐探索：平民市場與街頭塔可 2選1", type: "multiOption", detail: "點擊下方卡片查看推薦菜色與避坑提示：",
+                options: [
+                  { id: "mercado-hidalgo", tag: "候選 1・百年鐵皮市場", title: "Mercado Hidalgo", desc: "宏偉的百年室內市場，尋找隱藏攤位 CARNITASAM 必吃的炸豬皮鱷梨包。", query: "Mercado Hidalgo Guanajuato" },
+                  { id: "tacos-el-paisa", tag: "候選 2・高人氣街頭塔可", title: "Tacos 'El Paisa II'", desc: "在地人狂推的塔可老店，主打旋轉烤肉（Al Pastor）與鐵板牛腹肉。", query: "Tacos El Paisa II Guanajuato" }
+                ]
+              },
+              { time: "下午", title: "Monumento Al Pipila 看夕陽夜景", detail: "散步至山頂看夕陽、夜景，俯瞰彩色積木山城與地下隧道全貌。", featureId: "monumento-pipila", featureBtnText: " 景點導覽", mapTargets: [{ name: "皮皮拉紀念碑展望台", query: "Monumento Al Pipila Guanajuato" }] },
+             { time: "晚餐", title: "Taquería el Sazón Oaxaqueño", detail: "瓜納華托道地平民名店！主打薄切鹽醃風乾牛肉、辣醃豬肉與瓦哈卡手工牽絲起司。", featureId: "sazon-oaxaqueno", featureBtnText: " 推薦餐點", mapTargets: [{ name: "Taquería el Sazón Oaxaqueño", query: "Taquería el Sazón Oaxaqueño Guanajuato" }] }
+            ]
+          },
+          {
+            id: "day-1025",
+            shortDate: "10/25 瓜納華托",
+            date: "10月25日 週日",
+            city: "瓜納華托 Guanajuato",
+            remarks: [],
+            schedule: [
+              { 
+                time: "上午 (4景點巡禮)", title: "Guanajuato 漫遊四大經典地標", type: "multiOption", detail: "瓜納華托歷史城區最核心的四大世界遺產地標，點擊卡片閱讀深度歷史故事與拍照機位：",
+                options: [
+                  { id: "basilica-guanajuato", tag: "地標 1・亮黃色信仰中心", title: "瓜納華托聖母聖殿", desc: "亮黃外牆與大紅色圓頂，內部供奉隱藏 800 年的純木雕鍍金聖母像。", query: "Basílica Colegiata de Nuestra Señora de Guanajuato" },
+                  { id: "teatro-juarez", tag: "地標 2・白銀時代的奢華", title: "Teatro Juárez", desc: "羅馬多立克柱與謬思女神，內部為天方夜譚般的摩爾式奢華。", query: "Teatro Juárez Guanajuato" },
+                  { id: "callejon-beso", tag: "地標 3・悽美殉情窄巷", title: "接吻巷", desc: "寬度僅 68 公分的極窄巷弄，流傳著富家千金與窮礦工的悲劇愛情故事。", query: "Callejón del Beso Guanajuato" },
+                  { id: "uni-guanajuato", tag: "地標 4・可可夜總會原型", title: "瓜納華托大學", desc: "純白色新古典主義百級大階梯，動畫《可可夜總會》歌神宮殿靈感來源。", query: "Universidad de Guanajuato" }
+                ]
+              },
+              { time: "午餐", title: "Mercado Hidalgo (百年市場小吃巡禮)", detail: "瓜納華托最大的傳統挑高室內市場，尋訪在地人必吃的現揉熱餡餅、暖胃玉米豬骨濃湯與經典礦工捲餅。", featureId: "mercado-hidalgo-eats", featureBtnText: " 推薦餐點", mapTargets: [{ name: "Mercado Hidalgo", query: "Mercado Hidalgo Guanajuato" }] },
+              { time: "晚餐", title: "Tacos el Tigre", detail: "在地學生與夜遊者的宵夜首選，提供香氣四溢的道地街頭烤肉。", featureId: "tacos-el-tigre", featureBtnText: " 推薦餐點", mapTargets: [{ name: "Tacos el Tigre", query: "Tacos el Tigre Guanajuato" }] }
+            ]
+          },
+          {
+            id: "day-1026",
+            shortDate: "10/26 聖米格爾",
+            date: "10月26日 週一",
+            city: "聖米格爾德阿連德 San Miguel de Allende",
+            remarks: ["買隔日午餐車上吃"],
+            schedule: [
+              { 
+                time: "早餐", 
+                title: "Lavanda Café", 
+                detail: "聖米格爾最受歡迎的早午餐名店。將淡雅的天然薰衣草香氣完美融入精品咖啡中。", 
+                featureId: "lavanda-cafe", 
+                featureBtnText: " 推薦餐點", 
+                mapTargets: [{ name: "Lavanda Café", query: "Lavanda Café San Miguel de Allende" }] 
+              },
+              { 
+                time: "上午 (2景點巡禮)", title: "El Mirador 展望台與 Calle Aldama 漫步", type: "multiOption", detail: "聖米格爾制高點全景與世界最美石板巷弄 2選1：",
+                options: [
+                  { id: "monumento-pipila", tag: "地標 1・全城制高點全景", title: "El Mirador 展望台", desc: "俯瞰峽谷盆地、將彩色積木殖民老城與粉紅教堂盡收眼底的絕佳位置。", query: "El Mirador San Miguel de Allende" },
+                  { id: "calle-aldama", tag: "地標 2・世界最美石板街", title: "Calle Aldama (阿爾達馬街)", desc: "以獨立運動先驅命名，保有厚重民居與鐵鑄花窗的經典殖民風情巷弄。", query: "Calle Aldama San Miguel de Allende" }
+                ]
+              },
+              { time: "午餐", title: "Mamá Mela", detail: "提供最正宗、無商業包裝的墨西哥家庭式私房菜。", featureId: "mama-mela", featureBtnText: " 推薦餐點", mapTargets: [{ name: "Mamá Mela", query: "Mamá Mela San Miguel de Allende" }] },
+              { time: "甜點", title: "Chocolates y Churros San Agustín", detail: "知名阿根廷女星開設，人氣最高的吉拿棒與極濃郁西班牙熱巧克力專賣店。", featureId: "san-agustin", featureBtnText: " 推薦餐點", mapTargets: [{ name: "San Agustín 吉拿棒", query: "San Agustín Chocolates & Churros San Miguel de Allende" }] },
+              { time: "下午", title: "Parroquia de San Miguel Arcángel 地標教堂巡禮", detail: "粉紅新哥德式教堂與無原罪堂巡禮，欣賞原住民石匠憑明信片雕刻的奇蹟。", featureId: "san-miguel-church", featureBtnText: " 景點導覽", mapTargets: [{ name: "粉紅地標教堂", query: "Parroquia de San Miguel Arcángel" }] },
+              { time: "晚餐", title: "Restaurante Los Milagros", detail: "景觀餐廳，以豪邁震撼的『Molcajete（高溫火山石臼烤肉）』料理聞名。", featureId: "los-milagros", featureBtnText: " 推薦餐點", mapTargets: [{ name: "Los Milagros", query: "Restaurante Los Milagros San Miguel de Allende" }] }
+            ]
+          }
+        ]
+      },
+      {
+        tabLabel: "Puebla",
+        days: [
+          {
+            id: "day-1027",
+            shortDate: "10/27 普埃布拉",
+            date: "10月27日 週二",
+            city: "普埃布拉 Puebla",
+            remarks: [],
+            schedule: [
+              { time: "08:00", title: "長途巴士前往普埃布拉 (08:00 - 14:30)", detail: "瓜納華托市區地下道複雜，建議預留時間叫車前往城外西南側總站搭車；請提前 30 分鐘抵達出發站並備妥車票與證件。", mapTargets: [{ name: "車站", query: "https://maps.app.goo.gl/m2w8tFWZFeEcuo7J7" }], ticket: "Guanajuato到Puebla車票.pdf" },
+              { 
+                time: "下午 (3散策點巡禮)", title: "普埃布拉老城三大經典散策", type: "multiOption", detail: "普埃布拉最具代表性的波希米亞巷弄、手工藝市集與百年糖果街 3選1：",
+                options: [
+                  { id: "puebla-sapos", tag: "散策 1・波希米亞骨董街", title: "青蛙巷與青蛙廣場", desc: "充滿懷舊色彩的古董藝術聚落，每週末舉辦熱鬧的骨董與跳蚤市場。", query: "Plazuela de los Sapos Puebla" },
+                  { id: "puebla-parian", tag: "散策 2・手工藝活化石", title: "帕里安手工藝市集", desc: "第一座專門設立的傳統市集，匯聚精緻塔拉韋拉陶器與民俗紡織品。", query: "Mercado El Parián Puebla" },
+                  { id: "puebla-dulces", tag: "散策 3・修道院百年甜點", title: "糖果街 (Calle de los Dulces)", desc: "源自修道院修女的百年手藝，專屬甜點控的夢幻墨式傳統糕點街。", query: "Calle de los Dulces Puebla" }
+                ]
+              },
+              { 
+                time: "晚餐 (3選1)", title: "普埃布拉傳統佳餚名店 3選1", type: "multiOption", detail: "大教堂二樓景觀平民小吃、經典莫雷國宴與古宅博物館餐廳 3選1：",
+                options: [
+                  { id: "puebla-comal", tag: "候選 1・大教堂景觀", title: "Comal Cocina Local", desc: "大教堂正對面景觀名店，推薦招牌炸圓麵包牛肉堡（Pelonas）與查路帕脆餅。", query: "Comal Cocina Local Puebla" },
+                  { id: "puebla-mural", tag: "候選 2・國宴級莫雷", title: "El Mural de los Poblanos", desc: "滿牆藝術大師壁畫，被譽為品嚐正宗普埃布拉莫雷醬（Mole Poblano）的最高殿堂。", query: "El Mural de los Poblanos Puebla" },
+                  { id: "puebla-mendrugo", tag: "候選 3・古宅博物館", title: "La Casa del Mendrugo", desc: "17 世紀古宅庭園與考古博物館，伴隨現場爵士樂享用綠南瓜子醬燉豬肉與特調酒。", query: "La Casa del Mendrugo Puebla" }
+                ]
+              }
+            ]
+          },
+          {
+            id: "day-1028",
+            shortDate: "10/28 喬魯拉",
+            date: "10月28日 週三",
+            city: "聖佩德羅喬魯拉 San Pedro Cholula",
+            remarks: ["喬魯拉古城全境擁有豐富金字塔古蹟、修道院與清真寺風格小堂，時間充裕可隨時依下方推薦自由探索！"],
+            schedule: [
+              { time: "早餐", title: "San Pedro Cholula 市政市場早餐", detail: "9:00 出發，至在地室內市場品嚐熱騰騰的現烤鹹醃牛肉塔可、玉米粽與現做玉米厚餅。", featureId: "cholula-mercado", featureBtnText: "推薦餐點", mapTargets: [{ name: "San Pedro Cholula 市場", query: "Mercado Municipal San Pedro Cholula" }] },
+              { 
+                time: "上午 (自由探索推薦)", title: "喬魯拉精選 4 大推薦口袋景點 (自由探索)", type: "multiOption", detail: "金字塔頂黃色教堂、世界最大基底金字塔地下隧道、49圓頂清真寺風格修道院與主教座堂：",
+                options: [
+                  { id: "cholula-remedios", tag: "推薦 1・金字塔頂黃教堂", title: "補救聖母聖殿", desc: "金字塔之巔的明黃奇蹟教堂，露天觀景台直面白雪皚皚的波波卡特佩特活火山。", query: "Santuario de la Virgen de los Remedios Cholula" },
+                  { id: "cholula-arqueologica", tag: "推薦 2・世界最大金字塔", title: "喬魯拉大金字塔遺址", desc: "體積超越埃及吉薩！走入地下數百公尺神祕探測隧道，探索千年雨神祭祀庭院。", query: "Zona Arqueológica de Cholula" },
+                  { id: "cholula-san-gabriel", tag: "推薦 3・49座圓頂奇觀", title: "大天使聖加百列修道院", desc: "美洲最古老方濟各修道院，擁有 49 座連續拱頂宛如伊斯蘭清真寺的皇家小堂。", query: "Convento de San Gabriel Cholula" },
+                  { id: "cholula-parroquia", tag: "推薦 4・美洲第三高圓頂", title: "聖佩德羅主教教堂", desc: "坐落於大廣場旁的巴洛克信仰中心，擁有全美洲第三高的八角形巨型採光穹頂。", query: "Parroquia de San Pedro Cholula" }
+                ]
+              },
+              { 
+                time: "下午 (3散策點巡禮)", title: "普埃布拉老城三大經典散策", type: "multiOption", detail: "普埃布拉最具代表性的波希米亞巷弄、手工藝市集與百年糖果街 3選1：",
+                options: [
+                  { id: "puebla-sapos", tag: "散策 1・波希米亞骨董街", title: "青蛙巷與青蛙廣場", desc: "充滿懷舊色彩的古董藝術聚落，每週末舉辦熱鬧的骨董與跳蚤市場。", query: "Plazuela de los Sapos Puebla" },
+                  { id: "puebla-parian", tag: "散策 2・手工藝活化石", title: "帕里安手工藝市集", desc: "第一座專門設立的傳統市集，匯聚精緻塔拉韋拉陶器與民俗紡織品。", query: "Mercado El Parián Puebla" },
+                  { id: "puebla-dulces", tag: "散策 3・修道院百年甜點", title: "糖果街 (Calle de los Dulces)", desc: "源自修道院修女的百年手藝，專屬甜點控的夢幻墨式傳統糕點街。", query: "Calle de los Dulces Puebla" }
+                ]
+              },
+              { time: "甜點", title: "Puebla La Churrería", detail: "品嚐在地傳奇老字號現炸金黃酥脆吉拿棒，沾著極致濃稠的西班牙熱巧克力享用。", featureId: "puebla-churreria", featureBtnText: "推薦餐點", mapTargets: [{ name: "Puebla La Churrería", query: "Puebla La Churrería" }] },
+              { 
+                time: "晚餐 (3選1)", title: "普埃布拉傳統佳餚名店 3選1", type: "multiOption", detail: "大教堂二樓景觀平民小吃、經典莫雷國宴與古宅博物館餐廳 3選1：",
+                options: [
+                  { id: "puebla-comal", tag: "候選 1・大教堂景觀", title: "Comal Cocina Local", desc: "大教堂正對面景觀名店，推薦招牌炸圓麵包牛肉堡（Pelonas）與查路帕脆餅。", query: "Comal Cocina Local Puebla" },
+                  { id: "puebla-mural", tag: "候選 2・國宴級莫雷", title: "El Mural de los Poblanos", desc: "滿牆藝術大師壁畫，被譽為品嚐正宗普埃布拉莫雷醬（Mole Poblano）的最高殿堂。", query: "El Mural de los Poblanos Puebla" },
+                  { id: "puebla-mendrugo", tag: "候選 3・古宅博物館", title: "La Casa del Mendrugo", desc: "17 世紀古宅庭園與考古博物館，伴隨現場爵士樂享用綠南瓜子醬燉豬肉與特調酒。", query: "La Casa del Mendrugo Puebla" }
+                ]
+              }
+            ]
+          },
+          {
+            id: "day-1029",
+            shortDate: "10/29 阿特利斯科",
+            date: "10月29日 週四",
+            city: "阿特利斯科 Atlixco",
+            remarks: ["買隔日午餐車上吃"],
+            schedule: [
+              { time: "早餐", title: "Eonia Coffee Suc 2 咖啡早餐", detail: "9:00 至 CAPU 搭 Oro bus 抵達，在質感現代咖啡館享用單品手沖咖啡與手作酥脆可頌。", featureId: "atlixco-eonia-coffee", featureBtnText: "推薦餐點", mapTargets: [{ name: "Eonia Coffee Suc 2", query: "Eonia Coffee Suc 2 Atlixco" }] },
+              { 
+                time: "上午 (3景點巡禮)", title: "阿特利斯科三大核心地標散策", type: "multiOption", detail: "彩繪壁畫階梯、主廣場花園與懸空透明玻璃觀景台 3選1：",
+                options: [
+                  { id: "atlixco-escalera", tag: "地標 1・爆紅立體畫布", title: "寬階梯彩繪壁畫", desc: "以花卉與傳統舞蹈節為主題的巨大戶外立體畫布，融合白色殖民拱門。", query: "Escalera Ancha Atlixco" },
+                  { id: "atlixco-zocalo", tag: "地標 2・繁花殖民廣場", title: "主廣場 (Zócalo)", desc: "殖民迴廊建築環繞的小鎮心臟，漫步亞熱帶花園品嚐手工冰淇淋。", query: "Zócalo de Atlixco" },
+                  { id: "atlixco-mirador", tag: "地標 3・懸空玻璃步道", title: "透明玻璃觀景台", desc: "懸空延伸峭壁的透明玻璃地面，近距離直面波波卡特佩特活火山絕景。", query: "Mirador de Cristal Atlixco" }
+                ]
+              },
+              { time: "午餐", title: "Restaurante Enchiladas Lolita", detail: "品嚐在地數十年老字號現煎安琪拉達捲（Enchiladas），搭配焦香鹹牛肉片與清甜雞湯。", featureId: "atlixco-enchiladas-lolita", featureBtnText: "推薦餐點", mapTargets: [{ name: "Enchiladas Lolita", query: "Restaurante Enchiladas Lolita en Atlixco Centro" }] },
+              { time: "甜點", title: "Ximitl 手作特色冰品", detail: "朝聖傳奇獲獎手工雪酪，品嚐獵奇的火山灰冰品、國宴名菜冰淇淋與純天然鮮果雪酪。", featureId: "atlixco-ximitl-helados", featureBtnText: "推薦餐點", mapTargets: [{ name: "Ximitl 手作冰品", query: "Ximitl Helados y Nieves Artesanales Atlixco" }] },
+             { 
+                time: "晚餐 (3選1)", title: "普埃布拉傳統佳餚名店 3選1", type: "multiOption", detail: "大教堂二樓景觀平民小吃、經典莫雷國宴與古宅博物館餐廳 3選1：",
+                options: [
+                  { id: "puebla-comal", tag: "候選 1・大教堂景觀", title: "Comal Cocina Local", desc: "大教堂正對面景觀名店，推薦招牌炸圓麵包牛肉堡（Pelonas）與查路帕脆餅。", query: "Comal Cocina Local Puebla" },
+                  { id: "puebla-mural", tag: "候選 2・國宴級莫雷", title: "El Mural de los Poblanos", desc: "滿牆藝術大師壁畫，被譽為品嚐正宗普埃布拉莫雷醬（Mole Poblano）的最高殿堂。", query: "El Mural de los Poblanos Puebla" },
+                  { id: "puebla-mendrugo", tag: "候選 3・古宅博物館", title: "La Casa del Mendrugo", desc: "17 世紀古宅庭園與考古博物館，伴隨現場爵士樂享用綠南瓜子醬燉豬肉與特調酒。", query: "La Casa del Mendrugo Puebla" }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        tabLabel: "Oaxaca",
+        days: [
+          {
+            id: "day-1030",
+            shortDate: "10/30 瓦哈卡",
+            date: "10月30日 週五",
+            city: "瓦哈卡 Oaxaca",
+            remarks: [],
+            schedule: [
+              { time: "08:25", title: "長途巴士前往瓦哈卡 (08:25 - 13:10)", detail: "由 CAPU 總站發車直達瓦哈卡，車程約 4.5 小時；早晨普埃布拉市區車流多，建議預留充足叫車時間。", mapTargets: [{ name: "車站", query: "https://maps.app.goo.gl/ajQSfzGUSNbFhz2X8" }], ticket: "Puebla到Oax車票.pdf" },
+              { time: "午餐", title: "Boulenc 烘焙咖啡早午餐", detail: "朝聖瓦哈卡排隊神店，品嚐天然低溫發酵酸種麵包、手工煙燻牛肉三明治與杏仁可頌。", featureId: "oaxaca-boulenc", featureBtnText: "推薦餐點", mapTargets: [{ name: "Boulenc", query: "Boulenc Oaxaca" }] },
+              { time: "甜點", title: "Chima Cocao 傳統石臼可可", detail: "走入保留中美洲古法的手工巧克力店，品飲現煮純熱可可、採買肉桂石磨可可磚片。", featureId: "oaxaca-chima-cocao", featureBtnText: "推薦餐點", mapTargets: [{ name: "Chima Cocao", query: "Chima Cocao Oaxaca" }] },
+              { time: "下午", title: "亡靈節活動情報蒐集散策", detail: "漫步市區確認彩繪骷髏妝、樂隊踩街與墓園守夜情報", mapTargets: [{ name: "Oaxaca Zócalo", query: "Zócalo Oaxaca Centro" }] },
+              { time: "晚餐", title: "Lechoncito de Oro 烤乳豬塔可", detail: "瓦哈卡深夜排隊名店，品嚐炭烤手撕乳豬肉搭配金黃酥脆炸豬皮碎的雙重震撼口感。", featureId: "oaxaca-lechoncito", featureBtnText: "推薦餐點", mapTargets: [{ name: "Lechoncito de Oro", query: "Lechoncito de Oro Oaxaca" }] }
+            ]
+          },
+          {
+            id: "day-1031",
+            shortDate: "10/31 亡靈節首日",
+            date: "10月31日 週六",
+            city: "瓦哈卡 Oaxaca",
+            remarks: [],
+            schedule: [
+             { 
+                time: "早餐 (2選1)", title: "瓦哈卡在地市井早餐傳奇 2選1", type: "multiOption", detail: "Netflix 爆紅炭烤玉米厚餅與震撼煙霧肉廊 2選1：",
+                options: [
+                  { id: "oaxaca-dona-vale", tag: "候選 1・Netflix認證厚玉米餅", title: "Memelas Doña Vale", desc: "阿嬤炭火慢烤厚玉米餅，塗抹自煉豬油、黑豆泥與靈魂煙燻莫利塔辣椒醬。", query: "Memelas Doña Vale Mercado Central de Abastos Oaxaca" },
+                  { id: "oaxaca-pasillo-humo", tag: "候選 2・煙霧肉廊烤肉奇觀", title: "Pasillo de Humo (煙霧肉廊)", desc: "走入煙霧瀰漫的肉廊挑選鹽漬牛肉與香腸，鐵網炭火現烤包玉米餅享用。", query: "Pasillo de Humo Mercado 20 de Noviembre Oaxaca" }
+                ]
+              },
+              { time: "上午", title: "Mercado Benito Juárez 市場探訪", detail: "走訪萬壽菊祭壇、傳統服飾與民俗工藝", featureId: "oaxaca-mercado-benito", featureBtnText: "️ 景點導覽", mapTargets: [{ name: "Mercado Benito Juárez", query: "Mercado Benito Juárez Oaxaca" }] },
+              { time: "下午", title: "亡靈節慶典狂歡 (Día de Muertos)", detail: "街頭彩繪骷髏妝、加入盛大街頭踩街遊行狂歡", featureId: "oaxaca-dia-de-muertos", featureBtnText: " 慶典攻略", mapTargets: [{ name: "Santo Domingo 廣場", query: "Templo de Santo Domingo de Guzmán Oaxaca" }] }
+            ]
+          },
+          {
+            id: "day-1101",
+            shortDate: "11/01 阿爾班山",
+            date: "11月1日 週日",
+            city: "阿爾班山 Monte Albán",
+            remarks: [],
+            schedule: [
+              { time: "上午", title: "Monte Albán 薩波特克高山遺跡", detail: "9:00 出發，朝聖兩千公尺削平山頂打造的神殿首都，俯瞰三方河谷。", featureId: "monte-alban", featureBtnText: " 景點導覽", mapTargets: [{ name: "阿爾班山考古遺址", query: "Zona Arqueológica de Monte Albán" }] },
+              { time: "下午", title: "San Antonio Arrazola 靈獸木雕工藝村", detail: "造訪《可可夜總會》奇幻神獸 Alebrijes 發源地", featureId: "arrazola-alebrijes", featureBtnText: " 景點導覽", mapTargets: [{ name: "Arrazola 靈獸木雕村", query: "San Antonio Arrazola Oaxaca" }] }
+            ]
+          },
+         {
+            id: "day-1102",
+            shortDate: "11/02 瓦哈卡夜車",
+            date: "11月2日 週一",
+            city: "瓦哈卡 Oaxaca ➔ 跨城夜車",
+            remarks: ["23:15 - 7:00 ADO（去車站前先在市區洗澡）"],
+            schedule: [
+              { time: "午餐", title: "Las Quince Letras (已預訂)", detail: "國寶名廚掌杓的傳統殿堂，享用三大莫雷拼盤、三十種香料慢熬黑莫雷與在地梅斯卡爾調酒。", featureId: "oaxaca-quince-letras", featureBtnText: "推薦餐點", mapTargets: [{ name: "Las Quince Letras", query: "Las Quince Letras Oaxaca" }] },
+              { time: "下午", title: "Oaxaca Centro 市區漫遊採買", detail: "聖多明哥修道院巡禮、買 Mezcal 酒與紀念品", featureId: "oaxaca-centro-historico", featureBtnText: " 景點導覽", mapTargets: [{ name: "Oaxaca Centro", query: "Templo de Santo Domingo Oaxaca" }] },
+              { time: "23:15", title: "ADO 跨城夜車出發 (23:15 - 07:00)", detail: "出發前往墨西哥城 TAPO 客運總站", mapTargets: [{ name: "車站", query: "https://maps.app.goo.gl/FCPyNTzdiqdqgCYEA" }], ticket: "Oax到Mex車票.pdf" }
+            ]
+          }
+        ]
+      },
+      {
+        tabLabel: "Mexico City",
+        days: [
+          {
+            id: "day-1103",
+            shortDate: "11/03 墨西哥城",
+            date: "11月3日 週二",
+            city: "墨西哥城 Mexico City",
+            remarks: ["Don Asado Rio Lerma 需訂位"],
+            schedule: [
+              { time: "早餐", title: "Bobo Burgers & Café", detail: "抵達後先至潮流美式漢堡店品嚐焦脆雙層起司漢堡與精品冷萃咖啡，再前往 Check-in。", featureId: "cdmx-bobo-burgers", featureBtnText: "推薦餐點", mapTargets: [{ name: "Bobo Burgers & Café", query: "Bobo Burgers & Café Mexico City" }] },
+              { time: "上午", title: "國立人類學博物館 (Museo Nacional de Antropología)", detail: "參觀拉丁美洲最重要的歷史文明寶庫與太陽曆石", featureId: "mexico-antropologia", featureBtnText: " 景點導覽", mapTargets: [{ name: "人類學博物館", query: "Museo Nacional de Antropología Mexico City" }] },
+              { 
+                time: "午餐 (2選1)", title: "墨西哥城兩大頂級傳奇塔可 2選1", type: "multiOption", detail: "高端原塊菲力牛肉與北部酥脆炸豬皮名店對決。⚠️ 吃完午餐後，請先至 Don Asado Rio Lerma 現場訂位：",
+                options: [
+                  { id: "cdmx-el-califa", tag: "候選 1・菲力牛排始祖", title: "Taquería El Califa", desc: "高端塔可先驅，整片原塊軟嫩菲力牛肉（Gaonera）與鐵板香脆起司捲。", query: "Taquería El Califa Reforma Mexico City" },
+                  { id: "cdmx-orinoco", tag: "候選 2・北部粗獷炸豬皮", title: "Taquería Orinoco", desc: "蒙特雷現象級排隊神店，酥脆炸豬皮（Chicharrón）與特製蒜醬炸馬鈴薯。", query: "Taquería Orinoco Roma Norte Mexico City" }
+                ]
+              },
+              { time: "下午", title: "巴斯孔塞洛斯圖書館 (Biblioteca Vasconcelos)", detail: "參觀如《星際效應》般的懸浮書架矩陣迷宮", featureId: "mexico-vasconcelos", featureBtnText: " 景點導覽", mapTargets: [{ name: "巴斯孔塞洛斯圖書館", query: "Biblioteca Vasconcelos Mexico City" }] },
+              { time: "晚上", title: "Indios Verdes 纜車體驗", detail: "由圖書館旁 Buenavista 站搭乘地鐵至 Indios Verdes 站搭乘纜車。⚠️ 纜車來回車程約需 1 小時，出發前強烈建議先在車站或圖書館上廁所！", mapTargets: [{ name: "Metro / Cablebús Indios Verdes", query: "Estación Indios Verdes CDMX" }] },
+              { time: "晚餐", title: "Don Asado Rio Lerma (需訂位)", detail: "烏拉圭炭火直烤牛排館，享用厚切熟成紐約客牛排、鐵板焦香烤起司與在地美酒。", featureId: "cdmx-don-asado", featureBtnText: "推薦餐點", mapTargets: [{ name: "Don Asado Rio Lerma", query: "Don Asado Rio Lerma Mexico City" }] }
+            ]
+          },
+          {
+            id: "day-1104",
+            shortDate: "11/04 墨西哥城",
+            date: "11月4日 週三",
+            city: "墨西哥城 Mexico City",
+            remarks: ["買隔天早餐"],
+            schedule: [
+              { time: "上午", title: "Coyoacán 市集傳統早餐與漫步", detail: "走訪芙烈達故鄉百年傳統市場，品嚐現煎熱騰騰炸玉米片雙蛋（Chilaquiles）與現榨鮮果汁。", featureId: "cdmx-coyoacan-market", featureBtnText: "推薦餐點", mapTargets: [{ name: "Mercado de Coyoacán", query: "Mercado de Coyoacán Mexico City" }] },
+              { time: "午餐", title: "Trinidad Ritual De Sabores", detail: "Coyoacán 市集旁隱密人氣名店，品嚐融合墨式傳統香料與現代手藝的精緻風味料理。", featureId: "cdmx-trinidad", featureBtnText: "推薦餐點", mapTargets: [{ name: "Trinidad Ritual De Sabores", query: "Trinidad Ritual De Sabores Ignacio Allende Coyoacan Mexico City" }] },
+              { time: "下午", title: "Roma 區文藝街區逛街", detail: "探索優雅綠蔭大道、裝飾藝術建築與獨立選品店", featureId: "mexico-roma", featureBtnText: " 景點導覽", mapTargets: [{ name: "Roma Norte 文藝街區", query: "Colonia Roma Norte Mexico City" }] },
+              { time: "甜點", title: "Panadería Rosetta 傳奇烘焙", detail: "名廚掌杓的夢幻烘焙坊，品嚐千層酥脆的招牌芭樂起司酥捲（Rol de Guayaba）與小豆蔻肉桂捲。", featureId: "cdmx-panaderia-rosetta", featureBtnText: "推薦餐點", mapTargets: [{ name: "Panadería Rosetta", query: "Panadería Rosetta Colima Mexico City" }] },
+              { 
+                time: "晚餐 (2選1)", title: "Roma Norte 人氣名店 2選1", type: "multiOption", detail: "米其林推薦手工玉米餅塔可 vs 經典在地排隊神店：",
+                options: [
+                  { id: "cdmx-la-once-mil", tag: "候選 1・米其林推薦精緻塔可", title: "La Once Mil - Roma Norte", desc: "主打現壓手工玉米餅、炙燒巴西牛臀肉（Picaña）與嫩煎側腹牛排塔可。", featureId: "cdmx-la-once-mil", featureBtnText: "推薦餐點", query: "La Once Mil Orizaba Roma Norte Mexico City" },
+                  { id: "cdmx-tacos-del-valle", tag: "候選 2・在地排隊神店", title: "Tacos del Valle (Roma Norte)", desc: "香氣四溢的旋轉烤豬肉（Al Pastor）、慢燉牛胸肉（Suadero）與軟嫩牛舌塔可。", featureId: "cdmx-tacos-del-valle", featureBtnText: "推薦餐點", query: "Tacos del Valle Av Alvaro Obregon Roma Norte Mexico City" }
+                ]
+              }
+            ]
+          },
+          {
+            id: "day-1105",
+            shortDate: "11/05 特奧蒂瓦坎",
+            date: "11月5日 週四",
+            city: "特奧蒂瓦坎 Teotihuacán",
+            remarks: [],
+            schedule: [
+              { time: "上午", title: "Teotihuacán 諸神之城金字塔群", detail: "7:00 出發，朝聖西元前的宇宙神殿城邦、拔地 65 公尺的太陽金字塔與亡者之路。", featureId: "teotihuacan-pyramids", featureBtnText: " 景點導覽", mapTargets: [{ name: "特奧蒂瓦坎金字塔", query: "Zona Arqueológica de Teotihuacán" }] },
+              { time: "午餐", title: "El Torito Tacos 傳統燉肉", detail: "歷史城區老字號名店，大銅鍋長時間慢燉軟嫩牛腹肉（Suadero）與膠質豐富的牛頰肉塔可。", featureId: "cdmx-el-torito", featureBtnText: "推薦餐點", mapTargets: [{ name: "El Torito Tacos", query: "El Torito Tacos Centro Historico Mexico City" }] },
+              { time: "甜點", title: "Pastelería Ideal 百年點心宮殿", detail: "創立於 1927 年的宮殿級糕點店，拿大鐵盤穿梭點心長廊自由挑選傳統酥餅與三奶蛋糕。", featureId: "cdmx-pasteleria-ideal", featureBtnText: "推薦餐點", mapTargets: [{ name: "Pastelería Ideal", query: "Pastelería Ideal 16 de Septiembre Mexico City" }] },
+              { 
+                time: "下午 (3核心地標巡禮)", title: "墨西哥城歷史城區三大核心地標", type: "multiOption", detail: "憲法廣場、國家宮國寶壁畫與純白大理石藝術宮 3選1：",
+                options: [
+                  { id: "mexico-zocalo", tag: "地標 1・國家心臟廣場", title: "憲法廣場 (Zócalo)", desc: "美洲最大主教座堂與阿茲特克大神廟遺址交會處，感受薩滿煙燻與巨型國旗。", query: "Plaza de la Constitución Zocalo Mexico City" },
+                  { id: "mexico-palacio-nacional", tag: "地標 2・總統府國寶壁畫", title: "國家宮 (Palacio Nacional)", desc: "從蒙特祖馬宮殿到西班牙總督府，欣賞迭戈·里韋拉史詩巨作《墨西哥的歷史》。", query: "Palacio Nacional Mexico City" },
+                  { id: "mexico-bellas-artes", tag: "地標 3・純白文藝城堡", title: "藝術宮 (Palacio de Bellas Artes)", desc: "卡拉拉白大理石宮殿，百萬片蒂凡尼火山玻璃帷幕與三大壁畫巨匠殿堂。", query: "Palacio de Bellas Artes Mexico City" }
+                ]
+              },
+              { time: "晚餐", title: "Taquería El Gran Abanico", detail: "墨城最強油封手撕豬肉（Carnitas）排隊名店，品嚐香嫩肉塊搭配Q彈豬皮的絕妙塔可。", featureId: "cdmx-gran-abanico", featureBtnText: "推薦餐點", mapTargets: [{ name: "Taquería El Gran Abanico", query: "Taquería El Gran Abanico Mexico City" }] }
+            ]
+          },
+          {
+            id: "day-1106",
+            shortDate: "11/06 墨西哥城",
+            date: "11月6日 週五",
+            city: "墨西哥城 Mexico City",
+            remarks: [],
+            schedule: [
+              { 
+                time: "早餐 (2選1)", title: "Condesa 街區兩大風格早餐 2選1", type: "multiOption", detail: "紐約風煙燻牛肉貝果與街頭排隊炸玉米片三明治 2選1：",
+                options: [
+                  { id: "cdmx-mendl-delicatessen", tag: "候選 1・紐約猶太熟食館", title: "Mendl Delicatessen", desc: "慢烤厚切煙燻牛肉堆疊如山，搭配手工烤貝果、煙燻鮭魚與無酵餅丸雞湯。", query: "Mendl Delicatessen Condesa Mexico City" },
+                  { id: "cdmx-esquina-chilaquil", tag: "候選 2・街頭傳奇夾心包", title: "La Esquina Del Chilaquil", desc: "街角排隊神店！法棍麵包塞入熱騰騰雙醬炸玉米片、水煮雞絲與香濃起司酸奶。", query: "La Esquina Del Chilaquil Condesa Mexico City" }
+                ]
+              },
+              { time: "上午", title: "查普爾特佩克城堡 (Castillo de Chapultepec)", detail: "參觀美洲唯一一座曾真正住過皇帝的皇家城堡", featureId: "mexico-chapultepec", featureBtnText: " 景點導覽", mapTargets: [{ name: "查普爾特佩克城堡", query: "Castillo de Chapultepec Mexico City" }] },
+              { time: "午餐", title: "La Pancita de la Roma 傳統牛肚湯", detail: "近百年老字號傳統紅湯，精燉軟糯牛肚搭配奧勒岡香草、青檸汁與現烤玉米餅。", featureId: "cdmx-pancita-roma", featureBtnText: "推薦餐點", mapTargets: [{ name: "La Pancita de la Roma", query: "La Pancita de la Roma Mexico City" }] },
+              { time: "下午", title: "最後伴手禮採買 (La Ciudadela 工藝市集)", detail: "全墨手工藝品大總匯集中採買", featureId: "mexico-ciudadela", featureBtnText: "🛍️ 採買指南", mapTargets: [{ name: "La Ciudadela 工藝市集", query: "Mercado de Artesanías La Ciudadela Mexico City" }] },
+              { time: "晚餐", title: "Fogo de Chão Insurgentes Sur (已訂位 19:30)", detail: "享譽國際的頂級巴西窯烤 Churrascaria，無限量享用炭火現切 Picanha 牛後臀尖肉、肋眼牛排與豐盛鮮食吧。", featureId: "cdmx-fogo-de-chao", featureBtnText: "推薦餐點", mapTargets: [{ name: "Fogo de Chão Insurgentes Sur", query: "Fogo de Chao Insurgentes Sur Mexico City" }] }
+            ]
+          }
+        ]
+      },
+      {
+        tabLabel: "Querétaro",
+        days: [
+          {
+            id: "day-1107",
+            shortDate: "11/07 克雷塔羅",
+            date: "11月7日 週六",
+            city: "克雷塔羅 Queretaro",
+            remarks: ["10:20 - 14:00 Primera Plus（車票待買）"],
+            schedule: [
+              { time: "10:20", title: "Primera Plus 移動 (10:20 - 14:00)", detail: "搭車前往克雷塔羅（車票待買）", mapTargets: [{ name: "克雷塔羅客運站", query: "Terminal de Autobuses de Querétaro" }] },
+              { 
+                time: "下午 (2地標巡禮)", title: "克雷塔羅宏偉水道橋與古城區漫步", type: "multiOption", detail: "74 座粉紅火山岩巨拱水道橋與世遺西班牙殖民古城 2選1：",
+                options: [
+                  { id: "queretaro-acueducto", tag: "地標 1・粉紅巨拱工程", title: "克雷塔羅宏偉水道橋", desc: "18 世紀美洲規模最大水利工程，全長 1.2 公里、74 個巨大半圓石拱。", query: "Acueducto de Querétaro" },
+                  { id: "queretaro-centro", tag: "地標 2・世遺貴族古城", title: "克雷塔羅古城區", desc: "西班牙殖民建築典範，藏有聖克拉拉純金箔祭壇、憲法劇院與十字架樹。", query: "Centro Historico Queretaro" }
+                ]
+              }
+            ]
+          },
+          {
+            id: "day-1108",
+            shortDate: "11/08 克雷塔羅農莊",
+            date: "11月8日 週日",
+            city: "克雷塔羅 Queretaro",
+            remarks: [],
+            schedule: [
+              { 
+                time: "全日", 
+                title: "Rancho San Josemaría (起司農莊參訪)", 
+                detail: "多次榮獲世界起司大賽殊榮，專注頂級手工綿羊乾酪與酒浸軟質起司熟成工藝。", 
+                mapTargets: [{ name: "Rancho San Josemaría", query: "Rancho San Josemaría Quesos Queretaro" }] 
+              }
+            ]
+          },
+          {
+            id: "day-1109",
+            shortDate: "11/09 克雷塔羅",
+            date: "11月9日 週一",
+            city: "克雷塔羅 Queretaro",
+            remarks: [],
+            schedule: [
+              { time: "上午", title: "武器廣場市區休閒漫遊", detail: "漫步武器廣場（Plaza de Armas）品嚐精品咖啡", featureId: "queretaro-plaza-armas", featureBtnText: " 景點導覽", mapTargets: [{ name: "Plaza de Armas", query: "Plaza de Armas Queretaro" }] },            ]
+          }
+        ]
+      },
+      {
+        tabLabel: "Mexico City",
+        days: [
+          {
+            id: "day-1110",
+            shortDate: "11/10 墨西哥城",
+            date: "11月10日 週二",
+            city: "墨西哥城 Mexico City",
+            remarks: ["11:00 - 14:40 Primera Plus（車票待買）"],
+            schedule: [
+              { time: "11:00", title: "Primera Plus 移動 (11:00 - 14:40)", detail: "搭車返回墨西哥城 Check-in", mapTargets: [{ name: "墨西哥城北站客運", query: "Terminal Central de Autobuses del Norte Mexico City" }] },
+              { time: "下午", title: "Zona Rosa 街區慢活整備", detail: "飯店周邊採買與行李打包整備，鄰近獨立天使紀念碑", mapTargets: [{ name: "Hotel Segovia 周邊", query: "Hotel Segovia Regency Mexico City" }] }
+            ]
+          }
+        ]
+      }
+    ];
+
+    function switchTab(tabId) {
+      var tabs = ['summary', 'itinerary', 'luggage'];
+      for (var i = 0; i < tabs.length; i++) {
+        var id = tabs[i];
+        var btn = document.getElementById('btn-' + id);
+        var view = document.getElementById('view-' + id);
+        if (btn) btn.className = 'tab-btn' + (id === tabId ? ' active' : '');
+        if (view) view.className = 'page-view' + (id === tabId ? ' active' : '');
+      }
+      var cityBar = document.getElementById('city-bar');
+      if (cityBar) {
+        if (tabId === 'itinerary') {
+          cityBar.className = 'city-selector-bar show';
+        } else {
+          cityBar.className = 'city-selector-bar';
+        }
+      }
+      window.scrollTo(0, 0);
+    }
+
+    function initCityBar() {
+      var bar = document.getElementById('city-bar');
+      if (!bar) return;
+      bar.innerHTML = '';
+      for (var i = 0; i < cityGroups.length; i++) {
+        (function(idx) {
+          var btn = document.createElement('button');
+          btn.className = 'city-pill' + (idx === 1 ? ' active' : ''); 
+          btn.innerText = cityGroups[idx].tabLabel;
+          btn.onclick = function() { selectCityGroup(idx); };
+          bar.appendChild(btn);
+        })(i);
+      }
+    }
+
+    function selectCityGroup(groupIdx) {
+      var allPills = document.querySelectorAll('.city-pill');
+      for (var i = 0; i < allPills.length; i++) {
+        allPills[i].className = 'city-pill' + (i === groupIdx ? ' active' : '');
+      }
+
+      var group = cityGroups[groupIdx];
+      var container = document.getElementById('itinerary-city-container');
+      container.innerHTML = '';
+
+      for (var d = 0; d < group.days.length; d++) {
+        var day = group.days[d];
+        var dayBlock = document.createElement('div');
+        dayBlock.className = 'day-block';
+        dayBlock.id = day.id;
+
+        var remarkHtml = '';
+        if (day.remarks && day.remarks.length > 0) {
+          remarkHtml = '<div class="remark-box"><strong>⚠️ 當日備忘 / 提醒：</strong><ul>';
+          for (var r = 0; r < day.remarks.length; r++) {
+            remarkHtml += '<li>' + day.remarks[r] + '</li>';
+          }
+          remarkHtml += '</ul></div>';
+        }
+
+        var timelineHtml = '<div class="timeline">';
+        for (var s = 0; s < day.schedule.length; s++) {
+          var event = day.schedule[s];
+          var specialContentHtml = '';
+
+          if (event.type === 'multiOption') {
+            var gridCardsHtml = '';
+            for (var bIdx = 0; bIdx < event.options.length; bIdx++) {
+              var bOpt = event.options[bIdx];
+              var bMapUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(bOpt.query);
+              var fTarget = featuresDb[bOpt.id];
+              var isSpot = (fTarget && fTarget.type === 'spot') || bOpt.id.indexOf('cholula-') === 0;
+              var btnClass = isSpot ? "btn-spot-modal" : "btn-restaurant-modal";
+              var btnIcon = isSpot ? " 景點導覽" : " 推薦餐點";
+
+              gridCardsHtml += 
+                '<div class="candidate-card">' +
+                  '<div>' +
+                    '<span class="candidate-tag">' + bOpt.tag + '</span>' +
+                    '<div class="candidate-title">' + bOpt.title + '</div>' +
+                    '<div class="candidate-summary">' + bOpt.desc + '</div>' +
+                  '</div>' +
+                  '<div class="action-row" style="margin-top:10px;">' +
+                    '<button class="' + btnClass + '" onclick="openFeatureModal(\'' + bOpt.id + '\')">' + btnIcon + '</button>' +
+                    '<a href="' + bMapUrl + '" target="_blank" class="map-btn">📍 導航</a>' +
+                  '</div>' +
+                '</div>';
+            }
+           specialContentHtml = '<div class="option-grid-wrap">' + gridCardsHtml + '</div>';
+          } else if (event.featureId) {
+            var fData = featuresDb[event.featureId];
+            var btnClass = fData && fData.type === 'spot' ? 'btn-spot-modal' : 'btn-restaurant-modal';
+            var mapBtnsHtml = '';
+            if (event.mapTargets && event.mapTargets.length > 0) {
+              for (var m = 0; m < event.mapTargets.length; m++) {
+                var target = event.mapTargets[m];
+                var url = (target.query && target.query.indexOf('http') === 0) ? target.query : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(target.query));
+                mapBtnsHtml += '<a href="' + url + '" target="_blank" class="map-btn">📍 導航</a> ';
+              }
+            }
+            specialContentHtml = 
+              '<div class="action-row">' +
+                '<button class="' + btnClass + '" onclick="openFeatureModal(\'' + event.featureId + '\')">' + (event.featureBtnText || '查看詳情') + '</button>' +
+                mapBtnsHtml +
+              '</div>';
+          } else {
+            var mapBtnsHtml = '';
+            if (event.mapTargets && event.mapTargets.length > 0) {
+              for (var m = 0; m < event.mapTargets.length; m++) {
+                var target = event.mapTargets[m];
+                var url = (target.query && target.query.indexOf('http') === 0) ? target.query : ('https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(target.query));
+                mapBtnsHtml += '<a href="' + url + '" target="_blank" class="map-btn">📍 ' + target.name + '</a> ';
+              }
+            }
+            var ticketHtml = event.ticket ? '<a href="' + event.ticket + '" target="_blank" class="ticket-btn">車票</a>' : '';
+            specialContentHtml = '<div class="action-row">' + mapBtnsHtml + ' ' + ticketHtml + '</div>';
+          }
+
+          timelineHtml += 
+            '<div class="timeline-item">' +
+              '<div class="timeline-dot"></div>' +
+              '<div class="timeline-card">' +
+                '<div class="timeline-header"><span class="timeline-time">' + event.time + '</span></div>' +
+                '<div class="timeline-title">' + event.title + '</div>' +
+                '<div class="timeline-detail">' + event.detail + '</div>' +
+                specialContentHtml +
+              '</div>' +
+            '</div>';
+        }
+        timelineHtml += '</div>';
+
+        dayBlock.innerHTML = 
+          '<div class="day-header">' +
+            '<span class="day-header-title">' + day.city + '</span>' +
+            '<span class="day-header-date">' + day.date + '</span>' +
+          '</div>' +
+          remarkHtml +
+          timelineHtml;
+
+        container.appendChild(dayBlock);
+      }
+    }
+
+    function openFeatureModal(featureId) {
+      var data = featuresDb[featureId];
+      if (!data) return;
+
+      document.getElementById('fm-tag').innerText = data.tag || '深度導覽指南';
+      document.getElementById('fm-title').innerText = data.title || '';
+      document.getElementById('fm-summary').innerText = data.summary || '';
+
+      document.getElementById('fm-sec1-title').innerText = data.sec1Title || '⭐ 核心看點 / 推薦菜色';
+      document.getElementById('fm-sec2-title').innerText = data.sec2Title || '💡 現場看點與實用提示';
+
+      var sec1Container = document.getElementById('fm-sec1-content');
+      sec1Container.innerHTML = '';
+
+      if (data.sec1Text) {
+        var p = document.createElement('div');
+        p.className = 'spot-text-para';
+        p.innerText = data.sec1Text;
+        sec1Container.appendChild(p);
+      } else if (data.dishes && data.dishes.length > 0) {
+        var ul = document.createElement('ul');
+        ul.className = 'dish-list';
+        for (var i = 0; i < data.dishes.length; i++) {
+          var li = document.createElement('li');
+          li.className = 'dish-item';
+          li.innerHTML = data.dishes[i];
+          ul.appendChild(li);
+        }
+        sec1Container.appendChild(ul);
+      }
+
+      document.getElementById('fm-sec2-content').innerText = data.tips || '';
+
+      var sec3Box = document.getElementById('fm-sec3-box');
+      if (data.sec3Text) {
+        sec3Box.style.display = 'block';
+        document.getElementById('fm-sec3-title').innerText = data.sec3Title || '📷 拍照機位與行前注意事項';
+        document.getElementById('fm-sec3-content').innerText = data.sec3Text;
+      } else {
+        sec3Box.style.display = 'none';
+      }
+
+      document.getElementById('fm-map-btn').href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(data.query || data.title);
+      document.getElementById('feature-modal').className = 'modal-overlay active';
+    }
+
+    function jumpToCityGroup(groupIdx, targetDayId) {
+  // 切換到每日行程頁籤
+  if (typeof switchAppTab === 'function') {
+    switchAppTab('daily');
+  } else if (typeof switchTab === 'function') {
+    switchTab('itinerary');
+  }
+
+  // 載入該城市的行程
+  if (typeof selectCityGroup === 'function') {
+    selectCityGroup(groupIdx);
+  }
+
+  // 畫面平滑捲動至最頂端
+  setTimeout(function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 50);
+}
+
+    function openCityModal(cityIndex) {
+      var city = citiesData[cityIndex];
+      if (!city) return;
+      document.getElementById('cm-tag').innerText = city.tag;
+      document.getElementById('cm-title').innerText = city.name;
+      document.getElementById('cm-intro').innerText = city.intro;
+
+      var wrap = document.getElementById('cm-landmarks-wrap');
+      wrap.innerHTML = '';
+      for (var i = 0; i < city.landmarks.length; i++) {
+        var lm = city.landmarks[i];
+        var card = document.createElement('div');
+        card.className = 'modal-item-card';
+        var mapUrl = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(lm.query);
+        card.innerHTML = '<div class="modal-item-name">📍 ' + lm.name + '</div><div class="modal-item-detail">' + lm.detail + '</div><div class="modal-btn-row"><a href="' + mapUrl + '" target="_blank" class="map-btn">📍 Google Maps</a><button class="map-btn" onclick="jumpFromModalToDay(' + city.groupIndex + ', \'' + lm.targetDayId + '\')">➔ 直達當日時間軸</button></div>';
+        wrap.appendChild(card);
+      }
+      document.getElementById('city-modal').className = 'modal-overlay active';
+    }
+
+    function closeModal(id) { var el = document.getElementById(id); if (el) el.className = 'modal-overlay'; }
+    function closeModalOnBg(e, id) { if (e.target.id === id) closeModal(id); }
+    function jumpFromModalToDay(groupIndex, targetDayId) { closeModal('city-modal'); jumpToCityGroup(groupIndex, targetDayId); }
+
+    function renderLuggage() {
+      var ul = document.getElementById('luggage-list');
+      if (!ul) return;
+      ul.innerHTML = '';
+      for (var i = 0; i < luggageItems.length; i++) {
+        (function(idx) {
+          var text = luggageItems[idx];
+          var isChecked = localStorage.getItem('mex_prep_' + idx) === 'true';
+          var li = document.createElement('li');
+          li.className = 'checklist-item' + (isChecked ? ' checked' : '');
+          li.innerHTML = '<input type="checkbox" ' + (isChecked ? 'checked' : '') + ' id="chk-' + idx + '"><span>' + (idx + 1) + '. ' + text + '</span>';
+          li.onclick = function(e) { if (e.target.tagName !== 'INPUT') { var input = document.getElementById('chk-' + idx); input.checked = !input.checked; toggleCheck(input, idx); } };
+          li.querySelector('input').onchange = function() { toggleCheck(this, idx); };
+          ul.appendChild(li);
+        })(i);
+      }
+    }
+    function toggleCheck(chk, idx) { localStorage.setItem('mex_prep_' + idx, chk.checked); var parent = chk.parentElement; if (parent) parent.className = 'checklist-item' + (chk.checked ? ' checked' : ''); }
+
+    window.onload = function() {
+      initCityBar();
+      selectCityGroup(1); 
+      renderLuggage();
+    };
+  </script>
+<!-- 📱 手機 App 常駐底部導覽列 -->
+  <nav class="app-bottom-nav">
+    <button type="button" class="nav-tab-btn active" id="btn-tab-overview" onclick="switchAppTab('overview')">
+      <span class="nav-icon">🗺️</span>
+      <span class="nav-label">旅程總覽</span>
+    </button>
+        <button type="button" class="nav-tab-btn" id="btn-tab-safety" onclick="switchAppTab('safety')">
+      <span class="nav-icon">📞</span>
+      <span class="nav-label">緊急聯絡</span>
+    </button>
+  </nav>
+
+  <script>
+    // App 頁籤切換控制邏輯
+    function switchAppTab(tabKey) {
+      // 1. 隱藏所有分頁
+      var tabs = document.querySelectorAll('.app-view-tab');
+      tabs.forEach(function(tab) {
+        tab.classList.remove('active-tab');
+      });
+
+      // 2. 移除所有按鈕的啟用狀態
+      var btns = document.querySelectorAll('.nav-tab-btn');
+      btns.forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+
+      // 3. 顯示選中的分頁
+      var targetTab = document.getElementById('tab-' + tabKey);
+      if (targetTab) {
+        targetTab.classList.add('active-tab');
+      }
+
+      // 4. 點亮對應按鈕
+      var targetBtn = document.getElementById('btn-tab-' + tabKey);
+      if (targetBtn) {
+        targetBtn.classList.add('active');
+      }
+
+      // 5. 切換分頁時平滑回到最頂部
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  </script>
+<!-- 🔍 方案 A：全螢幕可自由縮放地圖燈箱 (支援點擊城市直達行程) -->
+  <div id="map-lightbox" class="map-lightbox-overlay" onclick="closeMapLightbox(event)">
+    <button type="button" class="lightbox-close-btn" onclick="closeMapLightbox(event)">✕</button>
+   <div class="lightbox-hint">🤏 雙指或滑動可自由縮放檢視地圖</div>
+    <div class="map-lightbox-content" id="map-lightbox-box">
+      <div style="position:relative; width:100%; border-radius:12px; overflow:hidden;">
+        <img src="mexico-map.png?v=1" alt="Mexico Travel Map HD" style="width:100%; height:auto; display:block;" />
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 開啟地圖燈箱
+    function openMapLightbox() {
+      var lb = document.getElementById('map-lightbox');
+      if (lb) {
+        lb.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    // 關閉地圖燈箱
+    function closeMapLightbox(e) {
+      if (e.target.id === 'map-lightbox' || e.target.classList.contains('lightbox-close-btn')) {
+        var lb = document.getElementById('map-lightbox');
+        if (lb) {
+          lb.style.display = 'none';
+          document.body.style.overflow = '';
+        }
+      }
+    }
+
+    // 燈箱內點擊城市：關閉大圖並直達該城市行程
+    function lightboxJump(cityIndex) {
+      var lb = document.getElementById('map-lightbox');
+      if (lb) {
+        lb.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+      switchAppTab('daily');
+      if (typeof jumpToCityGroup === 'function') {
+        jumpToCityGroup(cityIndex);
+      }
+    }
+  </script>
+</body>
+</html>
