@@ -361,7 +361,18 @@ body {
   pointer-events: none;
   z-index: 100000;
 }
-  </style>
+
+  /* 移除備註與清單所有壓在邊框上的黑點點，並留出舒適邊距 */
+  ul, ol, li {
+    list-style: none !important;
+    list-style-type: none !important;
+  }
+  
+  ul {
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+  }
+</style>
 </head>
 <body>
 
@@ -510,16 +521,7 @@ body {
     <!-- 【/第 ① 張頁籤結束】 -->
 
    <!-- 【第 ② 張頁籤：每日行程】 -->
-    <div id="tab-daily" class="app-view-tab" style="position: relative;">
-      
-      <!-- 懸浮返回按鈕：無論怎麼滑都浮在螢幕左上方，不擋版面 -->
-      <button type="button" onclick="switchAppTab('overview')" style="position: fixed; top: 18px; left: 18px; z-index: 9999; display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); color: #1e293b; border: 1px solid #cbd5e1; border-radius: 30px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,0,0.15); transition: transform 0.15s ease;">
-        ‹ 返回
-      </button>
-
-      <!-- 頂部保留一點間距，避免第一天的標題被按鈕壓到 -->
-      <div style="height: 48px;"></div>
-
+    <div id="tab-daily" class="app-view-tab">
       <div id="itinerary-city-container"></div>
     </div>
     <!-- 【/第 ② 張頁籤結束】 -->
@@ -2534,7 +2536,7 @@ body {
     }
 
     // 關閉地圖燈箱
-    function closeMapLightbox(e) {
+ function closeMapLightbox(e) {
       if (e.target.id === 'map-lightbox' || e.target.classList.contains('lightbox-close-btn')) {
         var lb = document.getElementById('map-lightbox');
         if (lb) {
@@ -2556,6 +2558,35 @@ body {
         jumpToCityGroup(cityIndex);
       }
     }
+
+    // 手機螢幕向右滑動返回城市總覽手勢
+    (function setupSwipeBack() {
+      let touchStartX = 0;
+      let touchStartY = 0;
+
+      const dailyTab = document.getElementById('tab-daily');
+      if (!dailyTab) return;
+
+      dailyTab.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+      }, { passive: true });
+
+      dailyTab.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+
+        // 手指往右滑動超過 70px，且不是上下垂直滾動時，自動退回總覽
+        if (diffX > 70 && Math.abs(diffX) > Math.abs(diffY) * 1.5) {
+          if (typeof switchAppTab === 'function') {
+            switchAppTab('overview');
+          }
+        }
+      }, { passive: true });
+    })();
   </script>
 </body>
 </html>
